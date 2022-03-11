@@ -52,13 +52,13 @@ app.get(endPointRoot + 'user/', (req, res) => {
     })
 })
 
-app.get(endPointRott + 'scores/:userid', (req, res) => {
+app.get(endPointRoot + 'scores/:userid', (req, res) => {
     req.params.userid
 })
 
 // Retrieve top X users by score
 // leaderboardNumber
-app.get(endPointRott + 'scores/leaderboard', (req, res) => {
+app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
     let userCount = 0;
     let q = req.body;
     let userCountSql = "SELECT COUNT(UserID) FROM users";

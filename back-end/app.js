@@ -10,6 +10,11 @@ const PUT = 'PUT';
 const POST = 'POST';
 const endPointRoot = "/API/v1/";
 
+let statReport = {
+    getLogin: 0,
+    postSignup: 0,
+};
+
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
@@ -28,34 +33,23 @@ app.use(function (req, res, next) {
     res.header( "Access-Control-Allow-Methods", "*");
     next();
 });
-// Expects format
+
+
+// LOGIN
 // User: username
 // Password: password
-// Do we have to hash it?
-app.get(endPointRoot + 'user/', (req, res) => {
-    req.on('data', function (chunk) {
-        if (chunk != null) {
-            body += chunk;
-        }
-    })
-    let sql = "SELECT * FROM score";
-    con.query(sql, function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status("404").send(`The database could not be reached`);
-            throw err;
-        } else {
-            console.log("Records retrieved");
-            console.log("JSON STRING:" + JSON.stringify(result));
-            res.send(JSON.stringify(result));
-        }
-    })
+app.get(endPointRoot + 'login', (req, res) => {
+    statReport.getLogin = statReport.getLogin + 1;
+    let body = req.body;
+    // LOGIN LOGIC
 })
 
+//Scoreboard
 app.get(endPointRoot + 'scores/:userid', (req, res) => {
-    req.params.userid
+    //
 })
 
+// Scoreboard
 // Retrieve top X users by score
 // leaderboardNumber
 app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
@@ -85,23 +79,12 @@ app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
         console.log(err);
         res.status(404).send("A DB error occured with your request");
     }
-    
 })
 
-//Temp user creation
-app.post('login/', (req, res) => {
-    req.on('data', function (chunk) {
-        if (chunk != null) {
-            body += chunk;
-        }
-    })
-    let q = JSON.parse(body);
-
-    // const jwt = require('njwt')
-    // const claims = { iss: 'https://myapp.com/', sub: 'users/' }
-    // const token = jwt.create(claims, 'top-secret-phrase')
-    // token.setExpiration(new Date().getTime() + 60*1000)
-    // res.send(token.compact())
+// Signup
+app.post('signup/', (req, res) => {
+    let q = req.body;
+    statReport.postSignup = statReport.postSignup + 1;
 
     let sql = `INSERT INTO users(username, password) values ('${q.username} , ${q.password})`;
     con.query(sql, function (err, result) {
@@ -115,7 +98,18 @@ app.post('login/', (req, res) => {
     })
 })
 
-// Temp update score
+// ADMIN LOGIN
+app.get('adminLogin/', (req, res) => {
+    let body = req.body;
+    //PLACEHOLDER CHECK - REPLACE WITH DATABASE CHECK + HASHING
+    if (body.user == admin && body.pass == '1234abcd') {
+        res.status(200).send(JSON.stringify(statReport));
+    } else {
+        res.status(403).send('Error - invalid credentials');
+    }
+})
+
+// WIP update score
 app.post(endPointRoot + 'game/', (req, res) => {
     // To prevent premature termination
     req.setTimeout(100000);
@@ -154,7 +148,8 @@ app.listen(PORT, (err) => {
     console.log(`App listening on port ${PORT}`);
 })
 
-//Check if input is an integer
+//Data sanitization
+// Check if input is an integer
 function isInteger(str) {
     if (typeof str !== 'string') {
         return false;

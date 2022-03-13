@@ -3,14 +3,19 @@ const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
 const app = express();
 const jwt = require('jsonwebtoken');
+// ---------------------- SWAGGER PAGE ------------------------------- 
+const swaggerUi = require('swagger-ui-express')
+const swaggerDoc = require('./documents/swagger.json');
 //Unsecure
 const TOKEN_STRING = 'beatmywordle';
 const API_VERSION = "/1/";
 let statReport = {
-    get: {
-        scoreboard: 0,
+    users: {
+        signup: 0,
+        login: 0,
+        adminLogin: 0,
     },
-    post: {
+    scores: {
         login: 0,
         signup: 0,
         adminLogin: 0,
@@ -30,9 +35,10 @@ con.connect(function(err) {
     if (err) throw err;
 })
 //------------------------------------
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(function (req, res, next) {
     res.header( "Access-Control-Allow-Origin", "*");
+    res.header( "Access-Control-Allow-Headers", "*");
     res.header( "Access-Control-Allow-Methods", "*");
     next();
 });
@@ -65,7 +71,6 @@ app.post(API_VERSION + 'users/login', function(req, res) {
 		res.status(403).send('Username or password not sent');
 	}
 });
-
 
 // General Signup
 app.post(API_VERSION + '/users/signup/', (req, res) => {

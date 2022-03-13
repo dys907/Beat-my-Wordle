@@ -1,18 +1,21 @@
 const express = require("express");
-const { chown } = require("fs");
-const { createRequire } = require("module");
 const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
 const app = express();
-
-const GET = 'GET';
-const PUT = 'PUT';
-const POST = 'POST';
-const endPointRoot = "/API/v1/";
-
+const jwt = require('jsonwebtoken');
+//Unsecure
+const TOKEN_STRING = 'beatmywordle';
+const API_VERSION = "/1/";
 let statReport = {
-    getLogin: 0,
-    postSignup: 0,
+    get: {
+        scoreboard: 0,
+    },
+    post: {
+        login: 0,
+        signup: 0,
+        adminLogin: 0,
+        scoreboard: 0
+    }
 };
 
 //-------------------------------------
@@ -34,25 +37,87 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-// LOGIN
-// User: username
-// Password: password
-app.get(endPointRoot + 'login', (req, res) => {
-    statReport.getLogin = statReport.getLogin + 1;
+// ---------------------- USER ENDPOINTS -----------------------------
+// General Login - TODO: Hashing
+app.post(API_VERSION + 'users/login', function(req, res) {
+	// Log POST req
+    statReport.post.login = statReport.post.login + 1;
     let body = req.body;
-    // LOGIN LOGIC
+	let username = body.username;
+	let password = body.password;
+	// Ensure the input fields exists and are not empty
+	if (username && password) {
+        let sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
+		connection.query(sql, [username, password], function(err, result) {
+			if (err) throw err;
+			if (result.length == 1) {
+				// req.session.loggedin = true;
+				// req.session.username = username;
+
+                //Generate and send token for persistent login
+                const token = generateAccessToken({ username: body.username });
+                res.status(200).json(token);
+			} else {
+				res.status(403).send('Incorrect password or user does not exist');
+			}
+		});
+	} else {
+		res.status(403).send('Username or password not sent');
+	}
+});
+
+
+// General Signup
+app.post(API_VERSION + '/users/signup/', (req, res) => {
+    let q = req.body;
+    statReport.post.signup = statReport.post.signup + 1;
+
+    let sql = `INSERT INTO users(username, password) values ('${q.username} , ${q.password})`;
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log("DB error");
+            res.status(403).send('There was a database error with your request');
+            throw err;
+        } else {
+            res.status(200).send('Successfully created user');
+        }
+    })
+})
+// ---------------------- ADMIN ENDPOINT --------------------
+// ADMIN LOGIN
+// Opted for no JWT and therefore no session persistence
+app.post(API_VERSION + '/users/admin/login', (req, res) => {
+    // Log POST req
+    statReport.post.adminLogin = statReport.post.adminLogin + 1;
+    let body = req.body;
+    let username = body.username;
+    let password = body.password;
+    // Ensure the input fields exists and are not empty
+    if (username && password) {
+        let sql = 'SELECT * FROM admin WHERE username = ? AND password = ?';
+        connection.query(sql, [username, password], function(err, result) {
+            if (err) throw err;
+            if (result.length == 1) {
+                res.status(200).json(statReport);
+            } else {
+                res.status(403).send('Incorrect password or user does not exist');
+            }
+        });
+    } else {
+        res.status(403).send('Username or password not sent');
+    }
 })
 
+// ---------------------- SCOREBOARD ENDPOINT ---------------
 //Scoreboard
-app.get(endPointRoot + 'scores/:userid', (req, res) => {
+app.get('scores/:userid', (req, res) => {
     //
 })
 
 // Scoreboard
 // Retrieve top X users by score
 // leaderboardNumber
-app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
+app.get('scores/leaderboard', (req, res) => {
     let userCount = 0;
     let q = req.body;
     let userCountSql = "SELECT COUNT(UserID) FROM users";
@@ -70,6 +135,7 @@ app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
             + `(SELECT DISTINCT TOP '${reqTop}' points FROM users ORDER BY points DESC)`;
         con.query(sql, function (err, result) {
             if (err) {
+                console.log(err);
                 throw err;
             } else {
                 res.status(200).send(JSON.stringify(result));
@@ -77,40 +143,11 @@ app.get(endPointRoot + 'scores/leaderboard', (req, res) => {
         })
     } catch (err) {
         console.log(err);
-        res.status(404).send("A DB error occured with your request");
+        res.status(404).send("User/password not sent");
     }
 })
 
-// Signup
-app.post('signup/', (req, res) => {
-    let q = req.body;
-    statReport.postSignup = statReport.postSignup + 1;
-
-    let sql = `INSERT INTO users(username, password) values ('${q.username} , ${q.password})`;
-    con.query(sql, function (err, result) {
-        if (err) {
-            console.log("DB error");
-            res.status(404).send('There was a database error with your request');
-            throw err;
-        } else {
-            res.status(200).send('Successfully created user');
-        }
-    })
-})
-
-// ADMIN LOGIN
-app.get('adminLogin/', (req, res) => {
-    let body = req.body;
-    //PLACEHOLDER CHECK - REPLACE WITH DATABASE CHECK + HASHING
-    if (body.user == admin && body.pass == '1234abcd') {
-        res.status(200).send(JSON.stringify(statReport));
-    } else {
-        res.status(403).send('Error - invalid credentials');
-    }
-})
-
-// WIP update score
-app.post(endPointRoot + 'game/', (req, res) => {
+app.post('game/', (req, res) => {
     // To prevent premature termination
     req.setTimeout(100000);
     let body = "";
@@ -148,7 +185,9 @@ app.listen(PORT, (err) => {
     console.log(`App listening on port ${PORT}`);
 })
 
-//Data sanitization
+// ----------------- HELPER FUNCTIONS --------------------
+
+// Data sanitization
 // Check if input is an integer
 function isInteger(str) {
     if (typeof str !== 'string') {
@@ -161,3 +200,28 @@ function isInteger(str) {
         return false;
     }
 }
+
+//Generate login token
+function generateAccessToken(username) {
+    return jwt.sign(username, 'beatmywordle', { expiresIn: '1800s' });
+}
+
+// Auth for JWT - intended as Express middleware fxn
+// Requires the header in format:
+//      Authorization: Bearer JWT_ACCESS_TOKEN
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+  
+    if (token == null) return res.sendStatus(401)
+  
+    jwt.verify(token, TOKEN_STRING, () => {
+      
+      if (err) {
+        console.log(err)
+        return res.sendStatus(403)
+      }
+      req.user = user
+      next()
+    })
+  }

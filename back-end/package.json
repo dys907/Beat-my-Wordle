@@ -2,7 +2,8 @@
   "dependencies": {
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "swagger-ui-express": "^4.3.0"
   },
   "name": "back-end",
   "version": "1.0.0",

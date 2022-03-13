@@ -1,0 +1,123 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the server for the game Beat My Wordle.",
+    "version": "1.0.0",
+    "title": "Beat My Wordle"
+  },
+  "host": "PLACEHOLDER",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "users",
+      "description": "User management and authentication"
+    },
+    {
+      "name": "scores",
+      "description": "For game score related queries"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/users/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "General login to the application",
+        "description": "",
+        "operationId": "generalLogin",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Users object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK"
+          },
+          "403": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/users/signup": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "General user signup",
+        "operationId": "userSignup",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Users object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK"
+          },
+          "403": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/users/admin/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Admin login",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Users object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Users": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Users"
+      }
+    }
+  }
+}

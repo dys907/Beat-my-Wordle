@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
 const app = express();
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 // ---------------------- SWAGGER PAGE ------------------------------- 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDoc = require('./documents/swagger.json');
@@ -111,6 +112,39 @@ app.post(API_VERSION + '/users/admin/login', (req, res) => {
     } else {
         res.status(403).send('Username or password not sent');
     }
+})
+//----------------------- WORD CHECK ENDPOINT --------------
+// need to account for dictionaryapi site going down
+app.get('/word/check/', (req, res) => {
+    const parsedLink = url.parse(req.url, true);
+    const apiDir = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+    const word = parsedLink.query["word"];
+
+    axios({
+        url: apiDir + word,
+        method: 'get'
+    })
+        .then(response => {
+            //res.status(200).json(response.data);
+            console.log(response.data);
+            res.status(200).json({"isWord":true});
+        })
+        .catch((error) => {
+            //res.status(500).json({ message: error });
+            console.log({message:error});
+            res.status(200).json({"isWord":false});
+        })
+});
+
+// ---------------------- WORD UPLOAD ENDPOINT ---------------
+app.post('/uploadWord', authenticateToken, (req, res) => {
+    const { username, word } = req.body; 
+    let sql = "INSERT INTO word(username, word) VALUES ('" + username + "'," + word + ")";
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+    });
+    res.sendStatus(200);
+    return;
 })
 
 // ---------------------- SCOREBOARD ENDPOINT ---------------

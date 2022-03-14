@@ -10,14 +10,14 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
         const endPointRoot = "https://wordle.keyuka.ca/";
         const resourceGet = "1/words/check/?word=" + word;
         const resourcePost = "1/words/upload";
-        xhttp.open('GET', resourceGet, true);
+        xhttp.open('GET', endPointRoot + resourceGet, true);
         xhttp.send();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4) {
                 const response = this.responseText.toString();
                 const resJSON = JSON.parse(response);
                 if(this.status == 200) {
-                    if (resJSON.isWord === "True") {
+                    if (resJSON.isWord === true) {
                         const username = "Vicly"; // hardcoded, get username later
                         const jsonObj = {
                             username: username,

@@ -24,7 +24,7 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
         console.log(submitObject);
         async function fetchData() {
             if (isAdmin) {
-                const host = `https://wordle.itsvicly.com/`;
+                const host = `https://wordle.itsvicly.com`;
                 const endpoint = `/1/users/admin/login`;
                 const URL = host + endpoint;
 

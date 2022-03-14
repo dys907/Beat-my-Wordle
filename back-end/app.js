@@ -25,13 +25,13 @@ let statReport = {
     },
     "PUT": {
         "/1/scores/id" : 0,
-        "/1/words/id": 0
+        "/1/words/upload": 0
     },
     "GET": {
         "/1/scores/all": 0,
         "/1/scores/id": 0,
-        "/1/words/id": 0,
-        "/1/words/random": 0
+        "/1/words/check": 0,
+        "/1/games": 0
     }
 };
 //-------------------------------------
@@ -147,7 +147,10 @@ app.get(API_VERSION + 'words/check', (req, res) => {
 });
 
 // ---------------------- WORD UPLOAD ENDPOINT ---------------
-app.post(API_VERSION + 'words/upload', authenticateToken, (req, res) => {
+// TODO
+// remember after signin/up implemented
+// app.post(API_VERSION + 'words/upload', authenticateToken (req, res) => {
+app.post(API_VERSION + 'words/upload', (req, res) => {
     const { username, word } = req.body; 
     let sql = "INSERT INTO words(username, word) VALUES ('" + username + "'," + word + ")";
     con.query(sql, function (err, result) {

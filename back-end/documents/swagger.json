@@ -19,6 +19,10 @@
     {
       "name": "words",
       "description": "For user word entry related queries"
+    },
+    {
+      "name": "games",
+      "description": "For being matched with another player's word"
     }
   ],
   "schemes": [
@@ -136,11 +140,11 @@
       }
     },
     "/words/upload": {
-      "post": {
+      "put": {
         "tags": [
           "words"
         ],
-        "summary": "Upload checked word to the Word microservice",
+        "summary": "Upload or update a checked word to the Word microservice",
         "description": "Send valid word to word microservice ",
         "operationId": "wordUpload",
         "produces": ["html/text"],
@@ -164,6 +168,105 @@
           },
           "500": {
             "description": "Word could not be added, could not reach endpoint"
+          }
+        }
+      }
+    },
+<<<<<<< HEAD
+    "/words/{username}": {
+      "delete": {
+        "tags": [
+          "words"
+        ],
+        "summary": "Delete the word hosted by the user",
+        "description": "Delete a word if a hosted ",
+        "operationId": "wordDelete",
+        "produces": ["html/text"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username associated to the word to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word deleted successfully"
+          },
+          "404": {
+            "description": "Username not associated to a word"
+          }
+        }
+      }
+    },
+    "/scores/{username}": {
+      "get": {
+        "tags": [
+          "scores"
+        ],
+        "summary": "Sees the score of a user",
+        "description": "See the score a single user",
+        "operationId": "scoreViewSingle",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username of the score to view ",
+            "required": true,
+            "type": "string"
+=======
+    "/games": {
+      "get": {
+        "tags": [
+          "matchmaking",
+          "games"
+        ],
+        "summary": "Get a game",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "description": "Create a matchmade game",
+            "required": true,
+            "type":"string"
+>>>>>>> 0cefd7101adc26381a4e4db335768b060f9d8dd2
+          }
+        ],
+        "responses": {
+          "200": {
+<<<<<<< HEAD
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/scores/" : {
+      "get": {
+        "tags": [
+          "scores"
+        ],
+        "summary": "Returns a map of all the scores stored",
+        "description": "See all the user scores",
+        "operationId": "scoreViewAll",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Scores not found"
+=======
+            "description": "200 OK"
+          },
+          "404": {
+            "description": "404 NO GAMES AVAILABLE"
+>>>>>>> 0cefd7101adc26381a4e4db335768b060f9d8dd2
           }
         }
       }

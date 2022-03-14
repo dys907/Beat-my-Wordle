@@ -7,47 +7,48 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
     const [pass, setPassword] = useState('');
     //login, adminStats, adminError
     const [pageFlow, setPageFlow] = useState('login');
+    const [adminStats, setAdminStats] = useState(null);
 
     const handleChange = (event) => {
         if (event.target.name === 'username') { setName(event.target.value) }
         if (event.target.name === 'password') { setPassword(event.target.value) }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const submitObject = {
             user: user,
             pass: pass
         }
         console.log('handle submit called');
+        console.log(submitObject);
+        async function fetchData() {
+            if (isAdmin) {
+                const host = `http://localhost:8080`;
+                const endpoint = `/1/users/admin/login`;
+                const URL = host + endpoint;
+                console.log("HandleSubmit called");
+                console.log(URL);
 
-        if (isAdmin) {
-            const host = `http://localhost:8890`;
-            const endpoint = `/adminLogin`;
-            const URL = host + endpoint;
-            console.log("HandleSubmit called");
+                const response = await fetch(`${URL}/`, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(submitObject),
 
-            fetch(`${URL}/`, {
-                method: 'POST',
-                body: JSON.stringify(submitObject)
-            }).then(function(response) {
-                response.text().then((txt) => {
-                    console.log(txt);
-                    if (response.status !== 403) {
-                        console.log('ayy admin');
-                        setPageFlow('adminStats');
-                    } else {
-                        setPageFlow('adminError');
-                    }
-                });
-            })
-            .catch(err => { //On error
-                console.log("Error caught: " + err);
-            });
+                    })
+                    
+                const data = await response.json();    
+                setAdminStats(data);
+                setPageFlow('adminStats');
+            }
         }
+        fetchData();
     }
     
     return (
-        pageFlow === 'login' ?
+        pageFlow === 'login' || pageFlow ==='adminError' ?
             <div>
                 <h2>{titleTxt}</h2>
                 <form onSubmit={handleSubmit} >
@@ -63,6 +64,20 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
                 </form>
                 {pageFlow === 'adminError' ? <p>There was an error with your admin credentials. Try again.</p> : <></>}
             </div>
+        :pageFlow === 'adminStats' ?
+         <>
+            <h3>Admin stats</h3>
+            <h3>Get stats</h3>
+            {adminStats && 
+                Object.keys(adminStats.get).map((key, i) => (
+                <p key={key}>Get {key}: {adminStats.get[key]} hits</p>
+            )) }
+            <h3>Post stats</h3>
+            {adminStats && 
+                Object.keys(adminStats.post).map((key, i) => (
+                <p key={key}>Get {key}: {adminStats.post[key]} hits</p>
+            )) }
+        </>
         :<></>
     );
 };

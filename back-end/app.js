@@ -14,19 +14,19 @@ const TOKEN_STRING = 'beatmywordle';
 const API_VERSION = "/1/";
 //Todo: initialize with fxn so verson and endpoint not repeated
 let statReport = {
-    POST: {
+    "POST": {
         "/1/users/signup": 0,
         "/1/users/login": 0,
         "/1/users/adminLogin": 0,
     },
-    DELETE: {
+    "DELETE": {
         "/1/words/id": 0
     },
-    PUT: {
+    "PUT": {
         "/1/scores/id" : 0,
         "/1/words/id": 0
     },
-    GET: {
+    "GET": {
         "/1/scores/all": 0,
         "/1/scores/id": 0,
         "/1/words/id": 0,
@@ -45,6 +45,7 @@ con.connect(function(err) {
     if (err) throw err;
 })
 //------------------------------------
+app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(function (req, res, next) {
     res.header( "Access-Control-Allow-Origin", "*");
@@ -57,14 +58,14 @@ app.use(function (req, res, next) {
 // General Login - TODO: Hashing
 app.post(API_VERSION + 'users/login', function(req, res) {
 	// Log POST req
-    statReport.post.login = statReport.post.login + 1;
+    statReport.POST["/1/users/login"] = statReport.POST["/1/users/login"] + 1;
     let body = req.body;
 	let username = body.username;
 	let password = body.password;
 	// Ensure the input fields exists and are not empty
 	if (username && password) {
         let sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
-		connection.query(sql, [username, password], function(err, result) {
+		con.query(sql, [username, password], function(err, result) {
 			if (err) throw err;
 			if (result.length == 1) {
 				// req.session.loggedin = true;
@@ -83,10 +84,9 @@ app.post(API_VERSION + 'users/login', function(req, res) {
 });
 
 // General Signup
-app.post(API_VERSION + '/users/signup/', (req, res) => {
+app.post(API_VERSION + 'users/signup/', (req, res) => {
     let q = req.body;
-    statReport.post.signup = statReport.post.signup + 1;
-
+    statReport.POST["/1/users/signup"] = statReport.POST["/1/users/signup"]+ 1;
     let sql = `INSERT INTO users(username, password) values ('${q.username} , ${q.password})`;
     con.query(sql, function (err, result) {
         if (err) {
@@ -100,18 +100,19 @@ app.post(API_VERSION + '/users/signup/', (req, res) => {
 })
 // ---------------------- ADMIN ENDPOINT --------------------
 // ADMIN LOGIN
-app.post(API_VERSION + '/users/admin/login', (req, res) => {
+app.post(API_VERSION + 'users/admin/login', (req, res) => {
     // Log POST req
-    statReport.post.adminLogin = statReport.post.adminLogin + 1;
+    statReport.POST["/1/users/adminLogin"] = statReport.POST["/1/users/adminLogin"] + 1;
     let body = req.body;
     let username = body.username;
     let password = crypto.createHash('md5').update(body.password).digest('hex');
     // Ensure the input fields exists and are not empty
     if (username && password) {
         let sql = 'SELECT * FROM admins WHERE username = ? AND password = ?';
-        connection.query(sql, [username, password], function(err, result) {
+        con.query(sql, [username, password], function(err, result) {
             if (err) throw err;
-            if (result.length == 1) {
+            if (result.length > 0) {
+                console.log(statReport);
                 res.status(200).json(statReport);
             } else {
                 res.status(403).send('Incorrect password or user does not exist');

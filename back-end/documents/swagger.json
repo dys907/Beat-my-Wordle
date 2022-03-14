@@ -6,7 +6,7 @@
     "title": "Beat My Wordle"
   },
   "host": "wordle.keyuka.ca",
-  "basePath": "/v1",
+  "basePath": "/1",
   "tags": [
     {
       "name": "users",
@@ -122,10 +122,7 @@
             "in": "query",
             "description": "Word that needs to be checked by dictionary",
             "required": true,
-            "type":"string",
-            "schema": {
-              "$ref": "#/definitions/Words"
-            }
+            "type":"string"
           }
         ],
         "responses": {
@@ -146,14 +143,13 @@
         "summary": "Upload checked word to the Word microservice",
         "description": "Send valid word to word microservice ",
         "operationId": "wordUpload",
-        "produces": ["application/json"],
+        "produces": ["html/text"],
         "parameters": [
           {
-            "name": "word",
+            "name": "body",
             "in": "body",
-            "description": "Word that needs to be checked by dictionary",
+            "description": "Username and their uploaded word",
             "required": true,
-            "type":"string",
             "schema": {
               "$ref": "#/definitions/Words"
             }
@@ -161,10 +157,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Word was successfully checked"
+            "description": "Word was successfully added"
           },
-          "404": {
-            "description": "Word could not be checked, endpoint not reached"
+          "403": {
+            "description": "Unauthorized."
+          },
+          "500": {
+            "description": "Word could not be added, could not reach endpoint"
           }
         }
       }
@@ -188,6 +187,9 @@
     "Words" : {
       "type": "object",
       "properties": {
+        "username": {
+          "type":"string"
+        },
         "word": {
           "type":"string"
         }

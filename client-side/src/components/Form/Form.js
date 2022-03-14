@@ -17,8 +17,8 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const submitObject = {
-            user: user,
-            pass: pass
+            username: user,
+            password: pass
         }
         console.log('handle submit called');
         console.log(submitObject);
@@ -27,8 +27,6 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
                 const host = `https://wordle.keyuka.ca`;
                 const endpoint = `/1/users/admin/login`;
                 const URL = host + endpoint;
-                console.log("HandleSubmit called");
-                console.log(URL);
 
                 const response = await fetch(`${URL}/`, {
                         method: 'POST',
@@ -39,8 +37,8 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
 
                     })
                 
-                console.log(response);
-                const data = await response.json();    
+                // console.log(response);
+                const data = await response.json();
                 setAdminStats(data);
                 setPageFlow('adminStats');
             }
@@ -70,13 +68,23 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
             <h3>Admin stats</h3>
             <h3>Get stats</h3>
             {adminStats && 
-                Object.keys(adminStats.get).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats.get[key]} hits</p>
+                Object.keys(adminStats["GET"]).map((key, i) => (
+                <p key={key}>Endpoint= {key}: {adminStats["GET"][key]} hits</p>
             )) }
             <h3>Post stats</h3>
             {adminStats && 
-                Object.keys(adminStats.post).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats.post[key]} hits</p>
+                Object.keys(adminStats["POST"]).map((key, i) => (
+                <p key={key}>Endpoint= {key}: {adminStats["POST"][key]} hits</p>
+            )) }
+            <h3>Delete stats</h3>
+            {adminStats && 
+                Object.keys(adminStats["DELETE"]).map((key, i) => (
+                <p key={key}>Endpoint= {key}: {adminStats["DELETE"][key]} hits</p>
+            )) }
+            <h3>Put stats</h3>
+            {adminStats && 
+                Object.keys(adminStats["PUT"]).map((key, i) => (
+                <p key={key}>Endpoint= {key}: {adminStats["PUT"][key]} hits</p>
             )) }
         </>
         :<></>

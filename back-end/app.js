@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
+const url = require("url");
 const app = express();
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
@@ -124,7 +125,7 @@ app.post(API_VERSION + 'users/admin/login', (req, res) => {
 })
 //----------------------- WORD CHECK ENDPOINT --------------
 // need to account for dictionaryapi site going down
-app.get(API_VERSION + 'words/check/', (req, res) => {
+app.get(API_VERSION + 'words/check', (req, res) => {
     const parsedLink = url.parse(req.url, true);
     const apiDir = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
     const word = parsedLink.query["word"];

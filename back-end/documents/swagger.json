@@ -166,6 +166,9 @@
           "403": {
             "description": "Unauthorized."
           },
+          "400": {
+            "description": "Bad request."
+          },
           "500": {
             "description": "Word could not be added, could not reach endpoint"
           }

@@ -139,12 +139,10 @@ app.get(API_VERSION + 'words/check', (req, res) => {
     })
         .then(response => {
             //res.status(200).json(response.data);
-            console.log(response.data);
             res.status(200).json({"isWord":true});
         })
         .catch((error) => {
             //res.status(500).json({ message: error });
-            console.log({message:error});
             res.status(200).json({"isWord":false});
         })
 });
@@ -155,13 +153,15 @@ app.get(API_VERSION + 'words/check', (req, res) => {
 // app.post(API_VERSION + 'words/upload', authenticateToken (req, res) => {
 app.put(API_VERSION + 'words/upload', (req, res) => {
     statReport.PUT["/1/words/upload"] = statReport.PUT["/1/words/upload"] + 1;
-    const { username, word } = req.body; 
-    let sql = "INSERT INTO words(username, word) VALUES ('" + username + "'," + word + ")";
+    const { username, word } = req.body;
+    let sql = "INSERT INTO words(username, word) VALUES ('" + username + "','" + word + "')";
     con.query(sql, function (err, result) {
-        if (err) throw err;
+        if (err) {
+            console.log(err);
+            res.status(400).send("400: Error with uploading your word");
+        }
+        res.status(200).send("Word successfully uploaded");
     });
-    res.sendStatus(200);
-    return;
 })
 
 // ---------------------- SCOREBOARD ENDPOINT ---------------

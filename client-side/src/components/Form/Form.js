@@ -36,11 +36,17 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
                         body: JSON.stringify(submitObject),
 
                     })
+                try {
+                    // console.log(response);
+                    const data = await response.json();
+                    setAdminStats(data);
+                    setPageFlow('adminStats');
+                } catch {
+                    console.log('error');
+                    setPageFlow('adminError');
+                }
                 
-                // console.log(response);
-                const data = await response.json();
-                setAdminStats(data);
-                setPageFlow('adminStats');
+                
             }
         }
         fetchData();

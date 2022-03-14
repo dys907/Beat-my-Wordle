@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Beat My Wordle"
   },
-  "host": "wordle.keyuka.ca",
+  "host": "wordle.itsvicly.com",
   "basePath": "/1",
   "tags": [
     {

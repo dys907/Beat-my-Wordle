@@ -37,9 +37,9 @@ let statReport = {
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
-    user: "wordleServer",
+    user: "itsvicly_wordle_user",
     password: "FHbEpZeEhiL8X3AG",
-    database: "wordle"
+    database: "itsvicly_wordle"
 })
 //Establish DB connection ONCE
 con.connect(function(err) {

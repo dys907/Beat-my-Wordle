@@ -12,7 +12,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
             return;
         }
         const xhttp = new XMLHttpRequest();
-        const endPointRoot = "https://wordle.keyuka.ca/";
+        const endPointRoot = "https://wordle.itsvicly.com/";
         const resourceGet = "1/words/check/?word=" + word;
         const resourcePost = "1/words/upload";
         xhttp.open('GET', endPointRoot + resourceGet, true);

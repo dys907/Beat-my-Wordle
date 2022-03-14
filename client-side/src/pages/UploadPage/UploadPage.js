@@ -4,8 +4,13 @@ import PropTypes from 'prop-types';
 
 const UploadPage = ({ homeHandler, playBtnHandler }) => {
 
-    const uploadWord = (word) => {
+    const uploadWord = () => {
+        const word = document.querySelector("#word").value
         const formStatus = document.querySelector("#status");
+        if (word.length != 5) {
+            formStatus.innerHTML = "Word is not of length 5, try a 5 letter word"
+            return;
+        }
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.keyuka.ca/";
         const resourceGet = "1/words/check/?word=" + word;
@@ -24,7 +29,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                             word: word
                         }
                         const params = JSON.stringify(jsonObj);
-                        xhttp.open('POST',endPointRoot + resourcePost, true);
+                        xhttp.open('PUT',endPointRoot + resourcePost, true);
                         xhttp.setRequestHeader("Content-type","application/json");
                         xhttp.send(params);
                         xhttp.onreadystatechange = function(){
@@ -40,7 +45,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                         formStatus.innerHTML = word + " is not a valid word, try a different word"
                     }
                 } else {
-                    // list.innerHTML = "Something went wrong with word validation";
+                    formStatus.innerHTML = "Something went wrong with word validation";
                 }
             }
         }
@@ -53,7 +58,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
         <>
             <input id="word" type="text"></input>
             
-            <Button btnText="Submit" clickHandler= {() => uploadWord(document.querySelector("#word").value)}></Button>
+            <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button>
 
             <h3 id="status"></h3>
 

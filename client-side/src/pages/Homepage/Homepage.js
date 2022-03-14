@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
-const Homepage = ({ loginHandler, playBtnHandler }) => {
+const Homepage = ({ loginHandler, playBtnHandler, uploadHanlder }) => {
     const loginBtnTxt = 'Login';
 
     return (
@@ -12,6 +12,8 @@ const Homepage = ({ loginHandler, playBtnHandler }) => {
 
             {/* Temporary for testing, so we can access Game directly */}
             <Button btnText='Play!' clickHandler={playBtnHandler} />
+
+            <Button btnText='Upload' clickHandler={uploadHanlder} />
         </>
     );
 }

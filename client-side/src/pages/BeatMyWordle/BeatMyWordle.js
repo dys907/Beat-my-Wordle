@@ -7,6 +7,10 @@ const BeatMyWordle = () => {
     //Homepage, Login, Game, 
     const [pageFlow, setPageFlow] = useState('Homepage');
 
+    const homeHandler = () => {
+        setPageFlow("Homepage")
+    }
+
     const loginHandler = () => {
         setPageFlow('Login')
     }
@@ -16,14 +20,19 @@ const BeatMyWordle = () => {
         setPageFlow('Game')
     }
 
+    const uploadHanlder = () => {
+        setPageFlow('Upload')
+    }
+
     return (
         pageFlow === 'Homepage' ?
-            <Homepage pageFlow={pageFlow} loginHandler={loginHandler} playBtnHandler={playGameHandler}/>
+            <Homepage pageFlow={pageFlow} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
         : pageFlow === 'Login' ?
             <LoginPage />
         : pageFlow === 'Game' ?
             <GamePage />
-        : <></>
+        : pageFlow === 'Upload' ?
+            <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />:   <></>
     );
 }
 

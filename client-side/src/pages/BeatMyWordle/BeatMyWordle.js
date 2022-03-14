@@ -31,7 +31,7 @@ const BeatMyWordle = () => {
         : pageFlow === 'Login' ?
             <LoginPage />
         : pageFlow === 'Game' ?
-            <GamePage />
+            <GamePage homeHandler={homeHandler}/>
         : pageFlow === 'Upload' ?
             <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />
         :<></>

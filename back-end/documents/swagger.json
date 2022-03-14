@@ -200,6 +200,34 @@
         }
       }
     },
+    "/profile/{username}": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "See the profile information of a user",
+        "description": "Review the profile information of a user",
+        "operationId": "viewProfile",
+        "produces": ["html/text"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username associated to the user being viewed",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
     "/scores/{username}": {
       "get": {
         "tags": [

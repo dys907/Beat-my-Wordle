@@ -40,7 +40,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                         formStatus.innerHTML = word + " is not a valid word, try a different word"
                     }
                 } else {
-                    list.innerHTML = "Something went wrong with word validation";
+                    // list.innerHTML = "Something went wrong with word validation";
                 }
             }
         }
@@ -70,4 +70,4 @@ UploadPage.propTypes = {
     playBtnHandler: PropTypes.func,
 }
 
-export default Homepage;
+export default UploadPage;

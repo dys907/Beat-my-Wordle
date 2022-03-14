@@ -172,7 +172,6 @@
         }
       }
     },
-<<<<<<< HEAD
     "/words/{username}": {
       "delete": {
         "tags": [
@@ -217,27 +216,10 @@
             "description": "username of the score to view ",
             "required": true,
             "type": "string"
-=======
-    "/games": {
-      "get": {
-        "tags": [
-          "matchmaking",
-          "games"
-        ],
-        "summary": "Get a game",
-        "parameters": [
-          {
-            "name": "word",
-            "in": "query",
-            "description": "Create a matchmade game",
-            "required": true,
-            "type":"string"
->>>>>>> 0cefd7101adc26381a4e4db335768b060f9d8dd2
           }
         ],
         "responses": {
           "200": {
-<<<<<<< HEAD
             "description": "Successful operation"
           },
           "404": {
@@ -261,12 +243,33 @@
           },
           "404": {
             "description": "Scores not found"
-=======
+          }
+        }
+      }
+    },
+
+    "/games": {
+      "get": {
+        "tags": [
+          "matchmaking",
+          "games"
+        ],
+        "summary": "Get a game",
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "description": "Create a matchmade game",
+            "required": true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "200 OK"
           },
           "404": {
             "description": "404 NO GAMES AVAILABLE"
->>>>>>> 0cefd7101adc26381a4e4db335768b060f9d8dd2
           }
         }
       }

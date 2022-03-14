@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Homepage from '../Homepage/Homepage';
 import GamePage from '../GamePage/GamePage';
 import LoginPage from '../LoginPage/LoginPage';
+import UploadPage from '../UploadPage/UploadPage';
 
 const BeatMyWordle = () => {
     //Homepage, Login, Game, 
@@ -32,7 +33,8 @@ const BeatMyWordle = () => {
         : pageFlow === 'Game' ?
             <GamePage />
         : pageFlow === 'Upload' ?
-            <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />:   <></>
+            <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />
+        :<></>
     );
 }
 

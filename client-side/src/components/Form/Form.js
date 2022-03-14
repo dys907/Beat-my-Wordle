@@ -24,7 +24,7 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
         console.log(submitObject);
         async function fetchData() {
             if (isAdmin) {
-                const host = `http://localhost:8080`;
+                const host = `https://wordle.keyuka.ca`;
                 const endpoint = `/1/users/admin/login`;
                 const URL = host + endpoint;
                 console.log("HandleSubmit called");
@@ -38,7 +38,8 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
                         body: JSON.stringify(submitObject),
 
                     })
-                    
+                
+                console.log(response);
                 const data = await response.json();    
                 setAdminStats(data);
                 setPageFlow('adminStats');

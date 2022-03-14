@@ -3,31 +3,39 @@ const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
 const app = express();
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 // ---------------------- SWAGGER PAGE ------------------------------- 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDoc = require('./documents/swagger.json');
 //Unsecure
 const TOKEN_STRING = 'beatmywordle';
 const API_VERSION = "/1/";
+//Todo: initialize with fxn so verson and endpoint not repeated
 let statReport = {
-    users: {
-        signup: 0,
-        login: 0,
-        adminLogin: 0,
+    POST: {
+        "/1/users/signup": 0,
+        "/1/users/login": 0,
+        "/1/users/adminLogin": 0,
     },
-    scores: {
-        login: 0,
-        signup: 0,
-        adminLogin: 0,
-        scoreboard: 0
+    DELETE: {
+        "/1/words/id": 0
+    },
+    PUT: {
+        "/1/scores/id" : 0,
+        "/1/words/id": 0
+    },
+    GET: {
+        "/1/scores/all": 0,
+        "/1/scores/id": 0,
+        "/1/words/id": 0,
+        "/1/words/random": 0
     }
 };
-
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
     user: "wordleServer",
-    password: "",
+    password: "FHbEpZeEhiL8X3AG",
     database: "wordle"
 })
 //Establish DB connection ONCE
@@ -90,16 +98,15 @@ app.post(API_VERSION + '/users/signup/', (req, res) => {
 })
 // ---------------------- ADMIN ENDPOINT --------------------
 // ADMIN LOGIN
-// Opted for no JWT and therefore no session persistence
 app.post(API_VERSION + '/users/admin/login', (req, res) => {
     // Log POST req
     statReport.post.adminLogin = statReport.post.adminLogin + 1;
     let body = req.body;
     let username = body.username;
-    let password = body.password;
+    let password = crypto.createHash('md5').update(body.password).digest('hex');
     // Ensure the input fields exists and are not empty
     if (username && password) {
-        let sql = 'SELECT * FROM admin WHERE username = ? AND password = ?';
+        let sql = 'SELECT * FROM admins WHERE username = ? AND password = ?';
         connection.query(sql, [username, password], function(err, result) {
             if (err) throw err;
             if (result.length == 1) {
@@ -115,75 +122,75 @@ app.post(API_VERSION + '/users/admin/login', (req, res) => {
 
 // ---------------------- SCOREBOARD ENDPOINT ---------------
 //Scoreboard
-app.get('scores/:userid', (req, res) => {
-    //
-})
+// app.get('scores/:userid', (req, res) => {
+//     //
+// })
 
-// Scoreboard
-// Retrieve top X users by score
-// leaderboardNumber
-app.get('scores/leaderboard', (req, res) => {
-    let userCount = 0;
-    let q = req.body;
-    let userCountSql = "SELECT COUNT(UserID) FROM users";
-    try {
-        con.query(sql, function (err, result) {
-            if (err) {
-                throw err;
-            } else {
-                console.log(result);
-                userCount = result;
-            }
-        })
-        let reqTop = q.leaderboardNumber | userCount;
-        sql = `SELECT username, points FROM users WHERE points IN`
-            + `(SELECT DISTINCT TOP '${reqTop}' points FROM users ORDER BY points DESC)`;
-        con.query(sql, function (err, result) {
-            if (err) {
-                console.log(err);
-                throw err;
-            } else {
-                res.status(200).send(JSON.stringify(result));
-            }
-        })
-    } catch (err) {
-        console.log(err);
-        res.status(404).send("User/password not sent");
-    }
-})
+// // Scoreboard
+// // Retrieve top X users by score
+// // leaderboardNumber
+// app.get('scores/leaderboard', (req, res) => {
+//     let userCount = 0;
+//     let q = req.body;
+//     let userCountSql = "SELECT COUNT(UserID) FROM users";
+//     try {
+//         con.query(sql, function (err, result) {
+//             if (err) {
+//                 throw err;
+//             } else {
+//                 console.log(result);
+//                 userCount = result;
+//             }
+//         })
+//         let reqTop = q.leaderboardNumber | userCount;
+//         sql = `SELECT username, points FROM users WHERE points IN`
+//             + `(SELECT DISTINCT TOP '${reqTop}' points FROM users ORDER BY points DESC)`;
+//         con.query(sql, function (err, result) {
+//             if (err) {
+//                 console.log(err);
+//                 throw err;
+//             } else {
+//                 res.status(200).send(JSON.stringify(result));
+//             }
+//         })
+//     } catch (err) {
+//         console.log(err);
+//         res.status(404).send("User/password not sent");
+//     }
+// })
 
-app.post('game/', (req, res) => {
-    // To prevent premature termination
-    req.setTimeout(100000);
-    let body = "";
-    req.on('data', function (chunk) {
-        if (chunk != null) {
-            body += chunk;
-        }
-    })
-    req.on('end', function () {
-        console.log("Full body: " + body);
-        let q = JSON.parse(body);
-        if ((q.name == null) | (q.score == null)) {
-            console.log("Received post with missing params");
-            res.status(404).send('Error: Your POST was missing parameters');
-        } else if (!isInteger(q.score)) {
-            console.log("Received post with non-int score");
-            res.status(404).send('Error: Your score is not an integer');
-        } else {
-            let sql = `INSERT INTO score(name, score) values ('${q.name}', ${q.score})`;
-            con.query(sql, function (err, result) {
-                if (err) {
-                    console.log("POST DB ERROR!");
-                    res.status(404).send('There was a database error on inserting your request');
-                    throw err
-                };
-                console.log("1 record inserted sucessfully");
-            })
-            res.status(200).send(`${q.name}:${q.score} was stored in the DB`);
-        }
-    })
-})
+// app.post('game/', (req, res) => {
+//     // To prevent premature termination
+//     req.setTimeout(100000);
+//     let body = "";
+//     req.on('data', function (chunk) {
+//         if (chunk != null) {
+//             body += chunk;
+//         }
+//     })
+//     req.on('end', function () {
+//         console.log("Full body: " + body);
+//         let q = JSON.parse(body);
+//         if ((q.name == null) | (q.score == null)) {
+//             console.log("Received post with missing params");
+//             res.status(404).send('Error: Your POST was missing parameters');
+//         } else if (!isInteger(q.score)) {
+//             console.log("Received post with non-int score");
+//             res.status(404).send('Error: Your score is not an integer');
+//         } else {
+//             let sql = `INSERT INTO score(name, score) values ('${q.name}', ${q.score})`;
+//             con.query(sql, function (err, result) {
+//                 if (err) {
+//                     console.log("POST DB ERROR!");
+//                     res.status(404).send('There was a database error on inserting your request');
+//                     throw err
+//                 };
+//                 console.log("1 record inserted sucessfully");
+//             })
+//             res.status(200).send(`${q.name}:${q.score} was stored in the DB`);
+//         }
+//     })
+// })
 
 app.listen(PORT, (err) => {
     if (err) throw err;
@@ -215,18 +222,17 @@ function generateAccessToken(username) {
 // Requires the header in format:
 //      Authorization: Bearer JWT_ACCESS_TOKEN
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-  
-    if (token == null) return res.sendStatus(401)
-  
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) return res.sendStatus(401);
+
     jwt.verify(token, TOKEN_STRING, () => {
-      
-      if (err) {
-        console.log(err)
-        return res.sendStatus(403)
-      }
-      req.user = user
-      next()
+        if (err) {
+            console.log(err);
+            return res.sendStatus(403);
+        }
+        req.user = user;
+        next()
     })
-  }
+}

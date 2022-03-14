@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Beat My Wordle"
   },
-  "host": "PLACEHOLDER",
+  "host": "wordle.keyuka.ca",
   "basePath": "/v1",
   "tags": [
     {
@@ -15,6 +15,10 @@
     {
       "name": "scores",
       "description": "For game score related queries"
+    },
+    {
+      "name": "words",
+      "description": "For user word entry related queries"
     }
   ],
   "schemes": [
@@ -102,6 +106,68 @@
           }
         }
       }
+    },
+    "/words/check": {
+      "get": {
+        "tags": [
+          "words"
+        ],
+        "summary": "Checks user submitted 5 letter word against an external dictionary API",
+        "description": "Checks a single word to see if it a valid 5 letter word",
+        "operationId": "wordCheck",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "word",
+            "in": "query",
+            "description": "Word that needs to be checked by dictionary",
+            "required": true,
+            "type":"string",
+            "schema": {
+              "$ref": "#/definitions/Words"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word was successfully checked"
+          },
+          "404": {
+            "description": "Word could not be checked, endpoint not reached"
+          }
+        }
+      }
+    },
+    "/words/upload": {
+      "post": {
+        "tags": [
+          "words"
+        ],
+        "summary": "Upload checked word to the Word microservice",
+        "description": "Send valid word to word microservice ",
+        "operationId": "wordUpload",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "word",
+            "in": "body",
+            "description": "Word that needs to be checked by dictionary",
+            "required": true,
+            "type":"string",
+            "schema": {
+              "$ref": "#/definitions/Words"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word was successfully checked"
+          },
+          "404": {
+            "description": "Word could not be checked, endpoint not reached"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -117,6 +183,17 @@
       },
       "xml": {
         "name": "Users"
+      }
+    },
+    "Words" : {
+      "type": "object",
+      "properties": {
+        "word": {
+          "type":"string"
+        }
+      },
+      "xml": {
+        "name": "Words"
       }
     }
   }

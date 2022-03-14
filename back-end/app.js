@@ -124,7 +124,7 @@ app.post(API_VERSION + 'users/admin/login', (req, res) => {
 })
 //----------------------- WORD CHECK ENDPOINT --------------
 // need to account for dictionaryapi site going down
-app.get('/word/check/', (req, res) => {
+app.get(API_VERSION + 'words/check/', (req, res) => {
     const parsedLink = url.parse(req.url, true);
     const apiDir = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
     const word = parsedLink.query["word"];
@@ -146,7 +146,7 @@ app.get('/word/check/', (req, res) => {
 });
 
 // ---------------------- WORD UPLOAD ENDPOINT ---------------
-app.post('/uploadWord', authenticateToken, (req, res) => {
+app.post(API_VERSION + 'words/upload', authenticateToken, (req, res) => {
     const { username, word } = req.body; 
     let sql = "INSERT INTO words(username, word) VALUES ('" + username + "'," + word + ")";
     con.query(sql, function (err, result) {

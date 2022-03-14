@@ -8,8 +8,8 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
         const formStatus = document.querySelector("#status");
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.keyuka.ca/";
-        const resourceGet = "words/check/?word=" + word;
-        const resourcePost = "words/upload";
+        const resourceGet = "1/words/check/?word=" + word;
+        const resourcePost = "1/words/upload";
         xhttp.open('GET', resourceGet, true);
         xhttp.send();
         xhttp.onreadystatechange = function() {

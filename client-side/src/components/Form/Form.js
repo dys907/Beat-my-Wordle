@@ -69,22 +69,22 @@ const Form = ({ titleTxt, isAdmin, submitTxt }) => {
             <h3>Get stats</h3>
             {adminStats && 
                 Object.keys(adminStats["GET"]).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats["GET"][key]} hits</p>
+                <p key={key}>Endpoint= {key}: {adminStats["GET"][key]} hits</p>
             )) }
             <h3>Post stats</h3>
             {adminStats && 
                 Object.keys(adminStats["POST"]).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats["POST"][key]} hits</p>
+                <p key={key}>Endpoint= {key}: {adminStats["POST"][key]} hits</p>
             )) }
             <h3>Delete stats</h3>
             {adminStats && 
                 Object.keys(adminStats["DELETE"]).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats["DELETE"][key]} hits</p>
+                <p key={key}>Endpoint= {key}: {adminStats["DELETE"][key]} hits</p>
             )) }
             <h3>Put stats</h3>
             {adminStats && 
                 Object.keys(adminStats["PUT"]).map((key, i) => (
-                <p key={key}>Get {key}: {adminStats["PUT"][key]} hits</p>
+                <p key={key}>Endpoint= {key}: {adminStats["PUT"][key]} hits</p>
             )) }
         </>
         :<></>

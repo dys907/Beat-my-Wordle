@@ -191,7 +191,7 @@ app.put(API_VERSION + 'words/upload', (req, res) => {
     });
 })
 
-//word deletion for 1 user ?username (should it be /username path instead of query??)
+//word deletion for 1 user ?username (should it be /username path instead of query??) NEW
 app.delete(API_VERSION + 'words',(req,res)=> {
     statReport.DELETE[API_VERSION + "words/id"] = statReport.DELETE[API_VERSION +"words/id"] + 1;
     const parsedLink = url.parse(req.url, true);
@@ -212,7 +212,7 @@ app.delete(API_VERSION + 'words',(req,res)=> {
     })
 
 })
-//deletes all words in database (cleared end of day everyday).might change endpoint if we have better nomenclature
+//deletes all words in database (cleared end of day everyday).might change endpoint if we have better nomenclature NEW
 app.delete(API_VERSION + 'words/all',(req,res)=> {
     statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION +"words/all"] + 1;
     let sql = "DELETE FROM words";

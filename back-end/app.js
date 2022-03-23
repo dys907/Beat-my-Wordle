@@ -15,30 +15,36 @@ const TOKEN_STRING = 'beatmywordle';
 const API_VERSION = "/1/";
 //Todo: initialize with fxn so verson and endpoint not repeated
 let statReport = {
-    "POST": {
-        "/1/users/signup": 0,
-        "/1/users/login": 0,
-        "/1/users/adminLogin": 0,
-    },
-    "DELETE": {
-        "/1/words/id": 0
-    },
-    "PUT": {
-        "/1/scores/id" : 0,
-        "/1/words/upload": 0
-    },
     "GET": {
         "/1/scores/all": 0,
         "/1/scores/id": 0,
-        "/1/words/check": 0,
-        "/1/games": 0
+        "/1/words/check": 0, //used
+        "/1/games/id": 0, //used
+        "/1/games/exist/id": 0 //used
+    },
+    "POST": {
+        "/1/users/signup": 0,
+        "/1/users/login": 0,
+        "/1/users/adminLogin": 0
+    },
+    "PUT": {
+        "/1/scores/id" : 0, 
+        "/1/words/upload": 0 //used
+    },
+    "DELETE": {
+        "/1/words/all":0, //used
+        "/1/words/id": 0, //used
+        "1/games/all":0 //used
+    },
+    "PATCH": {
+        "/1/games": 0 //used
     }
 };
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
-    user: "itsvicly_wordle_user",
-    password: "FHbEpZeEhiL8X3AG",
+    user: 'root',//"itsvicly_wordle_user",
+    password: '',//"FHbEpZeEhiL8X3AG",
     database: "itsvicly_wordle"
 })
 //Establish DB connection ONCE
@@ -99,6 +105,21 @@ app.post(API_VERSION + 'users/signup/', (req, res) => {
         }
     })
 })
+
+//----------------------- USER GAME ENDPOINT ---------------- NEW
+//check to see if user is currently in a game, and if yes see with who and what word (JSON) /?username
+//returns empty bracket if no games
+app.get(API_VERSION + 'users/gamestatus', (req, res) => {
+    const parsedLink = url.parse(req.url, true);
+    const username = parsedLink.query['username'];
+    let sql = 'SELECT gl.opponent, w.word FROM gameLobby gl JOIN words w ON gl.player = w.username WHERE gl.player=? AND inProgress=TRUE;';
+    con.query(sql,[username], function(err, result) {
+        if(err) {
+            res.status(500).send('Could not contact server');
+        }
+        res.status(200).send(JSON.stringify(result));
+    })
+})
 // ---------------------- ADMIN ENDPOINT --------------------
 // ADMIN LOGIN
 app.post(API_VERSION + 'users/admin/login', (req, res) => {
@@ -127,7 +148,7 @@ app.post(API_VERSION + 'users/admin/login', (req, res) => {
 // need to account for dictionaryapi site going down
 app.get(API_VERSION + 'words/check', (req, res) => {
 
-    statReport.GET["/1/words/check"] = statReport.GET["/1/words/check"] + 1;
+    statReport.GET[API_VERSION + "words/check"] = statReport.GET[API_VERSION + "words/check"] + 1;
 
     const parsedLink = url.parse(req.url, true);
     const apiDir = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
@@ -138,12 +159,18 @@ app.get(API_VERSION + 'words/check', (req, res) => {
         method: 'get'
     })
         .then(response => {
-            //res.status(200).json(response.data);
             res.status(200).json({"isWord":true});
         })
         .catch((error) => {
-            //res.status(500).json({ message: error });
-            res.status(200).json({"isWord":false});
+            console.log(error);
+            if(error == 404) {
+                //word not found
+                res.status(200).json({"isWord":false});
+            }
+            else {
+                //server not reached
+                res.status(500).send('Word could not be added, could not reach endpoint');
+            }
         })
 });
 
@@ -152,16 +179,149 @@ app.get(API_VERSION + 'words/check', (req, res) => {
 // remember after signin/up implemented
 // app.post(API_VERSION + 'words/upload', authenticateToken (req, res) => {
 app.put(API_VERSION + 'words/upload', (req, res) => {
-    statReport.PUT["/1/words/upload"] = statReport.PUT["/1/words/upload"] + 1;
+    statReport.PUT[API_VERSION + "words/upload"] = statReport.PUT[API_VERSION +"words/upload"] + 1;
     const { username, word } = req.body;
-    let sql = "INSERT INTO words(username, word) VALUES ('" + username + "','" + word + "')";
-    con.query(sql, function (err, result) {
+    let sql = "INSERT INTO words(username, word) VALUES (?,?)";
+    con.query(sql,[username,word], function (err, result) {
         if (err) {
             console.log(err);
             res.status(400).send("400: Error with uploading your word");
         }
         res.status(200).send("Word successfully uploaded");
     });
+})
+
+//word deletion for 1 user ?username (should it be /username path instead of query??)
+app.delete(API_VERSION + 'words',(req,res)=> {
+    statReport.DELETE[API_VERSION + "words/id"] = statReport.DELETE[API_VERSION +"words/id"] + 1;
+    const parsedLink = url.parse(req.url, true);
+    const username = parsedLink.query["username"];
+    let sql = "DELETE FROM words WHERE Username=?";
+    con.query(sql,[username], function(err,result) {
+        if(err) {
+            res.status(400).send("500: Error could not reach database");
+        }
+        //console.log(result);
+        console.log(result.affectedRows);
+        if(result.affectedRows == 0) {
+            res.status(400).send("400: Could not find word for this user");
+        } else {
+            res.status(200).send("200: Word has been deleted");
+        }
+
+    })
+
+})
+//deletes all words in database (cleared end of day everyday).might change endpoint if we have better nomenclature
+app.delete(API_VERSION + 'words/all',(req,res)=> {
+    statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION +"words/all"] + 1;
+    let sql = "DELETE FROM words";
+    con.query(sql, function(err,result) {
+        if(err) {
+            res.status(400).send("500: Error could not reach database");
+        }
+
+        if(result.affectedRows == 0) {
+            res.status(200).send("200: There are currently no entries to delete");
+        } else {
+            res.status(200).send("200: All words have been deleted");
+        }
+
+    })
+})
+
+//----------------------- MATCHMAKING ENDPOINT -------------- NEW
+
+//checking for available matches then sending 1 match back in JSON form NEW /?username
+app.get(API_VERSION + 'games', (req,res) => {
+    statReport.GET[API_VERSION + "games/id"] = statReport.GET[API_VERSION + "games/id"] + 1;
+    const parsedLink = url.parse(req.url, true);
+    const username = parsedLink.query["username"];
+
+    let sql = 'SELECT username, word FROM words WHERE username NOT IN (SELECT opponent FROM gameLobby WHERE player = ?) AND NOT username = ?;';
+    con.query(sql, [username,username], function(err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500).send("500: Error with contacting the server.");
+        }
+        if (result.length > 0) {
+            let opponent = result[Math.floor(result.length * Math.random())];
+            res.status(200).json(opponent);
+        } else {
+            res.status(403).send('There are no players available.');
+        }
+    });
+})
+//check if lobby already exists in database (security) NEW /?player=&opponent=
+app.get(API_VERSION + 'games/exist', (req,res,next)=> {
+    statReport.GET[API_VERSION + "games/exist/id"] = statReport.GET[API_VERSION + "games/exist/id"] + 1;
+    const parsedLink = url.parse(req.url, true);
+    const player = parsedLink.query["player"];
+    const opponent = parsedLink.query["opponent"];
+
+    let sql = 'SELECT * FROM gameLobby WHERE player = ? AND opponent = ? AND inProgress= TRUE;';
+
+    con.query(sql, [player, opponent], function(err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500).send("500: Error with contacting the server.");
+        }
+        if(result.length === 0) {
+            res.status(200).send('Game lobby does not exist, can be created');
+        } else {
+            res.status(400).send('Game lobby already exists, game lobby can not be created');
+        }
+    });
+})
+//Queue game and create match in lobby history body {player,opponent}
+app.post(API_VERSION + 'games', (req,res)=> {
+    statReport.POST[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
+    const { player, opponent } = req.body;
+    let sql = "INSERT INTO gameLobby(player, opponent, inProgress) VALUES (?,?,TRUE)";
+    con.query(sql, [player, opponent], function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send("400: Error with creating game lobby");
+        } 
+        res.status(200).send("200: Game created successfully");
+    });
+});
+//Alter the game state from inprogress to false (quit or finish game) body username(player)
+app.patch(API_VERSION + 'games',(req,res,next)=> {
+    statReport.PATCH[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
+    const {player,opponent} = req.body;
+    let sql = "UPDATE gameLobby SET inProgress = FALSE WHERE player = ? AND opponent = ? AND inProgress = TRUE";
+    con.query(sql, [player,opponent], function(err, result) {
+        if(err) {
+            console.log(err);
+            res.status(400).send('400: Error updating game lobby');
+        }
+        //console.log(result);
+        if(result.changedRows == 0) {
+            res.status(400).send('400: Game does not exist');
+        } else {
+            res.status(200).send(`200: ${player} vs ${opponent} game has been concluded`);
+        }
+
+    })
+})
+
+//delete all game lobbies (done at end of day)
+app.delete(API_VERSION + 'games/all',(req,res)=> {
+    statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
+    let sql = "DELETE FROM gamelobby";
+    con.query(sql, function(err,result) {
+        if(err) {
+            res.status(400).send("500: Error could not reach database");
+        }
+
+        if(result.affectedRows == 0) {
+            res.status(200).send("200: There are currently no entries to delete");
+        } else {
+            res.status(200).send("200: All match histories have been deleted");
+        }
+
+    })
 })
 
 // ---------------------- SCOREBOARD ENDPOINT ---------------

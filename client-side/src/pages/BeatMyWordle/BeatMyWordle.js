@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Homepage from '../Homepage/Homepage';
 import GamePage from '../GamePage/GamePage';
 import LoginPage from '../LoginPage/LoginPage';
@@ -7,6 +7,10 @@ import UploadPage from '../UploadPage/UploadPage';
 const BeatMyWordle = () => {
     //Homepage, Login, Game, 
     const [pageFlow, setPageFlow] = useState('Homepage');
+    const [isLoggedIn, setIsLoggedIn] = useState();
+
+    //Will probably need some kind of token check for login status
+    // useEffect(() => {})
 
     const homeHandler = () => {
         setPageFlow("Homepage")
@@ -25,11 +29,16 @@ const BeatMyWordle = () => {
         setPageFlow('Upload')
     }
 
+    const postLoginHandler = () => {
+        setIsLoggedIn(true);
+        homeHandler();
+    }
+
     return (
         pageFlow === 'Homepage' ?
-            <Homepage pageFlow={pageFlow} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
+            <Homepage isLoggedIn={isLoggedIn} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
         : pageFlow === 'Login' ?
-            <LoginPage />
+            <LoginPage postLoginHandler={postLoginHandler} />
         : pageFlow === 'Game' ?
             <GamePage homeHandler={homeHandler}/>
         : pageFlow === 'Upload' ?

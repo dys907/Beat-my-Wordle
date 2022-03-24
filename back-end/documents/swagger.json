@@ -23,6 +23,14 @@
     {
       "name": "games",
       "description": "For being matched with another player's word"
+    },
+    {
+      "name": "systems",
+      "description": "For system to organize data"
+    },
+    {
+      "name": "matchmaking",
+      "description": "For connecting games between 2 players"
     }
   ],
   "schemes": [
@@ -111,6 +119,34 @@
         }
       }
     },
+    "/users/gamestatus": {
+      "get": {
+        "tags": [
+          "users", 
+          "games"
+        ],
+        "summary": "Checks if player has an ongoing game",
+        "operationId": "checkUserGame",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "player",
+            "in": "query",
+            "description": "Check game status",
+            "required": true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200: Player's ingame status checked"
+          },
+          "500": {
+            "description": "500: Cannot contact server"
+          }
+        }
+      }
+    },
     "/words/check": {
       "get": {
         "tags": [
@@ -181,13 +217,13 @@
           "words"
         ],
         "summary": "Delete the word hosted by the user",
-        "description": "Delete a word if a hosted ",
+        "description": "Delete a word if a user has one hosted ",
         "operationId": "wordDelete",
         "produces": ["html/text"],
         "parameters": [
           {
             "name": "username",
-            "in": "path",
+            "in": "query",
             "description": "username associated to the word to delete",
             "required": true,
             "type": "string"
@@ -195,10 +231,33 @@
         ],
         "responses": {
           "200": {
-            "description": "Word deleted successfully"
+            "description": "200: Word deleted successfully"
           },
-          "404": {
-            "description": "Username not associated to a word"
+          "400": {
+            "description": "400: Could not find word for this user"
+          },
+          "500": {
+            "description": "500: Error could not reach database" 
+          }
+        }
+      }
+    },
+    "/words/all": {
+      "delete": {
+        "tags": [
+          "words",
+          "systems"
+        ],
+        "summary": "Delete all the words stored for the day",
+        "description": "Deletes all words stored in the day",
+        "operationId": "wordDeleteAll",
+        "produces": ["html/text"],
+        "responses": {
+          "200": {
+            "description": "200: All Word deleted successfully"
+          },
+          "500": {
+            "description": "500: Error could not reach database" 
           }
         }
       }
@@ -285,7 +344,10 @@
           "matchmaking",
           "games"
         ],
-        "summary": "Get a game",
+        "summary": "Get a game for player",
+        "description": "Check database for a new game for player",
+        "operationId":"getGame",
+        "produces":["application/json"],
         "parameters": [
           {
             "name": "word",
@@ -297,14 +359,153 @@
         ],
         "responses": {
           "200": {
-            "description": "200 OK"
+            "description": "200: Game match found"
           },
           "404": {
-            "description": "404 NO GAMES AVAILABLE"
+            "description": "404: No Games Available"
+          }
+        }
+      },
+      "post": {
+        "tags": ["games",
+        "matchmaking"],
+        "summary": "Create game for player",
+        "description": "Create match and log into game lobby table",
+        "operationId": "createGame",
+        "produces":["html/text"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Two usernames, player and opponent",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200: Lobby is available"
+          },
+          "400": {
+            "description": "400: Lobby already exists, cannot create"
+          },
+          "500": {
+            "description": "500: Error contacting server"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["games",
+        "matchmaking"],
+        "summary": "Updates game status for player",
+        "description": "Toggles inProgress to false when a match concludes",
+        "operationId": "updateGameStatus",
+        "produces":["html/text"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Two usernames, player and opponent",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Match"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200: Game status updated successfully"
+          },
+          "400": {
+            "description": "400: Game lobby does not exist or was not updated"
+          },
+          "500": {
+            "description": "500: Error contacting server"
+          }
+        }
+      }
+    },
+    "/games/exist": {
+      "get": {
+        "tags": [
+          "matchmaking",
+          "games"
+        ],
+        "summary": "Check if a game already exists or has been played",
+        "description": "Checks gameLobby table to see if match has been already made",
+        "operationId":"GameExist",
+        "produces":["html/text"],
+        "parameters": [
+          {
+            "name": "player",
+            "in": "query",
+            "description": "Player of the game",
+            "required": true,
+            "type":"string"
+          },
+          {
+            "name": "opponent",
+            "in": "query",
+            "description": "Opponent of the game",
+            "required": true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200: Lobby is available"
+          },
+          "400": {
+            "description": "400: Lobby already exists, cannot create"
+          },
+          "500": {
+            "description": "500: Error contacting server"
+          }
+        }
+      }
+    },
+    "/games/all": {
+      "delete": {
+        "tags": [
+          "systems",
+          "games"
+        ],
+        "summary": "Clears all game lobbies from game storage",
+        "description": "Deletes all the created lobby history in the game lobby` table, used on daily reset",
+        "operationId":"MatchDeleteAll",
+        "produces":["html/text"],
+        "parameters": [
+          {
+            "name": "player",
+            "in": "query",
+            "description": "Player of the game",
+            "required": true,
+            "type":"string"
+          },
+          {
+            "name": "opponent",
+            "in": "query",
+            "description": "Opponent of the game",
+            "required": true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200: Lobby is available"
+          },
+          "400": {
+            "description": "400: Lobby already exists, cannot create"
+          },
+          "500": {
+            "description": "500: Error contacting server"
           }
         }
       }
     }
+
   },
   "definitions": {
     "Users": {
@@ -333,6 +534,20 @@
       },
       "xml": {
         "name": "Words"
+      }
+    },
+    "Match" : {
+      "type": "object",
+      "properties": {
+        "player": {
+          "type":"string"
+        },
+        "opponent": {
+          "type":"string"
+        }
+      },
+      "xml": {
+        "name": "Match"
       }
     }
   }

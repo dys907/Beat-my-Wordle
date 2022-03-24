@@ -106,7 +106,7 @@ app.post(API_VERSION + 'users/signup/', (req, res) => {
     })
 })
 
-//----------------------- USER GAME ENDPOINT ---------------- NEW
+//----------------------- USER GAME ENDPOINT ---------------- NEW d
 //check to see if user is currently in a game, and if yes see with who and what word (JSON) /?username
 //returns empty bracket if no games
 app.get(API_VERSION + 'users/gamestatus', (req, res) => {
@@ -145,7 +145,7 @@ app.post(API_VERSION + 'users/admin/login', (req, res) => {
     }
 })
 //----------------------- WORD CHECK ENDPOINT --------------
-// need to account for dictionaryapi site going down
+// need to account for dictionaryapi site going down d
 app.get(API_VERSION + 'words/check', (req, res) => {
 
     statReport.GET[API_VERSION + "words/check"] = statReport.GET[API_VERSION + "words/check"] + 1;
@@ -185,7 +185,7 @@ app.put(API_VERSION + 'words/upload', (req, res) => {
     con.query(sql,[username,word], function (err, result) {
         if (err) {
             console.log(err);
-            res.status(400).send("400: Error with uploading your word");
+            res.status(400).send("500: Error with uploading your word");
         }
         res.status(200).send("Word successfully uploaded");
     });
@@ -199,7 +199,7 @@ app.delete(API_VERSION + 'words',(req,res)=> {
     let sql = "DELETE FROM words WHERE Username=?";
     con.query(sql,[username], function(err,result) {
         if(err) {
-            res.status(400).send("500: Error could not reach database");
+            res.status(500).send("500: Error could not reach database");
         }
         //console.log(result);
         console.log(result.affectedRows);
@@ -218,7 +218,7 @@ app.delete(API_VERSION + 'words/all',(req,res)=> {
     let sql = "DELETE FROM words";
     con.query(sql, function(err,result) {
         if(err) {
-            res.status(400).send("500: Error could not reach database");
+            res.status(500).send("500: Error could not reach database");
         }
 
         if(result.affectedRows == 0) {
@@ -252,7 +252,7 @@ app.get(API_VERSION + 'games', (req,res) => {
         }
     });
 })
-//check if lobby already exists in database (security) NEW /?player=&opponent=
+//check if lobby already exists in database (security) NEW /?player=&opponent= work on this
 app.get(API_VERSION + 'games/exist', (req,res,next)=> {
     statReport.GET[API_VERSION + "games/exist/id"] = statReport.GET[API_VERSION + "games/exist/id"] + 1;
     const parsedLink = url.parse(req.url, true);
@@ -294,7 +294,7 @@ app.patch(API_VERSION + 'games',(req,res,next)=> {
     con.query(sql, [player,opponent], function(err, result) {
         if(err) {
             console.log(err);
-            res.status(400).send('400: Error updating game lobby');
+            res.status(500).send('500: Error updating game lobby');
         }
         //console.log(result);
         if(result.changedRows == 0) {
@@ -312,7 +312,7 @@ app.delete(API_VERSION + 'games/all',(req,res)=> {
     let sql = "DELETE FROM gamelobby";
     con.query(sql, function(err,result) {
         if(err) {
-            res.status(400).send("500: Error could not reach database");
+            res.status(500).send("500: Error could not reach database");
         }
 
         if(result.affectedRows == 0) {

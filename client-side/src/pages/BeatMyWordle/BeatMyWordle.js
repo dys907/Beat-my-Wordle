@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Homepage from '../Homepage/Homepage';
 import GamePage from '../GamePage/GamePage';
 import LoginPage from '../LoginPage/LoginPage';
@@ -12,6 +12,10 @@ const BeatMyWordle = () => {
     const xhttp = new XMLHttpRequest();
     const userID = "dylan" // testing
     const endPointRoot = "https://wordle.itsvicly.com/";
+    const [isLoggedIn, setIsLoggedIn] = useState();
+
+    //Will probably need some kind of token check for login status
+    // useEffect(() => {})
 
     const homeHandler = () => {
         setPageFlow("Homepage")
@@ -100,12 +104,17 @@ const BeatMyWordle = () => {
             xhttp.send(params);
         })
     }
+    
+    const postLoginHandler = () => {
+        setIsLoggedIn(true);
+        homeHandler();
+    }
 
     return (
         pageFlow === 'Homepage' ?
-            <Homepage pageFlow={pageFlow} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
+            <Homepage isLoggedIn={isLoggedIn} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
         : pageFlow === 'Login' ?
-            <LoginPage />
+            <LoginPage postLoginHandler={postLoginHandler} />
         : pageFlow === 'Game' ?
             <GamePage homeHandler={homeHandler} word={word}/>
         : pageFlow === 'Upload' ?

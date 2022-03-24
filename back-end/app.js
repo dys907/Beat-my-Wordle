@@ -43,8 +43,8 @@ let statReport = {
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
-    user: 'root',//"itsvicly_wordle_user",
-    password: '',//"FHbEpZeEhiL8X3AG",
+    user: "itsvicly_wordle_user", // root
+    password: "FHbEpZeEhiL8X3AG",
     database: "itsvicly_wordle"
 })
 //Establish DB connection ONCE
@@ -112,7 +112,7 @@ app.post(API_VERSION + 'users/signup/', (req, res) => {
 app.get(API_VERSION + 'users/gamestatus', (req, res) => {
     const parsedLink = url.parse(req.url, true);
     const username = parsedLink.query['username'];
-    let sql = 'SELECT gl.opponent, w.word FROM gameLobby gl JOIN words w ON gl.player = w.username WHERE gl.player=? AND inProgress=TRUE;';
+    let sql = 'SELECT gl.opponent, w.word FROM gameLobby gl JOIN words w ON gl.opponent = w.username WHERE gl.player=? AND inProgress=TRUE;';
     con.query(sql,[username], function(err, result) {
         if(err) {
             res.status(500).send('Could not contact server');
@@ -163,7 +163,7 @@ app.get(API_VERSION + 'words/check', (req, res) => {
         })
         .catch((error) => {
             console.log(error);
-            if(error == 404) {
+            if(error.response.status == 404) {
                 //word not found
                 res.status(200).json({"isWord":false});
             }
@@ -181,14 +181,37 @@ app.get(API_VERSION + 'words/check', (req, res) => {
 app.put(API_VERSION + 'words/upload', (req, res) => {
     statReport.PUT[API_VERSION + "words/upload"] = statReport.PUT[API_VERSION +"words/upload"] + 1;
     const { username, word } = req.body;
-    let sql = "INSERT INTO words(username, word) VALUES (?,?)";
-    con.query(sql,[username,word], function (err, result) {
+    // let sql = "INSERT INTO words(username, word) VALUES (?,?)";
+    let sql = 'SELECT * FROM words WHERE words.username = ?;';
+    con.query(sql, [username], function(err, result) {
         if (err) {
             console.log(err);
-            res.status(400).send("500: Error with uploading your word");
+            res.status(500).send("500: Error with contacting the server.");
         }
-        res.status(200).send("Word successfully uploaded");
+        if (result.length > 0) {
+            let sql2 = "UPDATE words SET word = ? WHERE username = ?"
+            con.query(sql2, [word, username], function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).send("500: Error with uploading your word");
+                } else {
+                    res.status(200).send("updated");
+                }
+
+            })
+        } else {
+            let sql2 = "INSERT INTO words(username, word) VALUES (?,?)"
+            con.query(sql2,[username,word], function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).send("500: Error with uploading your word");
+                } else {
+                    res.status(200).send("uploaded");
+                }
+            });
+        }
     });
+
 })
 
 //word deletion for 1 user ?username (should it be /username path instead of query??) NEW

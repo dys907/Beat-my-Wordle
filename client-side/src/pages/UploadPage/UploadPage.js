@@ -3,7 +3,7 @@ import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
 const UploadPage = ({ homeHandler, playBtnHandler }) => {
-
+    // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
         const word = document.querySelector("#word").value
         const formStatus = document.querySelector("#status");
@@ -18,12 +18,13 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
         xhttp.open('GET', endPointRoot + resourceGet, true);
         xhttp.send();
         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4) {
+            if (this.readyState == 4 && this.status == 200) {
                 const response = this.responseText.toString();
+                console.log(response)
                 const resJSON = JSON.parse(response);
                 if(this.status == 200) {
                     if (resJSON.isWord === true) {
-                        const username = "Vicly"; // hardcoded, get username later
+                        const username = "player"; // hardcoded, get username later
                         const jsonObj = {
                             username: username,
                             word: word
@@ -35,7 +36,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                         xhttp.onreadystatechange = function(){
                             if (this.readyState == 4) {
                                 if(this.status == 200) {
-                                    formStatus.innerHTML = "Word - " + word + " was uploaded";
+                                    formStatus.innerHTML = "Word - " + word + " was " + this.responseText;
                                 } else if (this.status == 400) {
                                     formStatus.innerHTML = "Something went wrong, upload failed";
                                 }

@@ -8,9 +8,11 @@ const BeatMyWordle = () => {
     //Homepage, Login, Game, 
     const [pageFlow, setPageFlow] = useState('Homepage');
     const [word, setWord] = useState();
+    const [gameOpponent, setGameOpponent] = useState();
+    const [gameResult, setGameResult] = useState(0);
 
     const xhttp = new XMLHttpRequest();
-    const userID = "dylan" // testing
+    const userID = "player2" // testing
     const endPointRoot = "https://wordle.itsvicly.com/";
     const [isLoggedIn, setIsLoggedIn] = useState();
 
@@ -32,12 +34,16 @@ const BeatMyWordle = () => {
         checkGameStatus().then((res) => {
             let response = JSON.parse(res);
             console.log(response)
-            if (!response.length == 0) {
+            if (response.length == 0) {
                 lookForGame().then((res2) => {
                     createLobby(res2).then(() => {
                         setPageFlow('Game')
                     })
                 })
+            } else {
+                setGameOpponent(response[0].opponent);
+                setWord(response[0].word);
+                setPageFlow('Game')
             }
         })
 
@@ -52,7 +58,7 @@ const BeatMyWordle = () => {
     const checkGameStatus = () => {
         return new Promise((res, rej) => {
 
-            const resourceCheck = "1/users/gamestatu/?username=" + userID;
+            const resourceCheck = "1/users/gamestatus/?username=" + userID;
             xhttp.open("GET", endPointRoot + resourceCheck, true);
             xhttp.onload = () => {
                 if (xhttp.status === 200) {
@@ -73,8 +79,9 @@ const BeatMyWordle = () => {
             xhttp.onload = () => {
                 if (xhttp.status === 200) {
                     res(xhttp.response)
-                } else {
+                } else if (xhttp.status === 403) {
                     rej(xhttp.statusText)
+                    alert("No games available")
                 }
             }
             xhttp.send();
@@ -82,8 +89,10 @@ const BeatMyWordle = () => {
     }
 
     const createLobby = (res) => {
+        console.log(res);
         const response = JSON.parse(res);
-        const opponent = response.opponent;
+        const opponent = response.username;
+        setGameOpponent(opponent);
         setWord(response.word);
         return new Promise((res, rej) => {
             const resourceCreate = "1/games";
@@ -104,11 +113,24 @@ const BeatMyWordle = () => {
             xhttp.send(params);
         })
     }
-    
+
     const postLoginHandler = () => {
         setIsLoggedIn(true);
         homeHandler();
     }
+
+    useEffect(() => {
+        if (gameResult !== 0) {
+            const resourcePatch = "1/games";
+            const params = JSON.stringify({
+                player: userID,
+                opponent: gameOpponent,
+            })
+            xhttp.open('PATCH',endPointRoot + resourcePatch, true);
+            xhttp.setRequestHeader("Content-type","application/json");
+            xhttp.send(params);
+        }
+    }, [gameResult])
 
     return (
         pageFlow === 'Homepage' ?
@@ -116,7 +138,7 @@ const BeatMyWordle = () => {
         : pageFlow === 'Login' ?
             <LoginPage postLoginHandler={postLoginHandler} />
         : pageFlow === 'Game' ?
-            <GamePage homeHandler={homeHandler} word={word}/>
+            <GamePage homeHandler={homeHandler} word={word} gameResult={setGameResult}/>
         : pageFlow === 'Upload' ?
             <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />
         :<></>

@@ -30,6 +30,8 @@ const BeatMyWordle = () => {
     //TEMPORARY FOR TESTING
     const playGameHandler = () => {
 
+        setGameResult(0);
+
 
         checkGameStatus().then((res) => {
             let response = JSON.parse(res);

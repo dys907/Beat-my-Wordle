@@ -4,6 +4,7 @@ import './Game.css';
 
 const Game = ({ word, gameResult }) => {
     useEffect(() => {
+        gameResult(0)
         const CODE_A = 65;
         const CODE_a = 97;
         const CODE_z = 122;

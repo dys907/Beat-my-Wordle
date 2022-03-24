@@ -18,7 +18,7 @@ class Game extends Component {
         
         let won = false;
         
-        let solution = "DIARY";
+        let solution = this.props.word;
         
         let solutionArrary = [];
         

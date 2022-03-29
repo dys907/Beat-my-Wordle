@@ -2,13 +2,13 @@ import React from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
-const Homepage = ({ loginHandler, playBtnHandler, uploadHanlder }) => {
+const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, uploadHanlder }) => {
     const loginBtnTxt = 'Login';
 
     return (
         <>
             <h1>Beat my Wordle</h1>
-            <Button btnText={loginBtnTxt} clickHandler={loginHandler} />
+            {isLoggedIn ? <></> : <Button btnText={loginBtnTxt} clickHandler={loginHandler} />}
 
             {/* Temporary for testing, so we can access Game directly */}
             <Button btnText='Play!' clickHandler={playBtnHandler} />
@@ -19,7 +19,7 @@ const Homepage = ({ loginHandler, playBtnHandler, uploadHanlder }) => {
 }
 
 Homepage.propTypes = {
-    pageFlow: PropTypes.string,
+    isLoggedIn: PropTypes.bool,
     loginHandler: PropTypes.func,
     playBtnHandler: PropTypes.func,
 }

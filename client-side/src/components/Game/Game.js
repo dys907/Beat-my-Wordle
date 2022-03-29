@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import $ from 'jquery';
 import './Game.css';
 
-class Game extends Component {
-    componentDidMount() {
+const Game = ({ word, gameResult }) => {
+    useEffect(() => {
+        gameResult(0)
         const CODE_A = 65;
         const CODE_a = 97;
         const CODE_z = 122;
@@ -17,14 +18,18 @@ class Game extends Component {
         
         
         let won = false;
+        let lost = false;
         
-        let solution = "DIARY";
+        let solution = word.toUpperCase();
+        console.log(solution);
         
         let solutionArrary = [];
         
         for (let i = 0; i < NUMBER_OF_LETTERS; i++) {
             solutionArrary.push(solution.substring(i, i + 1));
         }
+
+        console.log(solutionArrary)
         
         
         let guessCounter = 0;
@@ -127,7 +132,7 @@ class Game extends Component {
         $("#letterDiv").append(del_btn);
         
         function pressEnter() {
-            if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won) {
+            if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
                 let equal = [];
                 solutionArrary.forEach((el, index) => {
                     (el === currentGuess[index]) ? equal.push(1) : equal.push(0);
@@ -160,15 +165,22 @@ class Game extends Component {
                         guessArray[guessCounter].letters[index].setColor("green");
                     }
                 })
-                if (sum === NUMBER_OF_LETTERS) won = true;
+                if (sum === NUMBER_OF_LETTERS) {
+                    won = true;
+                    gameResult(MAX_GUESS - guessCounter + 1);
+                }
                 currentGuess = [];
                 guessCounter++;
                 letterCounter = 0;
+                if (guessCounter == MAX_GUESS && !won) {
+                    lost = true;
+                    gameResult(-1);
+                }
             }
         }
         
         function pressDelete() {
-            if (letterCounter > 0 && guessCounter < MAX_GUESS && !won) {
+            if (letterCounter > 0 && guessCounter < MAX_GUESS && !won && !lost) {
                 letterCounter--;
                 guessArray[guessCounter].letters[letterCounter].clearLetter();
                 currentGuess.pop();
@@ -176,23 +188,22 @@ class Game extends Component {
         }
         
         function pressLetter(letter) {
-            if (letterCounter < NUMBER_OF_LETTERS && !won) {
+            if (letterCounter < NUMBER_OF_LETTERS && !won && !lost) {
                 guessArray[guessCounter].letters[letterCounter].setLetter(letter);
                 letterCounter++;
                 currentGuess.push(letter);
             }
         }
-    }
-    render() {
-        return (
-            <div className="Game">
-              <h1 id="head">Wordle</h1>
-              <div id="guessDiv"></div>
-              <div id="letterDiv"></div>
-            </div>
-          );
-    }
 
-  }
+    }, [])
+    return (
+        <div className="Game">
+          <h1 id="head">Wordle</h1>
+          <div id="guessDiv"></div>
+          <div id="letterDiv"></div>
+        </div>
+      );
+}
+
   
-  export default Game;
+export default Game;

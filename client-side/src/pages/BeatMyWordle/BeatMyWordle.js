@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Homepage from '../Homepage/Homepage';
 import GamePage from '../GamePage/GamePage';
 import LoginPage from '../LoginPage/LoginPage';
-import UploadPage from '../UploadPage/UploadPage';
+import ProfilePage from '../ProfilePage/ProfilePage';
+import LeaderboardPage from "../LeaderboardPage/LeaderboardPage";
 
 const BeatMyWordle = () => {
     //Homepage, Login, Game, 
@@ -10,6 +11,9 @@ const BeatMyWordle = () => {
     const [word, setWord] = useState();
     const [gameOpponent, setGameOpponent] = useState();
     const [gameResult, setGameResult] = useState(0);
+    const [score, setScore] = useState(0);
+    const [leaderboard, setLeaderboard] = useState("");
+    const [ownWord, setOwnWord] = useState("")
 
     const xhttp = new XMLHttpRequest();
     const userID = "player2" // testing
@@ -53,8 +57,71 @@ const BeatMyWordle = () => {
 
     }
 
-    const uploadHanlder = () => {
-        setPageFlow('Upload')
+    const profileHandler = () => {
+
+        checkScore().then((res) => {
+            let response = JSON.parse(res);
+            let s = response[0].score;
+            setScore(s)
+            checkWord().then((res2) => {
+                let response2 = JSON.parse(res2);
+                let s2 = response2.word;
+                setOwnWord(s2);
+                setPageFlow('Profile')
+            })
+        })
+    }
+
+    const leaderboardHandler = () => {
+        getLeaderboard().then((res) => {
+            setLeaderboard(res);
+            setPageFlow('Leaderboard')
+        })
+    }
+
+    const getLeaderboard = () => {
+        return new Promise((res, rej) => {
+            const resourceScore = "1/scores/all";
+            xhttp.open("GET", endPointRoot + resourceScore, true);
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
+                } else {
+                    rej(xhttp.statusText)
+                }
+            }
+            xhttp.send();
+        })
+    }
+
+    const checkScore = () => {
+        return new Promise((res, rej) => {
+            const resourceScore = "1/scores/?username=" + userID;
+            xhttp.open("GET", endPointRoot + resourceScore, true);
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
+                } else {
+                    rej(xhttp.statusText)
+                }
+            }
+            xhttp.send();
+        })
+    }
+
+    const checkWord = () => {
+        return new Promise((res, rej) => {
+            const resourceWord = "1/words/?username=" + userID;
+            xhttp.open("GET", endPointRoot + resourceWord, true);
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
+                } else {
+                    rej(xhttp.statusText)
+                }
+            }
+            xhttp.send();
+        })
     }
 
     const checkGameStatus = () => {
@@ -136,14 +203,17 @@ const BeatMyWordle = () => {
 
     return (
         pageFlow === 'Homepage' ?
-            <Homepage isLoggedIn={isLoggedIn} loginHandler={loginHandler} playBtnHandler={playGameHandler} uploadHanlder={uploadHanlder}/>
+            <Homepage isLoggedIn={isLoggedIn} loginHandler={loginHandler} playBtnHandler={playGameHandler} profileHandler={profileHandler} leaderboardHandler={leaderboardHandler}/>
         : pageFlow === 'Login' ?
             <LoginPage postLoginHandler={postLoginHandler} />
         : pageFlow === 'Game' ?
             <GamePage homeHandler={homeHandler} word={word} gameResult={setGameResult}/>
-        : pageFlow === 'Upload' ?
-            <UploadPage homeHandler={homeHandler} playBtnHandler={playGameHandler} />
-        :<></>
+        : pageFlow === 'Profile' ?
+            <ProfilePage score={score} homeHandler={homeHandler} playBtnHandler={playGameHandler} ownWord={ownWord} setOwnWord={setOwnWord}/>
+        : pageFlow === 'Leaderboard' ?
+            <LeaderboardPage homeHandler={homeHandler} playBtnHandler={playGameHandler} jsonList={leaderboard}/>
+            :
+        <></>
     );
 }
 

@@ -7,12 +7,15 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
     useEffect(() => {
         const list = JSON.parse(jsonList);
         let listDiv = document.querySelector("#list");
-        list.forEach((element) => {
+        list.forEach((element, index) => {
             let newEntry = document.createElement("tr");
+            let newRank = document.createElement("td");
+            newRank.innerHTML = index + 1;
             let newUsername = document.createElement("td");
             newUsername.innerHTML = element.username;
             let newScore = document.createElement("td");
             newScore.innerHTML = element.score;
+            newEntry.appendChild(newRank)
             newEntry.appendChild(newUsername)
             newEntry.appendChild(newScore)
             listDiv.appendChild(newEntry);
@@ -24,9 +27,10 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
 
         <h1>Leaderboard</h1>
 
-        <table>
+        <table id="leaderboard">
             <thead>
             <tr>
+                <th>Rank</th>
                 <th>Username</th>
                 <th>Score</th>
             </tr>

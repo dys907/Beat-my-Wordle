@@ -65,6 +65,8 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
             <h2>Upload / update your word</h2>
 
+            <h4>* If you already uploaded a word, uploading a new one will overwrite it</h4>
+
             <input id="word" type="text"></input>
             
             <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button>

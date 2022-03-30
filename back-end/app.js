@@ -42,14 +42,14 @@ let statReport = {
 //-------------------------------------
 const con = mysql.createConnection({
     host: "localhost",
-    user: "/itsvicly_wordle_user",
-    password: "FHbEpZeEhiL8X3AG",
+    user: "root", //"/itsvicly_wordle_user",
+    password: "", //"FHbEpZeEhiL8X3AG",
     database: "itsvicly_wordle"
 })
 //Establish DB connection ONCE
-con.connect(function(err) {
-    if (err) throw err;
-})
+// con.connect(function(err) {
+//     if (err) throw err;
+// })
 
 //------------------------------------
 app.use(express.json());
@@ -62,6 +62,7 @@ app.use(function (req, res, next) {
 });
 
 require('./routes/users.js')(app, API_VERSION, con, TOKEN_STRING, statReport);
+const gamesRouter = require('./server/route/gamesRouter.js');
 //----------------------- WORD CHECK ENDPOINT --------------
 // need to account for dictionaryapi site going down d
 app.get(API_VERSION + 'words/check', (req, res) => {
@@ -193,98 +194,8 @@ app.delete(API_VERSION + 'words/all',(req,res)=> {
 })
 
 //----------------------- MATCHMAKING ENDPOINT -------------- NEW
+app.use(API_VERSION + "games",gamesRouter);
 
-//checking for available matches then sending 1 match back in JSON form NEW /?username
-app.get(API_VERSION + 'games', (req,res) => {
-    statReport.GET[API_VERSION + "games/id"] = statReport.GET[API_VERSION + "games/id"] + 1;
-    const parsedLink = url.parse(req.url, true);
-    const username = parsedLink.query["username"];
-
-    let sql = 'SELECT username, word FROM words WHERE username NOT IN (SELECT opponent FROM gameLobby WHERE player = ?) AND NOT username = ?;';
-    con.query(sql, [username,username], function(err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).send("500: Error with contacting the server.");
-        }
-        if (result.length > 0) {
-            let opponent = result[Math.floor(result.length * Math.random())];
-            res.status(200).json(opponent);
-        } else {
-            res.status(403).send('There are no players available.');
-        }
-    });
-})
-//check if lobby already exists in database (security) NEW /?player=&opponent= work on this
-app.get(API_VERSION + 'games/exist', (req,res,next)=> {
-    statReport.GET[API_VERSION + "games/exist/id"] = statReport.GET[API_VERSION + "games/exist/id"] + 1;
-    const parsedLink = url.parse(req.url, true);
-    const player = parsedLink.query["player"];
-    const opponent = parsedLink.query["opponent"];
-
-    let sql = 'SELECT * FROM gameLobby WHERE player = ? AND opponent = ? AND inProgress= TRUE;';
-
-    con.query(sql, [player, opponent], function(err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).send("500: Error with contacting the server.");
-        }
-        if(result.length === 0) {
-            res.status(200).send('Game lobby does not exist, can be created');
-        } else {
-            res.status(400).send('Game lobby already exists, game lobby can not be created');
-        }
-    });
-})
-//Queue game and create match in lobby history body {player,opponent}
-app.post(API_VERSION + 'games', (req,res)=> {
-    statReport.POST[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
-    const { player, opponent } = req.body;
-    let sql = "INSERT INTO gameLobby(player, opponent, inProgress) VALUES (?,?,TRUE)";
-    con.query(sql, [player, opponent], function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status(400).send("400: Error with creating game lobby");
-        } 
-        res.status(200).send("200: Game created successfully");
-    });
-});
-//Alter the game state from inprogress to false (quit or finish game) body username(player)
-app.patch(API_VERSION + 'games',(req,res,next)=> {
-    statReport.PATCH[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
-    const {player,opponent} = req.body;
-    let sql = "UPDATE gameLobby SET inProgress = FALSE WHERE player = ? AND opponent = ? AND inProgress = TRUE";
-    con.query(sql, [player,opponent], function(err, result) {
-        if(err) {
-            console.log(err);
-            res.status(500).send('500: Error updating game lobby');
-        }
-        //console.log(result);
-        if(result.changedRows == 0) {
-            res.status(400).send('400: Game does not exist');
-        } else {
-            res.status(200).send(`200: ${player} vs ${opponent} game has been concluded`);
-        }
-
-    })
-})
-
-//delete all game lobbies (done at end of day)
-app.delete(API_VERSION + 'games/all',(req,res)=> {
-    statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
-    let sql = "DELETE FROM gamelobby";
-    con.query(sql, function(err,result) {
-        if(err) {
-            res.status(500).send("500: Error could not reach database");
-        }
-
-        if(result.affectedRows == 0) {
-            res.status(200).send("200: There are currently no entries to delete");
-        } else {
-            res.status(200).send("200: All match histories have been deleted");
-        }
-
-    })
-})
 
 // ---------------------- SCORING ENDPOINT ---------------
 //For getting a user's score

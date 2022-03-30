@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
-const UploadPage = ({ homeHandler, playBtnHandler }) => {
+const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
     // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
         const word = document.querySelector("#word").value
@@ -24,7 +24,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                 const resJSON = JSON.parse(response);
                 if(this.status == 200) {
                     if (resJSON.isWord === true) {
-                        const username = "player"; // hardcoded, get username later
+                        const username = "player2"; // hardcoded, get username later
                         const jsonObj = {
                             username: username,
                             word: word
@@ -37,6 +37,7 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
                             if (this.readyState == 4) {
                                 if(this.status == 200) {
                                     formStatus.innerHTML = "Word - " + word + " was " + this.responseText;
+                                    setOwnWord(word)
                                 } else if (this.status == 400) {
                                     formStatus.innerHTML = "Something went wrong, upload failed";
                                 }
@@ -57,6 +58,13 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
 
     return (
         <>
+
+            <h1>Current score: <span>{score}</span></h1>
+
+            <h1>Currently uploaded word: <span>{ownWord? ownWord : "NONE!"}</span></h1>
+
+            <h2>Upload / update your word</h2>
+
             <input id="word" type="text"></input>
             
             <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button>
@@ -64,16 +72,18 @@ const UploadPage = ({ homeHandler, playBtnHandler }) => {
             <h3 id="status"></h3>
 
             <Button btnText='Home' clickHandler={homeHandler} />
-            {/* Temporary for testing, so we can access Game directly */}
+
             <Button btnText='Play!' clickHandler={playBtnHandler} />
         </>
     );
 }
 
-UploadPage.propTypes = {
-    pageFlow: PropTypes.string,
+ProfilePage.propTypes = {
+    homeHandler: PropTypes.func,
     loginHandler: PropTypes.func,
-    playBtnHandler: PropTypes.func,
+    score: PropTypes.number,
+    ownWord: PropTypes.string,
+    setOwnWord: PropTypes.func,
 }
 
-export default UploadPage;
+export default ProfilePage;

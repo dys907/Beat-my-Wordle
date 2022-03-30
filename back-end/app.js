@@ -19,7 +19,8 @@ let statReport = {
         "/1/scores/id": 0, //used
         "/1/words/check": 0, //used
         "/1/games/id": 0, //used
-        "/1/games/exist/id": 0 //used
+        "/1/games/exist/id": 0, //used
+        "/1/words": 0 // used
     },
     "POST": {
         "/1/scores" : 0, 
@@ -171,6 +172,27 @@ app.get(API_VERSION + 'words/check', (req, res) => {
             }
         })
 });
+
+// ---------------------- get currently uploaded word-----------
+
+app.get(API_VERSION + 'words', (req, res) => {
+    statReport.GET[API_VERSION + "words"] = statReport.GET[API_VERSION +"words"] + 1;
+    const parsedLink = url.parse(req.url, true);
+    const username = parsedLink.query["username"];
+
+    let sql = 'SELECT words.word FROM words WHERE words.username = ?;';
+    con.query(sql, [username], function(err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500).send("500: Error with contacting the server.");
+        }
+        if (result.length > 0) {
+            res.status(200).json({"word":result[0].word});
+        } else {
+            res.status(200).json({"word": ""});
+        }
+    })
+})
 
 // ---------------------- WORD UPLOAD ENDPOINT ---------------
 // TODO
@@ -368,7 +390,7 @@ app.get(API_VERSION + 'scores', (req, res) => {
 //For getting all user's scores
 app.get(API_VERSION + 'scores/all', (req, res) => {
     statReport.GET[API_VERSION + "scores/all"] += 1;
-    let sql = "SELECT username, score FROM scores";
+    let sql = "SELECT username, score FROM scores ORDER BY score DESC";
     con.query(sql, function(err, result) {
         if (err) {
             console.log(err);

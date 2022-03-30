@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
-const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, uploadHanlder }) => {
+const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, leaderboardHandler }) => {
     const loginBtnTxt = 'Login';
 
     return (
@@ -13,7 +13,9 @@ const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, uploadHanlder }) =
             {/* Temporary for testing, so we can access Game directly */}
             <Button btnText='Play!' clickHandler={playBtnHandler} />
 
-            <Button btnText='Upload' clickHandler={uploadHanlder} />
+            <Button btnText='Profile' clickHandler={profileHandler} />
+            
+            <Button btnText='Leaderboard' clickHandler={leaderboardHandler} />
         </>
     );
 }
@@ -22,6 +24,8 @@ Homepage.propTypes = {
     isLoggedIn: PropTypes.bool,
     loginHandler: PropTypes.func,
     playBtnHandler: PropTypes.func,
+    profileHandler: PropTypes.func,
+    leaderboardHandler: PropTypes.func,
 }
 
 export default Homepage;

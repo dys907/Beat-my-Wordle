@@ -4,14 +4,16 @@ const PORT = process.env.PORT || 8080;
 const url = require("url");
 const app = express();
 const jwt = require('jsonwebtoken');
-const axios = require('axios');
 const crypto = require('crypto');
 // ---------------------- SWAGGER PAGE ------------------------------- 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDoc = require('./documents/swagger.json');
+const sc = require('./configs/httpResponseCodes'); //temporarily placed here
 const TOKEN_STRING = crypto.randomBytes(64).toString('hex');
-const API_VERSION = "/1/";
-//Todo: initialize with fxn so verson and endpoint not repeated
+const API_VERSION = require('./configs/API_VERSION');
+
+
+//TODO: initialize with fxn so verson and endpoint not repeated
 let statReport = {
     "GET": {
         "/1/scores/all": 0, //used
@@ -62,139 +64,13 @@ app.use(function (req, res, next) {
 });
 
 require('./routes/users.js')(app, API_VERSION, con, TOKEN_STRING, statReport);
+//routers
 const gamesRouter = require('./server/route/gamesRouter.js');
-//----------------------- WORD CHECK ENDPOINT --------------
-// need to account for dictionaryapi site going down d
-app.get(API_VERSION + 'words/check', (req, res) => {
+const wordsRouter = require('./server/route/wordsRouter.js');
 
-    statReport.GET[API_VERSION + "words/check"] = statReport.GET[API_VERSION + "words/check"] + 1;
-
-    const parsedLink = url.parse(req.url, true);
-    const apiDir = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
-    const word = parsedLink.query["word"];
-
-    axios({
-        url: apiDir + word,
-        method: 'get'
-    })
-        .then(response => {
-            res.status(200).json({"isWord":true});
-        })
-        .catch((error) => {
-            console.log(error);
-            if(error.response.status == 404) {
-                //word not found
-                res.status(200).json({"isWord":false});
-            }
-            else {
-                //server not reached
-                res.status(500).send('Word could not be added, could not reach endpoint');
-            }
-        })
-});
-
-// ---------------------- get currently uploaded word-----------
-
-app.get(API_VERSION + 'words', (req, res) => {
-    statReport.GET[API_VERSION + "words"] = statReport.GET[API_VERSION +"words"] + 1;
-    const parsedLink = url.parse(req.url, true);
-    const username = parsedLink.query["username"];
-
-    let sql = 'SELECT words.word FROM words WHERE words.username = ?;';
-    con.query(sql, [username], function(err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).send("500: Error with contacting the server.");
-        }
-        if (result.length > 0) {
-            res.status(200).json({"word":result[0].word});
-        } else {
-            res.status(200).json({"word": ""});
-        }
-    })
-})
-
-// ---------------------- WORD UPLOAD ENDPOINT ---------------
-// TODO
-// remember after signin/up implemented
-// app.post(API_VERSION + 'words/upload', authenticateToken (req, res) => {
-app.put(API_VERSION + 'words/upload', (req, res) => {
-    statReport.PUT[API_VERSION + "words/upload"] = statReport.PUT[API_VERSION +"words/upload"] + 1;
-    const { username, word } = req.body;
-    // let sql = "INSERT INTO words(username, word) VALUES (?,?)";
-    let sql = 'SELECT * FROM words WHERE words.username = ?;';
-    con.query(sql, [username], function(err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).send("500: Error with contacting the server.");
-        }
-        if (result.length > 0) {
-            let sql2 = "UPDATE words SET word = ? WHERE username = ?"
-            con.query(sql2, [word, username], function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(400).send("500: Error with uploading your word");
-                } else {
-                    res.status(200).send("updated");
-                }
-
-            })
-        } else {
-            let sql2 = "INSERT INTO words(username, word) VALUES (?,?)"
-            con.query(sql2,[username,word], function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(400).send("500: Error with uploading your word");
-                } else {
-                    res.status(200).send("uploaded");
-                }
-            });
-        }
-    });
-
-})
-
-//word deletion for 1 user ?username (should it be /username path instead of query??) NEW
-app.delete(API_VERSION + 'words',(req,res)=> {
-    statReport.DELETE[API_VERSION + "words/id"] = statReport.DELETE[API_VERSION +"words/id"] + 1;
-    const parsedLink = url.parse(req.url, true);
-    const username = parsedLink.query["username"];
-    let sql = "DELETE FROM words WHERE Username=?";
-    con.query(sql,[username], function(err,result) {
-        if(err) {
-            res.status(500).send("500: Error could not reach database");
-        }
-        //console.log(result);
-        console.log(result.affectedRows);
-        if(result.affectedRows == 0) {
-            res.status(400).send("400: Could not find word for this user");
-        } else {
-            res.status(200).send("200: Word has been deleted");
-        }
-
-    })
-
-})
-//deletes all words in database (cleared end of day everyday).might change endpoint if we have better nomenclature NEW
-app.delete(API_VERSION + 'words/all',(req,res)=> {
-    statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION +"words/all"] + 1;
-    let sql = "DELETE FROM words";
-    con.query(sql, function(err,result) {
-        if(err) {
-            res.status(500).send("500: Error could not reach database");
-        }
-
-        if(result.affectedRows == 0) {
-            res.status(200).send("200: There are currently no entries to delete");
-        } else {
-            res.status(200).send("200: All words have been deleted");
-        }
-
-    })
-})
-
-//----------------------- MATCHMAKING ENDPOINT -------------- NEW
-app.use(API_VERSION + "games",gamesRouter);
+//USE ROUTERS
+app.use(API_VERSION + 'words',wordsRouter); //words
+app.use(API_VERSION + "games",gamesRouter); //matchmaking
 
 
 // ---------------------- SCORING ENDPOINT ---------------
@@ -206,13 +82,13 @@ app.get(API_VERSION + 'scores', (req, res) => {
     con.query(sql, [username], function(err, result) {
         if (err) {
             console.log(err);
-            res.status(500).send("Internal server error");
+            res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");
         } else if (result.length === 1) {
             console.log(result);
-            res.status(200).send(JSON.stringify(result));
+            res.status(sc.OK).send(JSON.stringify(result));
         } else {
             console.log(result);
-            res.status(500).send("Internal server error");
+            res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");
         }
     })
 })
@@ -224,9 +100,9 @@ app.get(API_VERSION + 'scores/all', (req, res) => {
     con.query(sql, function(err, result) {
         if (err) {
             console.log(err);
-            res.status(500).send("Internal server error");
+            res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");
         } else {
-            res.status(200).send(JSON.stringify(result));
+            res.status(sc.OK).send(JSON.stringify(result));
         }
     })
 })
@@ -259,17 +135,17 @@ app.post(API_VERSION + 'scores', (req, res) => {
                 return con.promise(sql);
             } else {
                 console.log("No user found");
-                res.status(403).send("No users with that username");
+                res.status(sc.FORBIDDEN).send("No users with that username");
             }
         }).then((result) => {
             console.log(result);
-            res.status(200).send("Score updated successfully")
+            res.status(sc.OK).send("Score updated successfully")
         }).catch((err) => {
             console.log(err);
-            res.status(500).send("Internal server error");
+            res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");
         });
     } else {
-        res.status(404).send("Invalid request - score increment must be an integer")
+        res.status(sc.FORBIDDEN).send("Invalid request - score increment must be an integer")
     }
     
 })
@@ -302,7 +178,7 @@ app.post(API_VERSION + 'scores', (req, res) => {
 //         })
 //     } catch (err) {
 //         console.log(err);
-//         res.status(404).send("User/password not sent");
+//         res.status(sc.FORBIDDEN).send("User/password not sent");
 //     }
 // })
 
@@ -339,12 +215,12 @@ function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (token == null) return res.sendStatus(401);
+    if (token == null) return res.sendStatus(sc.UNAUTHORIZED);
 
     jwt.verify(token, TOKEN_STRING, () => {
         if (err) {
             console.log(err);
-            return res.sendStatus(403);
+            return res.sendStatus(sc.FORBIDDEN);
         }
         req.user = user;
         next()

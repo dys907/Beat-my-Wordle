@@ -1,11 +1,12 @@
+//deletes all words in database (cleared end of day everyday).might change endpoint if we have better nomenclature NEW
 const con = require('../../../configs/dbconfigs');
 const API_VERSION = require('../../../configs/API_VERSION');
 const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 
-const matchDeleteAll = (req, res) => {
-    statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
-    let sql = "DELETE FROM gamelobby";
+const wordDeleteAll = (req, res) => {
+    statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION + "words/all"] + 1;
+    let sql = "DELETE FROM words";
     con.getConnection((err, connection) => {
         con.query(sql, function (err, result) {
             if (err) {
@@ -15,11 +16,11 @@ const matchDeleteAll = (req, res) => {
             if (result.affectedRows == 0) {
                 res.status(sc.OK).send("200: There are currently no entries to delete");
             } else {
-                res.status(sc.OK).send("200: All match histories have been deleted");
+                res.status(sc.OK).send("200: All words have been deleted");
             }
             connection.release();
         })
     })
 }
 
-module.exports = matchDeleteAll;
+module.exports = wordDeleteAll;

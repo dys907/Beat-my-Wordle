@@ -1,5 +1,5 @@
 const con = require('../../../configs/dbconfigs');
-const API_VERSION = "/1/";//temp
+const API_VERSION = require('../../../configs/API_VERSION');
 const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 

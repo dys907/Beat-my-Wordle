@@ -1,10 +1,10 @@
 const con = require('../../../configs/dbconfigs');
-const API_VERSION = "/1/";//temp
+const API_VERSION = require('../../../configs/API_VERSION');
 const url = require("url");
 const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 
-const gameExist = (req, res, statReport, url, con) => {
+const gameExist = (req, res) => {
     statReport.GET[API_VERSION + "games/exist/id"] = statReport.GET[API_VERSION + "games/exist/id"] + 1;
     const parsedLink = url.parse(req.url, true);
     const player = parsedLink.query["player"];

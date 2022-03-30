@@ -3,6 +3,7 @@ import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
+    const username = "player2" // fix later
     // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
         const word = document.querySelector("#word").value
@@ -24,7 +25,6 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
                 const resJSON = JSON.parse(response);
                 if(this.status == 200) {
                     if (resJSON.isWord === true) {
-                        const username = "player2"; // hardcoded, get username later
                         const jsonObj = {
                             username: username,
                             word: word
@@ -57,26 +57,36 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
     }
 
     return (
-        <>
+        <div>
+            <div  id="profile_card">
+            <h1>Username: <span>{username}</span></h1>
 
             <h1>Current score: <span>{score}</span></h1>
 
             <h1>Currently uploaded word: <span>{ownWord? ownWord : "NONE!"}</span></h1>
+            </div>
+
+            <div id="upload_section">
 
             <h2>Upload / update your word</h2>
 
             <h4>* If you already uploaded a word, uploading a new one will overwrite it</h4>
 
             <input id="word" type="text"></input>
+
+            <button onClick={() => uploadWord()}>Submit</button>
             
-            <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button>
+            {/* <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button> */}
 
             <h3 id="status"></h3>
+            </div>
+
+
 
             <Button btnText='Home' clickHandler={homeHandler} />
 
             <Button btnText='Play!' clickHandler={playBtnHandler} />
-        </>
+        </div>
     );
 }
 

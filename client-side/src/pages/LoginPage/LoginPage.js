@@ -31,7 +31,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                 />                
             </div>
         : loginOrSignup === 'Signup' ?
-            <>
+            <div className={styles.center}>
                 <BackButton clickHandler={homeHandler} />
                 <Form 
                     titleTxt={signupBtnTxt} 
@@ -39,7 +39,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                     submitTxt='Signup' 
                     postLoginHandler={postLoginHandler} 
                 />
-            </>
+            </div>
         : 
             <div>
                 <Button btnText={loginBtnTxt} clickHandler={loginHandler} />

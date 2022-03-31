@@ -3,15 +3,13 @@ const mysql = require("mysql");
 const PORT = process.env.PORT || 8080;
 const url = require("url");
 const app = express();
-const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 // ---------------------- SWAGGER PAGE ------------------------------- 
 const swaggerUi = require('swagger-ui-express')
 const swaggerDoc = require('./documents/swagger.json');
 const sc = require('./configs/httpResponseCodes'); //temporarily placed here
-const TOKEN_STRING = crypto.randomBytes(64).toString('hex');
+const PRIVATE_KEY = crypto.randomBytes(64).toString('hex');
 const API_VERSION = require('./configs/API_VERSION');
-
 
 //TODO: initialize with fxn so verson and endpoint not repeated
 let statReport = {
@@ -63,15 +61,14 @@ app.use(function (req, res, next) {
     next();
 });
 
-require('./routes/users.js')(app, API_VERSION, con, TOKEN_STRING, statReport);
 //routers
 const gamesRouter = require('./server/route/gamesRouter.js');
 const wordsRouter = require('./server/route/wordsRouter.js');
-
+const usersRouter = require('./server/route/usersRouter.js');
 //USE ROUTERS
-app.use(API_VERSION + 'words',wordsRouter); //words
-app.use(API_VERSION + "games",gamesRouter); //matchmaking
-
+app.use(API_VERSION + 'words', wordsRouter); //words
+app.use(API_VERSION + "games", gamesRouter); //matchmaking
+app.use(API_VERSION + 'users', usersRouter); //users
 
 // ---------------------- SCORING ENDPOINT ---------------
 //For getting a user's score
@@ -201,28 +198,4 @@ function isInteger(str) {
     } else {
         return false;
     }
-}
-
-//Generate login token
-function generateAccessToken(username) {
-    return jwt.sign(username, 'beet', { expiresIn: '7d' });
-}
-
-// Auth for JWT - intended as Express middleware fxn
-// Requires the header in format:
-//      Authorization: Bearer JWT_ACCESS_TOKEN
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (token == null) return res.sendStatus(sc.UNAUTHORIZED);
-
-    jwt.verify(token, TOKEN_STRING, () => {
-        if (err) {
-            console.log(err);
-            return res.sendStatus(sc.FORBIDDEN);
-        }
-        req.user = user;
-        next()
-    })
 }

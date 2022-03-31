@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../components/Button/Button';
+import styles from './Homepage.module.css';
 import PropTypes from 'prop-types';
 
 const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, leaderboardHandler }) => {
@@ -7,7 +8,7 @@ const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, le
 
     return (
         <>
-            <h1>Beat my Wordle</h1>
+            <h1 className={styles.centerText}>Beat my Wordle</h1>
             {isLoggedIn ? <></> : <Button btnText={loginBtnTxt} clickHandler={loginHandler} />}
 
             {/* Temporary for testing, so we can access Game directly */}

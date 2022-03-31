@@ -16,12 +16,16 @@ const BeatMyWordle = () => {
     const [ownWord, setOwnWord] = useState("")
 
     const xhttp = new XMLHttpRequest();
-    const userID = "player2" // testing
+    const userID = "player1" // testing
     const endPointRoot = "https://wordle.itsvicly.com/";
     const [isLoggedIn, setIsLoggedIn] = useState();
 
     //Will probably need some kind of token check for login status
-    // useEffect(() => {})
+    useEffect(() => {
+        if (sessionStorage.getItem('username')) {
+            setIsLoggedIn(true);
+        }
+    },[])
 
     const homeHandler = () => {
         setPageFlow("Homepage")
@@ -183,8 +187,9 @@ const BeatMyWordle = () => {
         })
     }
 
-    const postLoginHandler = () => {
+    const postLoginHandler = (user) => {
         setIsLoggedIn(true);
+        sessionStorage.setItem('username', user);
         homeHandler();
     }
 
@@ -203,9 +208,15 @@ const BeatMyWordle = () => {
 
     return (
         pageFlow === 'Homepage' ?
-            <Homepage isLoggedIn={isLoggedIn} loginHandler={loginHandler} playBtnHandler={playGameHandler} profileHandler={profileHandler} leaderboardHandler={leaderboardHandler}/>
+            <Homepage 
+                isLoggedIn={isLoggedIn} 
+                loginHandler={loginHandler} 
+                playBtnHandler={playGameHandler} 
+                profileHandler={profileHandler} 
+                leaderboardHandler={leaderboardHandler}
+            />
         : pageFlow === 'Login' ?
-            <LoginPage postLoginHandler={postLoginHandler} />
+            <LoginPage postLoginHandler={postLoginHandler} homeHandler={homeHandler} />
         : pageFlow === 'Game' ?
             <GamePage homeHandler={homeHandler} word={word} gameResult={setGameResult}/>
         : pageFlow === 'Profile' ?

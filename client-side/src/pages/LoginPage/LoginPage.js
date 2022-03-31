@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import Button from '../../components/Button/Button';
+import BackButton from '../../components/BackButton/BackButton';
+import styles from './LoginPage.module.css';
 import Form from '../../components/Form/Form';
 import PropTypes from 'prop-types';
 
-const LoginPage = ({ postLoginHandler }) => {
+const LoginPage = ({ postLoginHandler, homeHandler }) => {
     const loginBtnTxt = 'Login to Existing Account';
     const signupBtnTxt = 'Signup for New Account';
-    const backBtnTxt = 'Back';
     //Login, Signup
     const [loginOrSignup, setLoginOrSignup] = useState('Default');
 
@@ -18,21 +19,26 @@ const LoginPage = ({ postLoginHandler }) => {
         setLoginOrSignup('Signup');
     }
     
-    const setPageToDefault = () => {
-        setLoginOrSignup('Default');
-    }
-
     return (
         loginOrSignup === 'Login' ?
-            <>
-                <Form titleTxt={loginBtnTxt} formType={'login'} submitTxt='Login' postLoginHandler={postLoginHandler} />
-                <Button btnText={backBtnTxt} clickHandler={setPageToDefault} />
-                
-            </>
+            <div className={styles.center}>
+                <BackButton clickHandler={homeHandler} />
+                <Form 
+                    titleTxt={loginBtnTxt} 
+                    formType={'login'} 
+                    submitTxt='Login' 
+                    postLoginHandler={postLoginHandler} 
+                />                
+            </div>
         : loginOrSignup === 'Signup' ?
             <>
-                <Form titleTxt={signupBtnTxt} formType={'signup'} submitTxt='Signup' postLoginHandler={postLoginHandler} />
-                <Button btnText={backBtnTxt} clickHandler={setPageToDefault} />
+                <BackButton clickHandler={homeHandler} />
+                <Form 
+                    titleTxt={signupBtnTxt} 
+                    formType={'signup'} 
+                    submitTxt='Signup' 
+                    postLoginHandler={postLoginHandler} 
+                />
             </>
         : 
             <div>
@@ -43,7 +49,8 @@ const LoginPage = ({ postLoginHandler }) => {
 }
 
 LoginPage.propTypes = {
-    postLoginHandler: PropTypes.func
+    postLoginHandler: PropTypes.func,
+    homeHandler: PropTypes.func
 }
 
 export default LoginPage;

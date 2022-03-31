@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-// import styles from './Button.module.css';
 import PropTypes from 'prop-types';
+import styles from '../Button/Button.module.css';
+import formStyles from './Form.module.css';
 
 const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {    
     const [user, setName] = useState('');
@@ -54,13 +55,14 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
 
         const response = await fetchMethod(method, URL);
         try {
-            const data = await response.json();
-            if (response.status === 403) {
+            if (response.status !== 200) {
                 setPageFlow('loginError');
+                response.text().then(text => {
+                    console.log(text);
+                });
             } else {
-                document.cookie = `token=${data}`;
-                console.log(`Token received!: ${data}`);
-                postLoginHandler();
+                console.log(`Login successful!`);
+                postLoginHandler(user);
             }
         } catch (e) {
             console.log('login error' + e);
@@ -73,16 +75,21 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
 
         const response = await fetchMethod(method, URL);
         try {
-            const data = await response.json();
-            if (response.status === 403) {
+            if (response.status !== 200) {
                 setPageFlow('loginError');
+                response.text().then(text => {
+                    console.log(text);
+                });
+                console.log(response);
             } else {
+                // const data = await response.json();
                 // document.cookie = `token=${data}`;
+                console.log(response);
                 console.log(`Signup successful!`);
-                postLoginHandler();
+                postLoginHandler(user);
             }
         } catch (e) {
-            console.log('login error' + e);
+            console.log('signup error ' + e);
         }
     }
 
@@ -102,18 +109,18 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     
     return (
         pageFlow === 'login' || pageFlow ==='loginError' ?
-            <div>
+            <div className={formStyles.center}>
                 <h2>{titleTxt}</h2>
                 <form onSubmit={handleSubmit} >
-                    <label>
-                        Username:
-                        <input type="text" name="username" onChange={handleChange} />
+                    <label className={formStyles.label}>
+                        Username: 
+                        <input className={formStyles.input} type="text" name="username" onChange={handleChange} />
                     </label>
-                    <label>
-                        Password:
-                        <input type="password" name="password" onChange={handleChange} />
+                    <label className={formStyles.label}>
+                        Password: 
+                        <input className={formStyles.input}  type="password" name="password" onChange={handleChange} />
                     </label>
-                    <input type="submit" value={submitTxt}  />
+                    <input className={styles.defaultButton} type="submit" value={submitTxt}  />
                 </form>
                 {pageFlow === 'loginError' ? <p>There was an error with your login credentials. Try again.</p> : <></>}
             </div>

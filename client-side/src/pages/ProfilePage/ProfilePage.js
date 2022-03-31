@@ -3,7 +3,7 @@ import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
-    const username = "player2" // fix later
+    const username = sessionStorage.getItem('username') // fix later
     // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
         const word = document.querySelector("#word").value

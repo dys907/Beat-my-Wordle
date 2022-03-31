@@ -16,7 +16,7 @@ const BeatMyWordle = () => {
     const [ownWord, setOwnWord] = useState("")
 
     const xhttp = new XMLHttpRequest();
-    const userID = "player1" // testing
+    const userID = sessionStorage.getItem('username') // testing
     const endPointRoot = "https://wordle.itsvicly.com/";
     const [isLoggedIn, setIsLoggedIn] = useState();
 

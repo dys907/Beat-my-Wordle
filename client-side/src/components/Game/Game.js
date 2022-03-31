@@ -5,7 +5,7 @@ import './Game.css';
 const Game = ({ word, gameResult }) => {
     useEffect(() => {
 
-        const username = "player2"; // todo: fix this later
+        const username = "player1"; // todo: fix this later
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";
@@ -118,20 +118,21 @@ const Game = ({ word, gameResult }) => {
         })
         
         $("#letterDiv").append($("<br>"));
-        
+
+        let enter_btn = $("<button></button>").append("ENTER").addClass("enter_delete").click(() => {
+            pressEnter();
+        })
+        $("#letterDiv").append(enter_btn);
+
+
         LETTERS_KEYBOARD_3.forEach((el) => {
             let newLetter = new LetterBtn(el);
             letterArray.push(newLetter);
         })
         
-        $("#letterDiv").append($("<br>"));
+
         
-        let enter_btn = $("<button></button>").append("ENTER").addClass("enter_delete").click(() => {
-            pressEnter();
-        })
-        $("#letterDiv").append(enter_btn);
-        
-        let del_btn = $("<button></button>").append("DELETE").addClass("enter_delete").click(() => {
+        let del_btn = $("<button></button>").append("DEL").addClass("enter_delete").click(() => {
             pressDelete();
         })
         $("#letterDiv").append(del_btn);

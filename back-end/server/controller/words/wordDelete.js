@@ -9,7 +9,7 @@ const wordDelete = (req, res) => {
     statReport.DELETE[API_VERSION + "words/id"] = statReport.DELETE[API_VERSION + "words/id"] + 1;
     const parsedLink = url.parse(req.url, true);
     const username = parsedLink.query["username"];
-    let sql = "DELETE FROM words WHERE Username=?";
+    let sql = "DELETE FROM words WHERE username=?";
     con.getConnection((err, connection) => {
         con.query(sql, [username], function (err, result) {
             if (err) {

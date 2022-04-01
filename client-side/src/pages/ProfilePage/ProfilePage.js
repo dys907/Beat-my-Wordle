@@ -5,23 +5,25 @@ import PropTypes from 'prop-types';
 import styles from './ProfilePage.module.css';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
-    const username = sessionStorage.getItem('username') // fix later
+    const username = sessionStorage.getItem('username')
+    console.log(username)
     // shows the upload menu underneath
     const [visible, setVisible] = useState(false);
     const toggleUpload = () => {
         setVisible(!visible);
     }
 
+    const xhttp = new XMLHttpRequest();
+    const endPointRoot = "https://wordle.itsvicly.com/";
+    const formStatus = document.querySelector("#status");
     // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
+        console.log("HELLo")
         const word = document.querySelector("#word").value
-        const formStatus = document.querySelector("#status");
         if (word.length != 5) {
             formStatus.innerHTML = "Word is not of length 5, try a 5 letter word"
             return;
         }
-        const xhttp = new XMLHttpRequest();
-        const endPointRoot = "https://wordle.itsvicly.com/";
         const resourceGet = "1/words/check/?word=" + word;
         const resourcePost = "1/words/upload";
         xhttp.open('GET', endPointRoot + resourceGet, true);
@@ -44,7 +46,7 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
                         xhttp.onreadystatechange = function () {
                             if (this.readyState == 4) {
                                 if (this.status == 200) {
-                                    formStatus.innerHTML = "Word - " + word + " was " + this.responseText;
+                                    formStatus.innerHTML = "Word - " + word + " was uploaded";
                                     setOwnWord(word)
                                 } else if (this.status == 400) {
                                     formStatus.innerHTML = "Something went wrong, upload failed";
@@ -62,6 +64,26 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
 
 
+
+
+    }
+
+    const deleteWord = () => {
+        const resourceDelete = "1/words/?username=" + username;
+        xhttp.open('DELETE', endPointRoot + resourceDelete, true)
+        xhttp.send()
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    formStatus.innerHTML = "Your word has been deleted"
+                    setOwnWord("")
+                } else if (this.status === 400) {
+                    formStatus.innerHTML = "You did not have a word uploaded"
+                } else {
+                    formStatus.innerHTML = "Error connecting to the server"
+                }
+            }
+        }
     }
 
     return (
@@ -90,13 +112,17 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
                 <h4>* If you already uploaded a word, uploading a new one will overwrite it</h4>
 
-                <input className={styles.word} type="text"></input>
+                <input id="word" className={styles.word} type="text"></input>
 
                 <button onClick={() => uploadWord()}>Submit</button>
 
+                <br></br>
+
+                <button onClick={() => deleteWord()}>Delete your word</button>
+
                 {/* <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button> */}
 
-                <h3 className={styles.status}></h3>
+                <h3 id="status" className={styles.status}></h3>
                 <Button btnText='View Info' clickHandler={() => { toggleUpload() }} />
             </div>
 

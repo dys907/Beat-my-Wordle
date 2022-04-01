@@ -2,7 +2,7 @@ import React, { Component, useEffect } from 'react';
 import $ from 'jquery';
 import './Game.css';
 
-const Game = ({ word, gameResult }) => {
+const Game = ({ word, gameResult, opponent }) => {
     useEffect(() => {
 
         const username = sessionStorage.getItem('username'); // todo: fix this later
@@ -234,26 +234,41 @@ const Game = ({ word, gameResult }) => {
         }
 
         function updateScore(s) {
-            console.log("Updating score")
-            const resourceUpdate = "1/scores";
+            const score_offset = 5;
             const resJSON = {
                 username: username,
                 score: s
             }
-            const resStr = JSON.stringify(resJSON);
-            xhttp.open("POST", endPointRoot + resourceUpdate, true);
-            xhttp.setRequestHeader("Content-type","application/json");
-            xhttp.send(resStr);
-            xhttp.onreadystatechange = function(){
-                if (this.readyState == 4) {
-                    if(this.status == 200) {
-                        console.log("score updated");
+            const resJSONOpponent = {
+                username: opponent,
+                score: (score_offset - s)
+            }
+            updateUser(resJSON).then(() => {
+                updateUser(resJSONOpponent).then(() => {
+                    console.log("score updated")
+                })
+            })
+        }
+
+        function updateUser(resJSON) {
+            
+            const resourceUpdate = "1/scores";
+            return new Promise((res, rej) => {
+                const resStr = JSON.stringify(resJSON);
+                xhttp.open("POST", endPointRoot + resourceUpdate, true);
+                xhttp.setRequestHeader("Content-type","application/json");
+                xhttp.onload = () => {
+                    if (xhttp.status === 200) {
+                        res(xhttp.response)
                     } else {
-                        console.log("score update failed - " + xhttp.responseText)
+                        rej(xhttp.statusText)
                     }
                 }
-            }
+                xhttp.send(resStr);
+            })
+            
         }
+
 
     }, [])
     return (

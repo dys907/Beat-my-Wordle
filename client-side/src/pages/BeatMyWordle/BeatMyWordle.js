@@ -218,7 +218,7 @@ const BeatMyWordle = () => {
         : pageFlow === 'Login' ?
             <LoginPage postLoginHandler={postLoginHandler} homeHandler={homeHandler} />
         : pageFlow === 'Game' ?
-            <GamePage homeHandler={homeHandler} word={word} gameResult={setGameResult}/>
+            <GamePage homeHandler={homeHandler} word={word} gameResult={setGameResult} opponent={gameOpponent}/>
         : pageFlow === 'Profile' ?
             <ProfilePage score={score} homeHandler={homeHandler} playBtnHandler={playGameHandler} ownWord={ownWord} setOwnWord={setOwnWord}/>
         : pageFlow === 'Leaderboard' ?

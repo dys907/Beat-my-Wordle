@@ -5,7 +5,7 @@ import './Game.css';
 const Game = ({ word, gameResult }) => {
     useEffect(() => {
 
-        const username = "player1"; // todo: fix this later
+        const username = sessionStorage.getItem('username'); // todo: fix this later
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";

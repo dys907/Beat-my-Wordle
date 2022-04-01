@@ -1,17 +1,16 @@
 .profile_card {
-    margin-top: 50px;
-    border: thin solid #90e0ef;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     width: 300px;
-    background-color: #90e0ef;
+    background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     text-align:center;
-    padding-top: 4px;
+    padding-top: 20px;
     padding-bottom: 40px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
 
 }
 
@@ -20,16 +19,44 @@
     font-size: small
 }
 .profile_card span {
-    color:orange;
-    font-size:xx-large;
+    color:black;
+    font-size:x-large;
     font-style:bold;
 }
 
+.inner_profile {
+    margin-bottom:20px;
+}
+
+.userName {
+    margin-bottom:20px;
+}
+.userName span {
+    font-size:42px;
+    font-style:bold;
+}
+
+.cardBox {
+    border: thin solid black;
+    margin:auto;
+    background-color:	rgba(222,184,135,0.5);
+    border-radius:5px;
+    width:150px;
+    padding:10px;
+    vertical-align: middle;
+}
+
 .upload_section {
-    margin-top: 100px;
-    color: #0077b6;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom:60px;
+    color: #0077b6;
+    text-align: center;
     width: 350px;
     height: 200px;
+}
+
+.hide_display {
+    display:none;
 }

@@ -29,13 +29,15 @@ body {
 }
 
 .letterClass {
-    color: #2E8BC0;
-    font-size: large;
+    color: white;
+    font-size: larger;
+    font-family: monospace;
     text-align: center;
     display: inline-block;
     width: 80px;
     height: 50px;
-    border: 2px dashed #2E8BC0;
+    border: 2px ridge white;
+    background-color: #222222;
 }
 
 .enter_delete {

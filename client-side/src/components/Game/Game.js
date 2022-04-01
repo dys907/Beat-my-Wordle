@@ -165,14 +165,14 @@ const Game = ({ word, gameResult, opponent }) => {
                                 })
                                 if (existElsewhere) {
                                     letterArray.forEach((el) => {
-                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("orange");
+                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("#FADA5E");
                                     })
-                                    guessArray[guessCounter].letters[index].setColor("orange");
+                                    guessArray[guessCounter].letters[index].setColor("#FADA5E");
                                 } else {
                                     letterArray.forEach((el) => {
-                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("red");
+                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("#626262");
                                     })
-                                    guessArray[guessCounter].letters[index].setColor("red");
+                                    guessArray[guessCounter].letters[index].setColor("#626262");
                                 }
                             } else {
                                 letterArray.forEach((el) => {

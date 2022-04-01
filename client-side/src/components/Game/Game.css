@@ -98,7 +98,7 @@ body {
     border-collapse: collapse;
     font-size: 2em;
     font-family: monospace;
-    min-width: 400px;
+    min-width: 350px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
   }
 

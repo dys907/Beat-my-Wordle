@@ -4,6 +4,7 @@ import GamePage from '../GamePage/GamePage';
 import LoginPage from '../LoginPage/LoginPage';
 import ProfilePage from '../ProfilePage/ProfilePage';
 import LeaderboardPage from "../LeaderboardPage/LeaderboardPage";
+import CustomModal from '../../components/CustomModal/CustomModal'
 
 const BeatMyWordle = () => {
     //Homepage, Login, Game, 
@@ -14,6 +15,9 @@ const BeatMyWordle = () => {
     const [score, setScore] = useState(0);
     const [leaderboard, setLeaderboard] = useState("");
     const [ownWord, setOwnWord] = useState("")
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalTitle, setModalTitle] = useState("")
+    const [modalText, setModalText] = useState("")
 
     const xhttp = new XMLHttpRequest();
     const userID = sessionStorage.getItem('username') // testing
@@ -154,7 +158,9 @@ const BeatMyWordle = () => {
                     res(xhttp.response)
                 } else if (xhttp.status === 403) {
                     rej(xhttp.statusText)
-                    alert("No games available")
+                    setModalText("Wait for other users to upload a word!")
+                    setModalTitle("No game available!")
+                    setModalOpen(true)
                 }
             }
             xhttp.send();
@@ -207,7 +213,8 @@ const BeatMyWordle = () => {
     }, [gameResult])
 
     return (
-        pageFlow === 'Homepage' ?
+        <>
+                {pageFlow === 'Homepage' ?
             <Homepage 
                 isLoggedIn={isLoggedIn} 
                 loginHandler={loginHandler} 
@@ -224,7 +231,10 @@ const BeatMyWordle = () => {
         : pageFlow === 'Leaderboard' ?
             <LeaderboardPage homeHandler={homeHandler} playBtnHandler={playGameHandler} jsonList={leaderboard}/>
             :
-        <></>
+        <></>}
+        <CustomModal openModal={modalOpen} title={modalTitle} text={modalText} handleOpen={setModalOpen}/>
+        </>
+
     );
 }
 

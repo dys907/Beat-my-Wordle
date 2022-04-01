@@ -1,8 +1,12 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import $ from 'jquery';
 import './Game.css';
+import CustomModal from '../CustomModal/CustomModal'
 
 const Game = ({ word, gameResult, opponent }) => {
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalTitle, setModalTitle] = useState("")
+    const [modalText, setModalText] = useState("")
     useEffect(() => {
 
         const username = sessionStorage.getItem('username'); // todo: fix this later
@@ -195,8 +199,9 @@ const Game = ({ word, gameResult, opponent }) => {
                         }
                         
                     } else {
-                        alert("Not a word, try again");//todo: css this
-                        console.log(currentGuess)
+                        setModalTitle(currentGuessWord + " is not a word!")
+                        setModalText("Try another word!");//todo: css this
+                        setModalOpen(true)
                     }
                 })
 
@@ -251,7 +256,11 @@ const Game = ({ word, gameResult, opponent }) => {
             }
             updateUser(resJSON).then(() => {
                 updateUser(resJSONOpponent).then(() => {
-                    console.log("score updated")
+                    let scoreTitle = s > 0 ? "Congrats!" : "Oops, the word is " + word
+                    let scoreText = s > 0 ? "You solved the wordle and gained " + s + " points!" : "Better luck next time!"
+                    setModalText(scoreText)
+                    setModalTitle(scoreTitle)
+                    setModalOpen(true)
                 })
             })
         }
@@ -278,11 +287,15 @@ const Game = ({ word, gameResult, opponent }) => {
 
     }, [])
     return (
-        <div className="Game">
+        <>
+                <div className="Game">
           <h1 id="head">Wordle</h1>
           <div id="guessDiv"></div>
           <div id="letterDiv"></div>
         </div>
+        <CustomModal openModal={modalOpen} title={modalTitle} text={modalText} handleOpen={setModalOpen}/>
+        </>
+
       );
 }
 

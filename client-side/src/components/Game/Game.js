@@ -139,82 +139,88 @@ const Game = ({ word, gameResult, opponent }) => {
         
         function pressEnter() {
             if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
-
                 let currentGuessWord = "";
 
                 currentGuess.forEach((letter) => {
                     currentGuessWord += letter;
                 })
 
-                const resourceGet = "1/words/check/?word=" + currentGuessWord;
-                xhttp.open('GET', endPointRoot + resourceGet, true);
-                xhttp.send();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        const response = this.responseText.toString();
-                        console.log(response)
-                        const resJSON = JSON.parse(response);
-                        if(this.status == 200) {
-                            if (resJSON.isWord === true) {
-                                let equal = [];
-                                solutionArrary.forEach((el, index) => {
-                                    (el === currentGuess[index]) ? equal.push(1) : equal.push(0);
+                checkIsWord(currentGuessWord).then((res) => {
+                    const resJSON = JSON.parse(res)
+                    if (resJSON.isWord === true) {
+                        let equal = [];
+                        solutionArrary.forEach((el, index) => {
+                            (el === currentGuess[index]) ? equal.push(1) : equal.push(0);
+                        })
+                        let sum = 0;
+                        equal.forEach((el, index) => {
+                            sum += el;
+                            if (el === 0) {
+                                let existElsewhere = solutionArrary.some((element) => {
+                                    return currentGuess[index] === element
                                 })
-                                let sum = 0;
-                                equal.forEach((el, index) => {
-                                    sum += el;
-                                    if (el === 0) {
-                                        let existElsewhere = solutionArrary.some((element) => {
-                                            return currentGuess[index] === element
-                                        })
-                                        if (existElsewhere) {
-                                            letterArray.forEach((el) => {
-                                                if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("orange");
-                                            })
-                                            guessArray[guessCounter].letters[index].setColor("orange");
-                                        } else {
-                                            letterArray.forEach((el) => {
-                                                if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("red");
-                                            })
-                                            guessArray[guessCounter].letters[index].setColor("red");
-                                        }
-                                    } else {
-                                        letterArray.forEach((el) => {
-                                            if (el.letter === currentGuess[index]) {
-                                                el.setColor("green");
-                                                el.alreadyGreen = true;
-                                            }
-                                        })
-                                        guessArray[guessCounter].letters[index].setColor("green");
+                                if (existElsewhere) {
+                                    letterArray.forEach((el) => {
+                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("orange");
+                                    })
+                                    guessArray[guessCounter].letters[index].setColor("orange");
+                                } else {
+                                    letterArray.forEach((el) => {
+                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("red");
+                                    })
+                                    guessArray[guessCounter].letters[index].setColor("red");
+                                }
+                            } else {
+                                letterArray.forEach((el) => {
+                                    if (el.letter === currentGuess[index]) {
+                                        el.setColor("green");
+                                        el.alreadyGreen = true;
                                     }
                                 })
-                                if (sum === NUMBER_OF_LETTERS) {
-                                    won = true;
-                                    gameResult(MAX_GUESS - guessCounter + 1);
-                                    updateScore(MAX_GUESS - guessCounter + 1)
-                                }
-                                currentGuess = [];
-                                guessCounter++;
-                                letterCounter = 0;
-                                if (guessCounter == MAX_GUESS && !won) {
-                                    lost = true;
-                                    gameResult(-1);
-                                    updateScore(-1);
-                                }
-                                
-                            } else {
-                                alert("Not a word, try again");//todo: css this
-                                console.log(currentGuess)
+                                guessArray[guessCounter].letters[index].setColor("green");
                             }
+                        })
+                        if (sum === NUMBER_OF_LETTERS) {
+                            won = true;
+                            gameResult(MAX_GUESS - guessCounter + 1);
+                            updateScore(MAX_GUESS - guessCounter + 1)
                         }
+                        currentGuess = [];
+                        guessCounter++;
+                        letterCounter = 0;
+                        if (guessCounter == MAX_GUESS && !won) {
+                            lost = true;
+                            gameResult(-1);
+                            updateScore(-1);
+                        }
+                        
+                    } else {
+                        alert("Not a word, try again");//todo: css this
+                        console.log(currentGuess)
                     }
-                }
+                })
 
 
 
 
 
             }
+        }
+
+        function checkIsWord(currentGuessWord) {
+            const resourceGet = "1/words/check/?word=" + currentGuessWord;
+            return new Promise((res, rej) => {
+                xhttp.open("GET", endPointRoot + resourceGet, true);
+                xhttp.onload = () => {
+                    if (xhttp.status === 200) {
+                        res(xhttp.response)
+                    } else {
+                        rej(xhttp.statusText)
+                    }
+                }
+                xhttp.send();
+            })
+            
         }
         
         function pressDelete() {

@@ -1,0 +1,35 @@
+.profile_card {
+    margin-top: 50px;
+    border: thin solid #90e0ef;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    background-color: #90e0ef;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    text-align:center;
+    padding-top: 4px;
+    padding-bottom: 40px;
+    padding-left: 30px;
+    padding-right: 30px;
+
+}
+
+.profile_card h1{
+    color: #0077b6;
+    font-size: small
+}
+.profile_card span {
+    color:orange;
+    font-size:xx-large;
+    font-style:bold;
+}
+
+.upload_section {
+    margin-top: 100px;
+    color: #0077b6;
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
+    height: 200px;
+}

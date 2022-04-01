@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
+import styles from './ProfilePage.module.css';
+
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
     const username = "player2" // fix later
     // todo: change/delete instead of upload once a word already uploaded
@@ -58,27 +60,30 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
     return (
         <div>
-            <div  id="profile_card">
-            <h1>Username: <span>{username}</span></h1>
+            <div  className={styles.profile_card}>
+            <h1>Username</h1>
+            <span>{username}</span>
 
-            <h1>Current score: <span>{score}</span></h1>
+            <h1>Rating</h1>
+            <span>{score}</span>
 
-            <h1>Currently uploaded word: <span>{ownWord? ownWord : "NONE!"}</span></h1>
+            <h1>Your word</h1>
+            <span>{ownWord? ownWord : "NONE!"}</span>
             </div>
 
-            <div id="upload_section">
+            <div className={styles.upload_section}>
 
             <h2>Upload / update your word</h2>
 
             <h4>* If you already uploaded a word, uploading a new one will overwrite it</h4>
 
-            <input id="word" type="text"></input>
+            <input className={styles.word} type="text"></input>
 
             <button onClick={() => uploadWord()}>Submit</button>
             
             {/* <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button> */}
 
-            <h3 id="status"></h3>
+            <h3 className={styles.status}></h3>
             </div>
 
 

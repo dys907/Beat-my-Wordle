@@ -3,7 +3,6 @@ const API_VERSION = require('../../../configs/API_VERSION');
 const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 const crypto = require('crypto');
-console.log("ADMINLOGIN");
 const adminLogin = (req, res) => {
     statReport.POST[API_VERSION + "users/adminLogin"] += 1;
     let body = req.body;

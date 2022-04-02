@@ -5,7 +5,6 @@ const sc = require('../../../configs/httpResponseCodes');
 const PRIVATE_KEY = require('../../../configs/PRIVATE_KEY');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-console.log("LOGIN");
 const login = (req, res) => {
     statReport.POST[API_VERSION + "users/login"] += 1;
     let body = req.body;
@@ -15,7 +14,7 @@ const login = (req, res) => {
     if (username && password) {
         let sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
         con.getConnection((err, connection) => {
-            con.query(sql, [username, password], function(err, result) {
+            connection.query(sql, [username, password], function(err, result) {
                 if (err) throw err;
                 if (result.length == 1) {
                     //Generate and send token for persistent login

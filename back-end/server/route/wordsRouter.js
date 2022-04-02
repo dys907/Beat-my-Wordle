@@ -14,5 +14,4 @@ wordsRouter.get("/check",wordCheck);
 wordsRouter.put("/upload", wordUpload);
 wordsRouter.delete("/all",wordDeleteAll);
 
-
 module.exports = wordsRouter;

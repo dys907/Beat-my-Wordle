@@ -7,7 +7,7 @@ const matchDeleteAll = (req, res) => {
     statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
     let sql = "DELETE FROM gamelobby";
     con.getConnection((err, connection) => {
-        con.query(sql, function (err, result) {
+        connection.query(sql, function (err, result) {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error could not reach database");
             }

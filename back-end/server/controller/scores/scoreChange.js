@@ -10,7 +10,7 @@ const scoreChange = (req, res) => {
     const body = req.body;
     const username = body.username;
     const scoreAddition = body.score;
-    console.log(typeof(scoreAddition));
+    
     if (isInteger(scoreAddition)) {
         con.getConnection((err, connection) => {
             //Promise structure

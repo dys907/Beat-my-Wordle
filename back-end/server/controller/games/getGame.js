@@ -12,7 +12,7 @@ const getGame = (req,res) => {
 
     let sql = 'SELECT username, word FROM words WHERE username NOT IN (SELECT opponent FROM gameLobby WHERE player = ?) AND NOT username = ?;';
     con.getConnection((err,connection) => {
-        con.query(sql, [username,username], function(err, result) {
+        connection.query(sql, [username,username], function(err, result) {
             if (err) {
                 console.log(err);
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error with contacting the server.");

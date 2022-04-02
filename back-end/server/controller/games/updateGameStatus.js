@@ -8,7 +8,7 @@ const updateGameStatus = (req, res) => {
     const { player, opponent } = req.body;
     let sql = "UPDATE gameLobby SET inProgress = FALSE WHERE player = ? AND opponent = ? AND inProgress = TRUE";
     con.getConnection((err, connection) => {
-        con.query(sql, [player, opponent], function (err, result) {
+        connection.query(sql, [player, opponent], function (err, result) {
             if (err) {
                 console.log(err);
                 res.status(sc.INTERNAL_SERVER_ERROR).send('500: Error updating game lobby');

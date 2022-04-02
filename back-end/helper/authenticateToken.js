@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const sc = require('../../../configs/httpResponseCodes');
-const PRIVATE_KEY = require('../../../configs/TOKEN');
+const sc = require('../configs/httpResponseCodes');
+const PRIVATE_KEY = require('../configs/PRIVATE_KEY');
 
 // Auth for JWT - intended as Express middleware fxn
 // Requires the header in format:
@@ -11,12 +11,11 @@ const authenticateToken = (req, res, next) => {
 
     if (token == null) return res.sendStatus(sc.UNAUTHORIZED);
 
-    jwt.verify(token, PRIVATE_KEY, () => {
+    jwt.verify(token, PRIVATE_KEY, (err) => {
         if (err) {
             console.log(err);
             return res.sendStatus(sc.FORBIDDEN);
         }
-        req.user = user;
         next()
     })
 }

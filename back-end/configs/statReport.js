@@ -5,7 +5,8 @@ let statReport = {
         "/1/words/check": 0, //used
         "/1/games/id": 0, //used
         "/1/games/exist/id": 0, //used
-        "/1/words": 0 // used
+        "/1/words": 0, // used
+        "/1/users/gamestatus": 0
     },
     "POST": {
         "/1/scores" : 0, 

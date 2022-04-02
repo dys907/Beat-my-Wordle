@@ -2,3 +2,41 @@
 .centerText {
     text-align: center;
 }
+
+.game_descriptor {
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:30px;
+    width:70%;
+    text-align:left;
+    background-color:#cecfb9;
+    padding:10px 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+
+}
+
+.desc_title {
+    text-align: center;
+}
+
+.game_descriptor p {
+    margin:0;
+}
+
+.how_to_div {
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:30px;
+    width:50%;
+    text-align:left;
+    background-color:white;
+    padding:10px 30px 10px 30px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.how_to {
+    padding:1em;
+    list-style-type:decimal;
+}

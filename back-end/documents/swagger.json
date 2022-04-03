@@ -180,7 +180,7 @@
         "tags": [
           "words"
         ],
-        "summary": "Upload or update a checked word to the Word microservice",
+        "summary": "Upload a checked word to the Word microservice",
         "description": "Send valid word to word microservice ",
         "operationId": "wordUpload",
         "produces": ["html/text"],
@@ -197,7 +197,43 @@
         ],
         "responses": {
           "200": {
-            "description": "Word was successfully added"
+            "description": "Word has been uploaded"
+          },
+          "403": {
+            "description": "Unauthorized."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "500": {
+            "description": "Word could not be added, could not reach endpoint"
+          }
+        }
+      }
+    },
+    "/words/update": {
+      "put": {
+        "tags": [
+          "words"
+        ],
+        "summary": "Update a checked word to the Word microservice",
+        "description": "Send valid word to word microservice to replace currently saved one",
+        "operationId": "wordUpdate",
+        "produces": ["html/text"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Username and their updated word",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Words"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word has been updated"
           },
           "403": {
             "description": "Unauthorized."

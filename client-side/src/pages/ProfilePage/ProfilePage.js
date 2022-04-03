@@ -82,6 +82,10 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
         }
     }
 
+    const checkIfHasWord = () => {
+        
+    }
+
     const deleteWord = () => {
         const successfulDeleteText = "Your word has been deleted";
         const errorWordDeleteText = "You did not have a word uploaded";

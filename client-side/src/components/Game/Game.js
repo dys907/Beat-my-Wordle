@@ -26,6 +26,10 @@ const Game = ({ word, gameResult, opponent }) => {
         const LETTERS_KEYBOARD_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
         const ENTER_KEY = 13;
         const DELETE_KEY = 8;
+        const yellow = "#FADA5E"
+        const green = "#7bfa5e"
+        const grey = "#626262"
+
         
         let won = false;
         let lost = false;
@@ -47,6 +51,16 @@ const Game = ({ word, gameResult, opponent }) => {
         let guessArray = [];
         let letterArray = [];
         
+        function Guess(number) {
+            this.number = number;
+            this.letters = [];
+            this.element = $("<div></div>");
+            for (let i = 0; i < NUMBER_OF_LETTERS; i++) {
+                this.letters.push(new Letter(i, this.element));
+            }
+            $("#guessDiv").append(this.element);
+        }
+
         function Guess(number) {
             this.number = number;
             this.letters = [];
@@ -139,7 +153,7 @@ const Game = ({ word, gameResult, opponent }) => {
         })
         $("#letterDiv").append(del_btn);
         
-        function pressEnter() {
+        const pressEnter = () => {
             const modalTryAgainText = "Try another word!";
             if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
                 let currentGuessWord = "";
@@ -157,31 +171,7 @@ const Game = ({ word, gameResult, opponent }) => {
                         })
                         let sum = 0;
                         equal.forEach((el, index) => {
-                            sum += el;
-                            if (el === 0) {
-                                let existElsewhere = solutionArrary.some((element) => {
-                                    return currentGuess[index] === element
-                                })
-                                if (existElsewhere) {
-                                    letterArray.forEach((el) => {
-                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("#FADA5E");
-                                    })
-                                    guessArray[guessCounter].letters[index].setColor("#FADA5E");
-                                } else {
-                                    letterArray.forEach((el) => {
-                                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor("#626262");
-                                    })
-                                    guessArray[guessCounter].letters[index].setColor("#626262");
-                                }
-                            } else {
-                                letterArray.forEach((el) => {
-                                    if (el.letter === currentGuess[index]) {
-                                        el.setColor("green");
-                                        el.alreadyGreen = true;
-                                    }
-                                })
-                                guessArray[guessCounter].letters[index].setColor("green");
-                            }
+                            handleGuess(el, index, sum);
                         })
                         if (sum === NUMBER_OF_LETTERS) {
                             won = true;
@@ -207,7 +197,35 @@ const Game = ({ word, gameResult, opponent }) => {
             }
         }
 
-        function checkIsWord(currentGuessWord) {
+        const handleGuess = (el, index, sum) => {
+            sum += el;
+            if (el === 0) {
+                let existElsewhere = solutionArrary.some((element) => {
+                    return currentGuess[index] === element
+                })
+                if (existElsewhere) {
+                    letterArray.forEach((el) => {
+                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor(yellow);
+                    })
+                    guessArray[guessCounter].letters[index].setColor(yellow);
+                } else {
+                    letterArray.forEach((el) => {
+                        if (el.letter === currentGuess[index] && !el.alreadyGreen) el.setColor(grey);
+                    })
+                    guessArray[guessCounter].letters[index].setColor(grey);
+                }
+            } else {
+                letterArray.forEach((el) => {
+                    if (el.letter === currentGuess[index]) {
+                        el.setColor(green);
+                        el.alreadyGreen = true;
+                    }
+                })
+                guessArray[guessCounter].letters[index].setColor(green);
+            }
+        }
+
+        const checkIsWord = (currentGuessWord) => {
             const resourceGet = "1/words/check/?word=" + currentGuessWord;
             return new Promise((res, rej) => {
                 xhttp.open("GET", endPointRoot + resourceGet, true);
@@ -222,7 +240,7 @@ const Game = ({ word, gameResult, opponent }) => {
             })
         }
         
-        function pressDelete() {
+        const pressDelete = () => {
             if (letterCounter > 0 && guessCounter < MAX_GUESS && !won && !lost) {
                 letterCounter--;
                 guessArray[guessCounter].letters[letterCounter].clearLetter();
@@ -230,7 +248,7 @@ const Game = ({ word, gameResult, opponent }) => {
             }
         }
         
-        function pressLetter(letter) {
+        const pressLetter = (letter) => {
             if (letterCounter < NUMBER_OF_LETTERS && !won && !lost) {
                 guessArray[guessCounter].letters[letterCounter].setLetter(letter);
                 letterCounter++;
@@ -238,7 +256,7 @@ const Game = ({ word, gameResult, opponent }) => {
             }
         }
 
-        function updateScore(s) {
+        const updateScore = (s) => {
             const score_offset = 5;
             const winTitleText = 'Congrats!';
             const loseTitleText = `Oops, the word is ${word}`;
@@ -268,7 +286,7 @@ const Game = ({ word, gameResult, opponent }) => {
             })
         }
 
-        function updateUser(resJSON) {
+        const updateUser = (resJSON) => {
             const resourceUpdate = "1/scores";
             return new Promise((res, rej) => {
                 const resStr = JSON.stringify(resJSON);

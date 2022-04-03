@@ -123,19 +123,17 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
         const resourceDelete = "1/words/?username=" + username;
 
         xhttp.open('DELETE', endPointRoot + resourceDelete, true)
-        xhttp.send()
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                if (this.status === 200) {
-                    formStatus.innerHTML = successfulDeleteText;
-                    setOwnWord("")
-                } else if (this.status === 400) {
-                    formStatus.innerHTML = errorWordDeleteText;
-                } else {
-                    formStatus.innerHTML = connectErrorText;
-                }
+        xhttp.onload = () => {
+            if (xhttp.status === 200) {
+                formStatus.innerHTML = successfulDeleteText;
+                setOwnWord("")
+            } else if (xhttp.status === 400) {
+                formStatus.innerHTML = errorWordDeleteText;
+            } else {
+                formStatus.innerHTML = connectErrorText;
             }
         }
+        xhttp.send()
     }
 
     return (

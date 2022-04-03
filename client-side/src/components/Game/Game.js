@@ -272,6 +272,7 @@ const Game = ({ word, gameResult, opponent }) => {
                 const resStr = JSON.stringify(resJSON);
                 xhttp.open("POST", endPointRoot + resourceUpdate, true);
                 xhttp.setRequestHeader("Content-type","application/json");
+                xhttp.setRequestHeader("Authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
                     if (xhttp.status === 200) {
                         res(xhttp.response)

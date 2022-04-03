@@ -20,8 +20,9 @@ const login = (req, res) => {
                     //Generate and send token for persistent login
                     const token =  jwt.sign({user: username}, 
                         PRIVATE_KEY, { expiresIn: "7 days" });
-                    res.cookie("jwt", token, { secure: true, httpOnly: true});
-                    res.status(sc.OK).send("Login successful");
+                    //res.cookie("jwt", token, { secure: true });
+                    res.status(sc.OK).json({"type": "login", "access_token": token});
+                    //res.status(sc.OK).send("Login successful");
                 } else {
                     res.status(sc.INTERNAL_SERVER_ERROR)
                         .send('Incorrect password or user does not exist');

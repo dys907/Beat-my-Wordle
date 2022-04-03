@@ -25,8 +25,8 @@ const signup = (req, res) => {
                 } else {
                     const token =  jwt.sign({user: username}, 
                         PRIVATE_KEY, { expiresIn: "7 days" });
-                    res.cookie("jwt", token, { secure: true, httpOnly: true});
-                    res.status(sc.OK).send("Successfully signed up");
+                    //res.cookie("jwt", token, { secure: true });
+                    res.status(sc.OK).json({"type": "signup", "access_token": token});//send("Successfully signed up");
                 }
             });
         } catch (err) {

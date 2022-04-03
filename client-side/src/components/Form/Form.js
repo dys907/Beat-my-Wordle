@@ -62,6 +62,10 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 });
             } else {
                 console.log(`Login successful!`);
+                response.text().then(text => {
+                    let jwt_token = JSON.parse(text).access_token;
+                    localStorage.setItem("jwt", jwt_token);
+                })
                 postLoginHandler(user);
             }
         } catch (e) {
@@ -86,6 +90,10 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 // document.cookie = `token=${data}`;
                 console.log(response);
                 console.log(`Signup successful!`);
+                response.text().then(text => {
+                    let jwt_token = JSON.parse(text).access_token;
+                    localStorage.setItem("jwt", jwt_token);
+                })
                 postLoginHandler(user);
             }
         } catch (e) {

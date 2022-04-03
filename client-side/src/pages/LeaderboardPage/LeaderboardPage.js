@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
+import styles from './LeaderboardPage.module.css';
+
 const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
     const homeBtnTxt = 'Home';
     const playBtnTxt = 'Play!';
@@ -26,7 +28,7 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
 
     return (
         <>
-            <h1>Leaderboard</h1>
+            <h1 className={styles.title}>Leaderboard</h1>
             <table id="leaderboard">
                 <thead>
                     <tr>
@@ -38,8 +40,10 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
                 <tbody id="list">
                 </tbody>
             </table>
-            <Button btnText={homeBtnTxt} clickHandler={homeHandler} />
-            <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
+            <div className={styles.buttonMenu}>
+                <Button btnText={homeBtnTxt} clickHandler={homeHandler} />
+                <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
+            </div>
         </>
     );
 }

@@ -103,7 +103,7 @@ body {
   }
 
 #leaderboard thead tr {
-    background-color: #0077b6;
+    background-color: #202020; /*#0077b6;*/
     color: #ffffff;
     text-align: left;
 }
@@ -113,12 +113,14 @@ body {
 }
 
 #leaderboard tbody tr {
-    background-color: #90e0ef;
-    border-bottom: 1px solid #dddddd;
+    background-color: #4f4f4f /*#90e0ef*/;
+    border-bottom: 1px solid #101;
+    color:white;
 }
 
 #leaderboard tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    background-color: #9e9e9e/*#f3f3f3*/;
+    color:white;
 }
 
 /* #profile_card {

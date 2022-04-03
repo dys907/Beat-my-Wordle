@@ -5,3 +5,11 @@
     color:white;
 }
 
+.buttonMenu {
+    margin-top:50%;
+}
+
+.buttonMenu Button {
+    margin-top:20px;
+    margin-bottom:20px;
+}

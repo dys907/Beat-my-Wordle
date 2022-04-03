@@ -41,7 +41,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                 />
             </div>
         : 
-            <div>
+            <div className={styles.buttonMenu}>
                 <Button btnText={loginBtnTxt} clickHandler={loginHandler} />
                 <Button btnText={signupBtnTxt} clickHandler={signupHandler} /> 
             </div>

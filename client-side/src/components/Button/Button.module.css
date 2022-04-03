@@ -1,4 +1,4 @@
-.defaultButton {
+/* .defaultButton2 {
     display:block;
     margin-left:auto;
     margin-right:auto;
@@ -18,7 +18,7 @@
     border:0;
     color: white;
 
-}
+} */
 
 .imgButton {
   display:block;
@@ -31,7 +31,7 @@
 }
 
 /* CSS reference */
-.button-44 {
+/* .button-44 {
   background: #1f3e94;
   border-radius: 11px;
   box-sizing: border-box;
@@ -69,4 +69,53 @@
 .button-44:hover {
   border-bottom-style: none;
   border-color: #dadada;
+} */
+
+/** New **/
+.defaultButton {
+  align-items: center;
+  background-color: #121213;
+  border: 2px solid #3A3A3C;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  /* display: inline-flex; */
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  fill: #000;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: -.8px;
+  line-height: 24px;
+  min-width: 140px;
+  outline: 0;
+  padding: 0 17px;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.defaultButton:hover {
+  border-color: white;
+  color: white;
+  fill: white;
+}
+
+.defaultButton:active {
+  border-color: white;
+  color: white;
+  fill: white;
+}
+
+@media (min-width: 768px) {
+  .button-59 {
+    min-width: 170px;
+  }
 }

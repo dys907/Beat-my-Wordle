@@ -3,21 +3,40 @@
     text-align: center;
 }
 
+
+.logo {
+    display:block;
+    margin:auto;
+}
+
+.flex_container {
+    display:flex;
+    flex-direction: row;
+    flex-flow:row wrap;
+}
+.buttonMenu {
+    flex:1;
+}
+
+.buttonMenu Button {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
 .game_descriptor {
     margin-left:auto;
     margin-right:auto;
     margin-bottom:30px;
-    width:70%;
+    color:white;
     text-align:left;
-    background-color:#cecfb9;
     padding:10px 20px 20px 20px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    border-right:double 5px #3A3A3C;
+    flex:2;
 
 }
 
 .desc_title {
-    text-align: center;
+    text-align: left;
 }
 
 .game_descriptor p {
@@ -28,15 +47,34 @@
     margin-left:auto;
     margin-right:auto;
     margin-bottom:30px;
-    width:50%;
+    color:white;
     text-align:left;
-    background-color:white;
     padding:10px 30px 10px 30px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    flex:2;
 }
 
 .how_to {
     padding:1em;
     list-style-type:decimal;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .flex-container {
+      flex-direction: column;
+    }
+    .buttonMenu {
+        flex:1;
+        margin-top:100px;
+    }
+    .game_descriptor {
+        flex:1;
+    }
+    .how_to_div {
+        flex:1;
+        border-top: double 5px #3A3A3C
+    }
+    .how_to_div .desc_title {
+        text-align: center;
+    }
+  }

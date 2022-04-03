@@ -30,11 +30,13 @@ body {
 .letterClass {
     color: white;
     font-size: larger;
-    font-family: monospace;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
     text-align: center;
     display: inline-block;
     width: 80px;
     height: 50px;
+    line-height: 50px;
     border: 2px ridge white;
     background-color: #222222;
 }

@@ -16,7 +16,8 @@ let statReport = {
         "/1/users/adminLogin": 0
     },
     "PUT": {
-        "/1/words/upload": 0 //used
+        "/1/words/upload": 0, //used
+        "/1/words/update": 0
     },
     "DELETE": {
         "/1/words/all":0, //used

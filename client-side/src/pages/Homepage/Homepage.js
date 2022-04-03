@@ -29,14 +29,16 @@ const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, le
             <img className={styles.logo} src={logoSrc} alt={"logo"} />
             <div className={styles.flex_container}>
                 <div className={styles.buttonMenu}>
-                    {isLoggedIn ? <></> : <Button btnText={loginBtnTxt} clickHandler={loginHandler} />}
-
-                    {/* Temporary for testing, so we can access Game directly */}
-                    <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
-                    <Button btnText={profileBtnTxt} clickHandler={profileHandler} />
-                    <Button btnText={leaderboardBtnTxt} clickHandler={leaderboardHandler} />
-
-                    {isLoggedIn ? <Button btnText='Logout' clickHandler={logoutHandler} /> : <></>}
+                    {isLoggedIn ? 
+                            <>
+                                <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
+                                <Button btnText={profileBtnTxt} clickHandler={profileHandler} />
+                                <Button btnText={leaderboardBtnTxt} clickHandler={leaderboardHandler} />
+                                <Button btnText='Logout' clickHandler={logoutHandler} /> 
+                            </> 
+                        : 
+                            <Button btnText={loginBtnTxt} clickHandler={loginHandler} />
+                    }
                 </div>
 
                 <div className={styles.game_descriptor}>

@@ -15,7 +15,7 @@ const Game = ({ word, opponent }) => {
     const [modalText, setModalText] = useState("")
 
     useEffect(() => {
-        const username = localStorage.getItem('username'); // todo: fix this later
+        const username = localStorage.getItem('username');
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";
@@ -199,7 +199,7 @@ const Game = ({ word, opponent }) => {
                     } else {
                         const invalidWordText = currentGuessWord + " is not a word!";
                         setModalTitle(invalidWordText);
-                        setModalText(modalTryAgainText);//todo: css this
+                        setModalText(modalTryAgainText);
                         setModalOpen(true);
                     }
                 })

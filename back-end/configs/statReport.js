@@ -20,9 +20,7 @@ let statReport = {
         "/1/words/update": 0
     },
     "DELETE": {
-        "/1/words/all":0, //used
-        "/1/words/id": 0, //used
-        "1/games/all":0 //used
+        "/1/words/id": 0 //used
     },
     "PATCH": {
         "/1/games": 0 //used

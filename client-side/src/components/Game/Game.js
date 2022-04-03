@@ -257,7 +257,11 @@ const Game = ({ word, gameResult, opponent }) => {
                     setModalText(scoreText);
                     setModalTitle(scoreTitle);
                     setModalOpen(true);
+                }).catch((err) => {
+                    console.log(err)
                 })
+            }).catch((err) => {
+                console.log(err)
             })
         }
 
@@ -267,7 +271,7 @@ const Game = ({ word, gameResult, opponent }) => {
                 const resStr = JSON.stringify(resJSON);
                 xhttp.open("POST", endPointRoot + resourceUpdate, true);
                 xhttp.setRequestHeader("Content-type","application/json");
-                xhttp.setRequestHeader("Authorization", "bearer " + localStorage.getItem("jwt"))
+                xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
                     if (xhttp.status === 200) {
                         res(xhttp.response)

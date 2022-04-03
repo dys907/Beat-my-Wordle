@@ -1,29 +1,24 @@
 import React from 'react';
 import Button from '../../components/Button/Button';
+import {
+    loginBtnTxt,
+    playBtnTxt,
+    profileBtnTxt,
+    leaderboardBtnTxt,
+    uploadBtnTxt,
+    gameDescriptorTitle,
+    gameDescriptor1,
+    gameDescriptor2,
+    gameDescriptor3,
+    howToPlay,
+    howToPlayListDescList,
+} from './strings';
 import styles from './Homepage.module.css';
 import PropTypes from 'prop-types';
 
+
 const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, leaderboardHandler, logoutHandler, uploadHandler }) => {
-    const loginBtnTxt = 'Login';
     const logoSrc = 'logo.png';
-    const playBtnTxt = 'Play!';
-    const profileBtnTxt = 'Profile';
-    const leaderboardBtnTxt = 'Leaderboard';
-    const uploadBtnTxt = "Edit word"
-
-    const gameDescriptorTitle = 'Regular Wordle too easy? Want to play more than once a day?';
-    const gameDescriptor1 = 'Upload your own word and pit yourself against the words of other Wordle enthusiasts. ';
-    const gameDescriptor2 = 'Battle against others and see who can get the highest score!';
-    const gameDescriptor3 = 'Bring a new word every day because the word pool resets daily!';
-
-    const howToPlay = 'How to play';
-    const howToPlayListDescList = [
-        'Log in with an account', 
-        'Visit your profile', 
-        'Upload a 5 letter word', 
-        'Press play to match against a random players word',
-        'Win or lose points for words you solve and each player you beat with your word!'
-    ]
 
     return (
         <>

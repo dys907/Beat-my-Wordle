@@ -218,12 +218,13 @@ const BeatMyWordle = () => {
                 }),
                 body: JSON.stringify(submitObject),
             });
+
+            setIsLoggedIn(false);
+            localStorage.removeItem("username");
+            localStorage.removeItem('jwt');
     
             if (response.status === 200) {
                 console.log('Log out successful');
-                setIsLoggedIn(false);
-                localStorage.removeItem("username");
-                localStorage.removeItem('jwt');
             } else {
                 console.log('Error while trying to log out');
                 response.text((txt) => {
@@ -231,6 +232,9 @@ const BeatMyWordle = () => {
                 });
             }
         } catch(e) {
+            setIsLoggedIn(false);
+            localStorage.removeItem("username");
+            localStorage.removeItem('jwt');
             console.log('Error logging out: ' + e);
         }
         

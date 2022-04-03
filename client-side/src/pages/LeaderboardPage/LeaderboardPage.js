@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import BackButton from '../../components/BackButton/BackButton';
 import Button from '../../components/Button/Button';
+import {
+    playBtnTxt,
+    leaderBoardTitle,
+    rankHeader,
+    usernameHeader,
+    scoreHeader,
+} from './strings';
 import PropTypes from 'prop-types';
 
 import styles from './LeaderboardPage.module.css';
 
 const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
-    const homeBtnTxt = 'Home';
-    const playBtnTxt = 'Play!';
-
     useEffect(() => {
         const list = JSON.parse(jsonList);
         let listDiv = document.querySelector("#list");
@@ -32,13 +36,13 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
             <div className={styles.backWrapper}>
                 <BackButton clickHandler={homeHandler} />
             </div>
-            <h1 className={styles.title}>Leaderboard</h1>
+            <h1 className={styles.title}>{leaderBoardTitle}</h1>
             <table id="leaderboard" className={styles.leaderboard}>
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Score</th>
+                        <th>{rankHeader}</th>
+                        <th>{usernameHeader}</th>
+                        <th>{scoreHeader}</th>
                     </tr>
                 </thead>
                 <tbody id="list">

@@ -9,13 +9,16 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     //login, adminStats, adminError
     const [pageFlow, setPageFlow] = useState('login');
     const [adminStats, setAdminStats] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
     const host = `https://wordle.itsvicly.com`;
     //const host = `http://localhost:8080`;
     const method = 'POST';
 
     const userNameLabel = 'Username: ';
     const passwordLabel = 'Password: ';
-    const credentialsErrorText = 'There was an error with your login credentials. Try again.';
+    const loginErrorText = 'There was an error with your login credentials. Please try again.';
+    const signupErrorText = 'That username is already taken.';
+    const generalErrorText = 'There was an error with our servers. Please try again later!';
 
     const handleChange = (event) => {
         if (event.target.name === 'username') { setName(event.target.value) }
@@ -50,18 +53,17 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             setPageFlow('adminStats');
         } catch {
             console.log('error');
-            setPageFlow('loginError');
+            setErrorMsgAndChangePageFlow(loginErrorText);
         }
     }
 
     const handleLogin = async () => {
         const endpoint = `/1/users/login`;
-        const URL = host + endpoint;
-
-        const response = await fetchMethod(method, URL);
+        const URL = host + endpoint;        
         try {
+            const response = await fetchMethod(method, URL);
             if (response.status !== 200) {
-                setPageFlow('loginError');
+                setErrorMsgAndChangePageFlow(loginErrorText);
                 response.text().then(text => {
                     console.log(text);
                 });
@@ -74,6 +76,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 postLoginHandler(user);
             }
         } catch (e) {
+            setErrorMsgAndChangePageFlow(generalErrorText);
             console.log('login error' + e);
         }
     }
@@ -81,19 +84,15 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     const handleSignup = async () => {
         const endpoint = `/1/users/signup`;
         const URL = host + endpoint;
-
-        const response = await fetchMethod(method, URL);
         try {
+            const response = await fetchMethod(method, URL);
             if (response.status !== 200) {
-                setPageFlow('loginError');
+                setErrorMsgAndChangePageFlow(generalErrorText);
                 response.text().then(text => {
                     console.log(text);
                 });
                 console.log(response);
             } else {
-                // const data = await response.json();
-                // document.cookie = `token=${data}`;
-                console.log(response);
                 console.log(`Signup successful!`);
                 response.text().then(text => {
                     console.log(text);
@@ -103,6 +102,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 postLoginHandler(user);
             }
         } catch (e) {
+            setErrorMsgAndChangePageFlow(signupErrorText);
             console.log('signup error ' + e);
         }
     }
@@ -120,6 +120,11 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             body: JSON.stringify(submitObject),
         });
     } 
+
+    const setErrorMsgAndChangePageFlow = (msg) => {
+        setErrorMsg(msg);
+        setPageFlow('loginError');
+    }
     
     return (
         pageFlow === 'login' || pageFlow ==='loginError' ?
@@ -136,7 +141,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                     </label>
                     <input className={`${styles.defaultButton} ${formStyles.submitBtn}`} type="submit" value={submitTxt}  />
                 </form>
-                {pageFlow === 'loginError' ? <p>{credentialsErrorText}</p> : <></>}
+                {pageFlow === 'loginError' ? <p>{errorMsg}</p> : <></>}
             </div>
         :pageFlow === 'adminStats' ?
          <>

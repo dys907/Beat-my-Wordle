@@ -14,7 +14,7 @@ const gameStatus = (req, res) => {
     con.getConnection((err, connection) => {
         con.query(sql, [username], (err, result) => {
             if (err) {
-                res.status(sc.INTERNAL_SERVER_ERROR).send('Could not contact server');
+                res.status(sc.INTERNAL_SERVER_ERROR).send("500: Could not contact server");
             }
             res.status(sc.OK).send(JSON.stringify(result));
         })

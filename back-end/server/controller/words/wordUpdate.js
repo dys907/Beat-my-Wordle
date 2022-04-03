@@ -22,7 +22,6 @@ const wordUpdate = (req, res) => {
                 } else {
                     res.status(sc.OK).send("200: Word has been updated");
                 }
-
             })
         })
     }

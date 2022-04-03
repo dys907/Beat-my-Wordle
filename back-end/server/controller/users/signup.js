@@ -13,13 +13,13 @@ const signup = (req, res) => {
     con.getConnection((err, connection) => {
         try {
             let sql = "INSERT INTO users(username, password) values (? , ?)";
-            connection.query(sql, [username, password], function (err, result) {
+            connection.query(sql, [username, password], (err, result) => {
                 if (err) {
                     throw err;
                 }
             });
             sql = "INSERT INTO scores(username, score) values (? , ?)";
-            connection.query(sql, [username, 0], function (err, result) {
+            connection.query(sql, [username, 0], (err, result) => {
                 if (err) {
                     throw err;
                 } else {
@@ -31,7 +31,7 @@ const signup = (req, res) => {
             });
         } catch (err) {
             console.log(err);
-            res.status(sc.INTERNAL_SERVER_ERROR);
+            res.status(sc.INTERNAL_SERVER_ERROR).send("500: Internal server error");
         }
         connection.release();
     });

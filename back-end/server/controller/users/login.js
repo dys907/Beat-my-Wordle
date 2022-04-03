@@ -14,8 +14,11 @@ const login = (req, res) => {
     if (username && password) {
         let sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
         con.getConnection((err, connection) => {
-            connection.query(sql, [username, password], function(err, result) {
-                if (err) throw err;
+            connection.query(sql, [username, password], (err, result) => {
+                if (err) {
+                    console.log("LOGIN DB ERROR");
+                    res.status(sc.INTERNAL_SERVER_ERROR).send("500: Internal server error");
+                };
                 if (result.length == 1) {
                     //Generate and send token for persistent login
                     const token =  jwt.sign({user: username}, 

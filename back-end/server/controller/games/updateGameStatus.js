@@ -4,7 +4,7 @@ const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 
 const updateGameStatus = (req, res) => {
-    statReport.PATCH[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
+    statReport.PATCH[API_VERSION + "games"] = statReport.PATCH[API_VERSION + "games"] + 1;
     const { player, opponent } = req.body;
     let sql = "UPDATE gameLobby SET inProgress = FALSE WHERE player = ? AND opponent = ? AND inProgress = TRUE";
     con.getConnection((err, connection) => {

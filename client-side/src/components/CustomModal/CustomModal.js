@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
@@ -10,8 +9,8 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 280,
-  bgcolor: '#90e0ef',
-  border: '2px solid white',
+  bgcolor: '#3A3A3C',
+  border: '2px double black',
   borderRadius: '10px',
   boxShadow: 24,
   p: 4,

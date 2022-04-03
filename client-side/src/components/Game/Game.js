@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import './Game.css';
-import { title } from './strings';
+import { 
+    title, 
+    modalTryAgainText,
+    loseScoreText,
+    winTitleText,
+ } from './strings';
 import CustomModal from '../CustomModal/CustomModal'
 
 const Game = ({ word, opponent }) => {
@@ -152,7 +157,6 @@ const Game = ({ word, opponent }) => {
         $("#letterDiv").append(del_btn);
         
         const pressEnter = () => {
-            const modalTryAgainText = "Try another word!";
             if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
                 let currentGuessWord = "";
 
@@ -183,7 +187,7 @@ const Game = ({ word, opponent }) => {
                         currentGuess = [];
                         guessCounter++;
                         letterCounter = 0;
-                        if (guessCounter == MAX_GUESS && !won) {
+                        if (guessCounter === MAX_GUESS && !won) {
                             lost = true;
                             updateGameStatus().then((res) => {
                                 updateScore(-1);
@@ -263,11 +267,9 @@ const Game = ({ word, opponent }) => {
 
         const updateScore = (s) => {
             const score_offset = 5;
-            const winTitleText = 'Congrats!';
             const loseTitleText = `Oops, the word is ${word}`;
             const winScoreText = `You solved the wordle and gained ${s} points!`;
-            const loseScoreText = 'Better luck next time!';
-
+            
             const resJSON = {
                 username: username,
                 score: s

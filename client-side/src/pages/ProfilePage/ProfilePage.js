@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '../../components/Button/Button';
 import BackButton from '../../components/BackButton/BackButton';
+import {
+    profile,
+    scoreText,
+    word,
+    noWordText,
+    editWord,
+    playButtonText,
+} from './strings';
 import PropTypes from 'prop-types';
 
 import styles from './ProfilePage.module.css';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, uploadHandler }) => {
     const username = localStorage.getItem('username')
-    const profile = 'Profile';
-    const rating = 'Score';
-    const word = 'Word';
-    const noWordText = 'NONE!';
-    const editWord = "Edit your word";
-    const homeButtonText = 'Home';
-    const playButtonText = 'Play';
 
     return (
         <div>
@@ -27,7 +28,7 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, uploadHandle
                     <div className={styles.userName}>
                         <span>{username}</span>
                     </div>
-                    <h1>{rating}</h1>
+                    <h1>{scoreText}</h1>
                     <div className={styles.cardBox}>
                         <span>{score}</span>
                     </div>

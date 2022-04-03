@@ -68,6 +68,8 @@
 
 .help_desc {
     font-style:italic;
+    margin-top:0;
+    margin-bottom:10px;
 }
 
 .buttonMenu {

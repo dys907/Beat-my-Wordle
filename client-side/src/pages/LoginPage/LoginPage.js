@@ -10,8 +10,6 @@ import styles from './LoginPage.module.css';
 import PropTypes from 'prop-types';
 
 const LoginPage = ({ postLoginHandler, homeHandler }) => {
-    const loginBtnTxt = 'Login to Existing Account';
-    const signupBtnTxt = 'Signup for New Account';
     //Login, Signup
     const [loginOrSignup, setLoginOrSignup] = useState('Default');
 

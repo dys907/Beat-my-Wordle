@@ -33,7 +33,7 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
                 <BackButton clickHandler={homeHandler} />
             </div>
             <h1 className={styles.title}>Leaderboard</h1>
-            <table id="leaderboard">
+            <table id="leaderboard" className={styles.leaderboard}>
                 <thead>
                     <tr>
                         <th>Rank</th>

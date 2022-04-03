@@ -3,12 +3,13 @@ import Button from '../../components/Button/Button';
 import styles from './Homepage.module.css';
 import PropTypes from 'prop-types';
 
-const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, leaderboardHandler, logoutHandler }) => {
+const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, leaderboardHandler, logoutHandler, uploadHandler }) => {
     const loginBtnTxt = 'Login';
     const logoSrc = 'logo.png';
     const playBtnTxt = 'Play!';
     const profileBtnTxt = 'Profile';
     const leaderboardBtnTxt = 'Leaderboard';
+    const uploadBtnTxt = "Edit word"
 
     const gameDescriptorTitle = 'Regular Wordle too easy? Want to play more than once a day?';
     const gameDescriptor1 = 'Upload your own word and pit yourself against the words of other Wordle enthusiasts. ';
@@ -33,6 +34,7 @@ const Homepage = ({ isLoggedIn, loginHandler, playBtnHandler, profileHandler, le
                             <>
                                 <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
                                 <Button btnText={profileBtnTxt} clickHandler={profileHandler} />
+                                <Button btnText={uploadBtnTxt} clickHandler={uploadHandler} />
                                 <Button btnText={leaderboardBtnTxt} clickHandler={leaderboardHandler} />
                                 <Button btnText='Logout' clickHandler={logoutHandler} /> 
                             </> 
@@ -71,6 +73,7 @@ Homepage.propTypes = {
     profileHandler: PropTypes.func,
     leaderboardHandler: PropTypes.func,
     logoutHandler: PropTypes.func,
+    uploadHandler: PropTypes.func,
 }
 
 export default Homepage;

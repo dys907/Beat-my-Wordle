@@ -7,6 +7,9 @@ const Game = ({ word, gameResult, opponent }) => {
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
     const [modalText, setModalText] = useState("")
+
+    const title = 'Beat my Wordle';
+    
     useEffect(() => {
         const username = sessionStorage.getItem('username'); // todo: fix this later
 
@@ -286,7 +289,7 @@ const Game = ({ word, gameResult, opponent }) => {
     return (
         <>
           <div className="Game">
-            <h1 id="head">Wordle</h1>
+            <h1 id="head">{title}</h1>
             <div id="guessDiv"></div>
             <div id="letterDiv"></div>
           </div>

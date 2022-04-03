@@ -44,6 +44,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
         
         const response = await fetchMethod(method, URL);
         try {
+            
             const data = await response.json();
             setAdminStats(data);
             setPageFlow('adminStats');
@@ -95,6 +96,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 console.log(response);
                 console.log(`Signup successful!`);
                 response.text().then(text => {
+                    console.log(text);
                     let jwt_token = JSON.parse(text).access_token;
                     localStorage.setItem("jwt", jwt_token);
                 })
@@ -121,7 +123,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     
     return (
         pageFlow === 'login' || pageFlow ==='loginError' ?
-            <div className={formStyles.center}>
+            <div className={formStyles.wrapper}>
                 <h2>{titleTxt}</h2>
                 <form onSubmit={handleSubmit} >
                     <label className={formStyles.label}>
@@ -132,7 +134,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                         {passwordLabel} 
                         <input className={formStyles.input}  type="password" name="password" onChange={handleChange} />
                     </label>
-                    <input className={styles.defaultButton} type="submit" value={submitTxt}  />
+                    <input className={`${styles.defaultButton} ${formStyles.submitBtn}`} type="submit" value={submitTxt}  />
                 </form>
                 {pageFlow === 'loginError' ? <p>{credentialsErrorText}</p> : <></>}
             </div>

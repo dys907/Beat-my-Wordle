@@ -6,10 +6,16 @@
 }
 
 .buttonMenu {
-    margin-top:50%;
+    margin-top: 5%;
 }
 
 .buttonMenu Button {
     margin-top:20px;
     margin-bottom:20px;
+}
+
+@media only screen and (max-width: 412px) {
+    .buttonMenu {
+        margin-top: 50%;
+    }
 }

@@ -11,7 +11,7 @@ const usersRouter = express.Router();
 usersRouter.post("/login", login);
 usersRouter.post("/signup", signup);
 usersRouter.post("/adminLogin",  adminLogin);
-usersRouter.get("/gamestatus", gameStatus);
+usersRouter.get("/gamestatus", authenticateToken, gameStatus);
 usersRouter.post("/logout", authenticateToken, logout);
 
 module.exports = usersRouter;

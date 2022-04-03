@@ -229,6 +229,7 @@ const Game = ({ word, gameResult, opponent }) => {
             const resourceGet = "1/words/check/?word=" + currentGuessWord;
             return new Promise((res, rej) => {
                 xhttp.open("GET", endPointRoot + resourceGet, true);
+                xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
                     if (xhttp.status === 200) {
                         res(xhttp.response)

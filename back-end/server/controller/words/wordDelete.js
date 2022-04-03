@@ -15,8 +15,6 @@ const wordDelete = (req, res) => {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error could not reach database");
             }
-            //console.log(result);
-            console.log(result.affectedRows);
             if (result.affectedRows == 0) {
                 res.status(sc.BAD_REQUEST).send("400: Could not find word for this user");
             } else {

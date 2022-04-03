@@ -13,6 +13,10 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     // const host = `http://localhost:8080`;
     const method = 'POST';
 
+    const userNameLabel = 'Username: ';
+    const passwordLabel = 'Password: ';
+    const credentialsErrorText = 'There was an error with your login credentials. Try again.';
+
     const handleChange = (event) => {
         if (event.target.name === 'username') { setName(event.target.value) }
         if (event.target.name === 'password') { setPassword(event.target.value) }
@@ -62,6 +66,10 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 });
             } else {
                 console.log(`Login successful!`);
+                response.text().then(text => {
+                    let jwt_token = JSON.parse(text).access_token;
+                    localStorage.setItem("jwt", jwt_token);
+                })
                 postLoginHandler(user);
             }
         } catch (e) {
@@ -86,6 +94,10 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 // document.cookie = `token=${data}`;
                 console.log(response);
                 console.log(`Signup successful!`);
+                response.text().then(text => {
+                    let jwt_token = JSON.parse(text).access_token;
+                    localStorage.setItem("jwt", jwt_token);
+                })
                 postLoginHandler(user);
             }
         } catch (e) {
@@ -113,16 +125,16 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 <h2>{titleTxt}</h2>
                 <form onSubmit={handleSubmit} >
                     <label className={formStyles.label}>
-                        Username: 
+                        {userNameLabel} 
                         <input className={formStyles.input} type="text" name="username" onChange={handleChange} />
                     </label>
                     <label className={formStyles.label}>
-                        Password: 
+                        {passwordLabel} 
                         <input className={formStyles.input}  type="password" name="password" onChange={handleChange} />
                     </label>
                     <input className={styles.defaultButton} type="submit" value={submitTxt}  />
                 </form>
-                {pageFlow === 'loginError' ? <p>There was an error with your login credentials. Try again.</p> : <></>}
+                {pageFlow === 'loginError' ? <p>{credentialsErrorText}</p> : <></>}
             </div>
         :pageFlow === 'adminStats' ?
          <>

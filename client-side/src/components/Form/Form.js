@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import {
+    userNameLabel,
+    passwordLabel,
+    loginErrorText,
+    signupErrorText,
+    generalErrorText,
+} from './strings';
 import styles from '../Button/Button.module.css';
 import formStyles from './Form.module.css';
 
@@ -13,12 +20,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     const host = `https://wordle.itsvicly.com`;
     //const host = `http://localhost:8080`;
     const method = 'POST';
-
-    const userNameLabel = 'Username: ';
-    const passwordLabel = 'Password: ';
-    const loginErrorText = 'There was an error with your login credentials. Please try again.';
-    const signupErrorText = 'That username is already taken.';
-    const generalErrorText = 'There was an error with our servers. Please try again later!';
 
     const handleChange = (event) => {
         if (event.target.name === 'username') { setName(event.target.value) }
@@ -93,7 +94,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 });
                 console.log(response);
             } else {
-                console.log(`Signup successful!`);
                 response.text().then(text => {
                     console.log(text);
                     let jwt_token = JSON.parse(text).access_token;

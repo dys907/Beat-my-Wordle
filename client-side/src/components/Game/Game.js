@@ -1,6 +1,7 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import './Game.css';
+import { title } from './strings';
 import CustomModal from '../CustomModal/CustomModal'
 
 const Game = ({ word, gameResult, opponent }) => {
@@ -8,8 +9,6 @@ const Game = ({ word, gameResult, opponent }) => {
     const [modalTitle, setModalTitle] = useState("")
     const [modalText, setModalText] = useState("")
 
-    const title = 'Beat my Wordle';
-    
     useEffect(() => {
         const username = localStorage.getItem('username'); // todo: fix this later
 

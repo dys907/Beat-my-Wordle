@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import Button from '../../components/Button/Button';
 import BackButton from '../../components/BackButton/BackButton';
-import styles from './LoginPage.module.css';
 import Form from '../../components/Form/Form';
+import {
+    loginBtnTxt,
+    signupBtnTxt,
+} from './strings';
+import styles from './LoginPage.module.css';
 import PropTypes from 'prop-types';
 
 const LoginPage = ({ postLoginHandler, homeHandler }) => {

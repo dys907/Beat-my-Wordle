@@ -3,6 +3,8 @@ import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
 const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
+    const homeBtnTxt = 'Home';
+    const playBtnTxt = 'Play!';
 
     useEffect(() => {
         const list = JSON.parse(jsonList);
@@ -24,30 +26,20 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
 
     return (
         <>
-
-        <h1>Leaderboard</h1>
-
-        <table id="leaderboard">
-            <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Username</th>
-                <th>Score</th>
-            </tr>
-            </thead>
-            <tbody id="list">
-
-            </tbody>
-
-        </table>
-
-
-
-
-                    <Button btnText='Home' clickHandler={homeHandler} />
-            
-            <Button btnText='Play!' clickHandler={playBtnHandler} />
-        
+            <h1>Leaderboard</h1>
+            <table id="leaderboard">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="list">
+                </tbody>
+            </table>
+            <Button btnText={homeBtnTxt} clickHandler={homeHandler} />
+            <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
         </>
     );
 }

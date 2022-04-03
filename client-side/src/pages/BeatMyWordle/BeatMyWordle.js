@@ -199,6 +199,11 @@ const BeatMyWordle = () => {
         homeHandler();
     }
 
+    const logoutHandler = () => {
+        setIsLoggedIn(false);
+        sessionStorage.removeItem('username');
+    }
+
     useEffect(() => {
         if (gameResult !== 0) {
             const resourcePatch = "1/games";
@@ -221,6 +226,7 @@ const BeatMyWordle = () => {
                 playBtnHandler={playGameHandler} 
                 profileHandler={profileHandler} 
                 leaderboardHandler={leaderboardHandler}
+                logoutHandler={logoutHandler}
             />
         : pageFlow === 'Login' ?
             <LoginPage postLoginHandler={postLoginHandler} homeHandler={homeHandler} />

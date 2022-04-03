@@ -8,7 +8,6 @@ const Game = ({ word, gameResult, opponent }) => {
     const [modalTitle, setModalTitle] = useState("")
     const [modalText, setModalText] = useState("")
     useEffect(() => {
-
         const username = sessionStorage.getItem('username'); // todo: fix this later
 
         const xhttp = new XMLHttpRequest();
@@ -25,7 +24,6 @@ const Game = ({ word, gameResult, opponent }) => {
         const ENTER_KEY = 13;
         const DELETE_KEY = 8;
         
-        
         let won = false;
         let lost = false;
         
@@ -39,7 +37,6 @@ const Game = ({ word, gameResult, opponent }) => {
         }
 
         console.log(solutionArrary)
-        
         
         let guessCounter = 0;
         let letterCounter = 0;
@@ -128,13 +125,11 @@ const Game = ({ word, gameResult, opponent }) => {
         })
         $("#letterDiv").append(enter_btn);
 
-
         LETTERS_KEYBOARD_3.forEach((el) => {
             let newLetter = new LetterBtn(el);
             letterArray.push(newLetter);
         })
         
-
         
         let del_btn = $("<button></button>").append("DEL").addClass("enter_delete").click(() => {
             pressDelete();
@@ -142,6 +137,7 @@ const Game = ({ word, gameResult, opponent }) => {
         $("#letterDiv").append(del_btn);
         
         function pressEnter() {
+            const modalTryAgainText = "Try another word!";
             if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
                 let currentGuessWord = "";
 
@@ -199,16 +195,12 @@ const Game = ({ word, gameResult, opponent }) => {
                         }
                         
                     } else {
-                        setModalTitle(currentGuessWord + " is not a word!")
-                        setModalText("Try another word!");//todo: css this
-                        setModalOpen(true)
+                        const invalidWordText = currentGuessWord + " is not a word!";
+                        setModalTitle(invalidWordText);
+                        setModalText(modalTryAgainText);//todo: css this
+                        setModalOpen(true);
                     }
                 })
-
-
-
-
-
             }
         }
 
@@ -225,7 +217,6 @@ const Game = ({ word, gameResult, opponent }) => {
                 }
                 xhttp.send();
             })
-            
         }
         
         function pressDelete() {
@@ -246,6 +237,11 @@ const Game = ({ word, gameResult, opponent }) => {
 
         function updateScore(s) {
             const score_offset = 5;
+            const winTitleText = 'Congrats!';
+            const loseTitleText = `Oops, the word is ${word}`;
+            const winScoreText = `You solved the wordle and gained ${s} points!`;
+            const loseScoreText = 'Better luck next time!';
+
             const resJSON = {
                 username: username,
                 score: s
@@ -256,17 +252,16 @@ const Game = ({ word, gameResult, opponent }) => {
             }
             updateUser(resJSON).then(() => {
                 updateUser(resJSONOpponent).then(() => {
-                    let scoreTitle = s > 0 ? "Congrats!" : "Oops, the word is " + word
-                    let scoreText = s > 0 ? "You solved the wordle and gained " + s + " points!" : "Better luck next time!"
-                    setModalText(scoreText)
-                    setModalTitle(scoreTitle)
-                    setModalOpen(true)
+                    let scoreTitle = s > 0 ? winTitleText : loseTitleText;
+                    let scoreText = s > 0 ? winScoreText :loseScoreText;
+                    setModalText(scoreText);
+                    setModalTitle(scoreTitle);
+                    setModalOpen(true);
                 })
             })
         }
 
         function updateUser(resJSON) {
-            
             const resourceUpdate = "1/scores";
             return new Promise((res, rej) => {
                 const resStr = JSON.stringify(resJSON);
@@ -282,23 +277,18 @@ const Game = ({ word, gameResult, opponent }) => {
                 }
                 xhttp.send(resStr);
             })
-            
         }
-
-
     }, [])
     return (
         <>
-                <div className="Game">
-          <h1 id="head">Wordle</h1>
-          <div id="guessDiv"></div>
-          <div id="letterDiv"></div>
-        </div>
+          <div className="Game">
+            <h1 id="head">Wordle</h1>
+            <div id="guessDiv"></div>
+            <div id="letterDiv"></div>
+          </div>
         <CustomModal openModal={modalOpen} title={modalTitle} text={modalText} handleOpen={setModalOpen}/>
         </>
-
       );
 }
 
-  
 export default Game;

@@ -7,7 +7,7 @@ import styles from './ProfilePage.module.css';
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
     const username = sessionStorage.getItem('username')
     const profile = 'Profile';
-    const rating = 'Rating';
+    const rating = 'Score';
     const word = 'Word';
     const changeWordButtonText = 'Change Word';
     const noWordText = 'NONE!';
@@ -161,18 +161,28 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
             <div className={visible ? styles.upload_section : styles.hide_display}>
                 <h2>{helpModalTitleText}</h2>
-                <h4>{helpModalDescText}</h4>
+                <h4 className={styles.help_desc}>{helpModalDescText}</h4>
 
-                <input id="word" className={styles.word} type="text"></input>
-                <button onClick={() => uploadWord()}>{submitButtonText}</button>
+                <div className={styles.upload}>
+                    <input id="word" className={styles.word} type="text"></input>
+                    <button onClick={() => uploadWord()}>{submitButtonText}</button>
+
+                </div>
 
                 <br></br>
 
-                <button onClick={() => deleteWord()}>{deleteYourWordButtonText}</button>
+                {/* <button onClick={() => deleteWord()}>{deleteYourWordButtonText}</button> */}
+                <div className={styles.delete}>
+
+                </div>
+                <Button btnText={deleteYourWordButtonText} clickHandler={() => { deleteWord() }} />
                 {/* <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button> */}
 
                 <h3 id="status" className={styles.status}></h3>
-                <Button btnText={viewInfoButtonText} clickHandler={() => { toggleUpload() }} />
+                <div className={styles.buttonMenu}>
+                    <Button btnText={viewInfoButtonText} clickHandler={() => { toggleUpload() }} />
+                </div>
+
             </div>
 
             <div className={styles.buttonMenu}>

@@ -19,7 +19,7 @@ const signup = (req, res) => {
                 }
             });
             sql = "INSERT INTO scores(username, score) values (? , ?)";
-            connection.query(sql, [username, password], function (err, result) {
+            connection.query(sql, [username, 0], function (err, result) {
                 if (err) {
                     throw err;
                 } else {

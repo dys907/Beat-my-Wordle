@@ -4,7 +4,7 @@ const statReport = require('../configs/statReport');
 
 const matchDeleteAll = () => {
     statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
-    let sql = "DELETE FROM gamelobby";
+    let sql = "DELETE FROM gameLobby";
     con.getConnection((err, connection) => {
         connection.query(sql, function (err, result) {
             if (err) {

@@ -5,7 +5,7 @@ const sc = require('../../../configs/httpResponseCodes');
 
 const matchDeleteAll = (req, res) => {
     statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
-    let sql = "DELETE FROM gamelobby";
+    let sql = "DELETE FROM gameLobby";
     con.getConnection((err, connection) => {
         connection.query(sql, function (err, result) {
             if (err) {

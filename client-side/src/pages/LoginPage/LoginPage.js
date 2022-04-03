@@ -21,7 +21,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
     
     return (
         loginOrSignup === 'Login' ?
-            <div className={styles.center}>
+            <div className={styles.form_div}>
                 <BackButton clickHandler={homeHandler} />
                 <Form 
                     titleTxt={loginBtnTxt} 
@@ -31,7 +31,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                 />                
             </div>
         : loginOrSignup === 'Signup' ?
-            <div className={styles.center}>
+            <div className={styles.form_div}>
                 <BackButton clickHandler={homeHandler} />
                 <Form 
                     titleTxt={signupBtnTxt} 

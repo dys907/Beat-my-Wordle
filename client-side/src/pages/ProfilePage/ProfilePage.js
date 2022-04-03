@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../components/Button/Button';
+import BackButton from '../../components/BackButton/BackButton';
 import PropTypes from 'prop-types';
 
 import styles from './ProfilePage.module.css';
@@ -16,6 +17,10 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, uploadHandle
 
     return (
         <div>
+            <div className={styles.backWrapper}>
+                <BackButton clickHandler={homeHandler} />
+            </div>
+            
             <h1 className={styles.title}>{profile}</h1>
             <div className={styles.profile_card}>
                 <div className={styles.inner_profile}>
@@ -36,7 +41,6 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, uploadHandle
 
             <div className={styles.buttonMenu}>
                 <Button btnText={editWord} clickHandler={uploadHandler} />
-                <Button btnText={homeButtonText} clickHandler={homeHandler} />
                 <Button btnText={playButtonText} clickHandler={playBtnHandler} />
             </div>
 

@@ -3,9 +3,8 @@ body {
 }
 
 #head {
-    margin: auto;
-    width: 20%;
-    color: #145DA0;
+    text-align: center;
+    color: white;
 }
 
 #guessDiv {

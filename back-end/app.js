@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
+const scheduler = require('./scheduling/scheduler');
 const PORT = process.env.PORT || 8080;
 const app = express();
 // ---------------------- SWAGGER PAGE ------------------------------- 
@@ -32,4 +33,6 @@ app.listen(PORT, (err) => {
     console.log(`App listening on port ${PORT}`);
 })
 
+//node schedule resets words (daily) using cronjob scheduling at 12:00 EST
+scheduler;
 // ----------------- HELPER FUNCTIONS --------------------

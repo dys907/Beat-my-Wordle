@@ -12,7 +12,7 @@ const adminLogin = (req, res) => {
     if (username && password) {
         let sql = 'SELECT * FROM admins WHERE username = ? AND password = ?';
         con.getConnection((err, connection) => {
-            connection.query(sql, [username, password], function(err, result) {
+            connection.query(sql, [username, password], (err, result) => {
                 if (err) {
                     res.status(sc.INTERNAL_SERVER_ERROR).send("500: Internal server error");
                 }

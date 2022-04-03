@@ -8,7 +8,7 @@ const scoreGetAll = (req, res) => {
     statReport.GET[API_VERSION + "scores/all"] += 1;
     let sql = "SELECT username, score FROM scores ORDER BY score DESC";
     con.getConnection((err, connection) => {
-        connection.query(sql, function(err, result) {
+        connection.query(sql, (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");

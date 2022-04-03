@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import './Game.css';
-import { title } from './strings';
+import { 
+    title, 
+    modalTryAgainText,
+    loseScoreText,
+    winTitleText,
+ } from './strings';
 import CustomModal from '../CustomModal/CustomModal'
 
 const Game = ({ word, gameResult, opponent }) => {
@@ -25,8 +30,8 @@ const Game = ({ word, gameResult, opponent }) => {
         const LETTERS_KEYBOARD_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
         const ENTER_KEY = 13;
         const DELETE_KEY = 8;
-        const yellow = "#FADA5E"
-        const green = "#7bfa5e"
+        const yellow = "#b59d34"
+        const green = "#3aa346"
         const grey = "#626262"
 
         
@@ -153,7 +158,6 @@ const Game = ({ word, gameResult, opponent }) => {
         $("#letterDiv").append(del_btn);
         
         const pressEnter = () => {
-            const modalTryAgainText = "Try another word!";
             if (letterCounter === NUMBER_OF_LETTERS && guessCounter < MAX_GUESS && !won && !lost) {
                 let currentGuessWord = "";
 
@@ -170,7 +174,8 @@ const Game = ({ word, gameResult, opponent }) => {
                         })
                         let sum = 0;
                         equal.forEach((el, index) => {
-                            handleGuess(el, index, sum);
+                            sum += el;
+                            handleGuess(el, index);
                         })
                         if (sum === NUMBER_OF_LETTERS) {
                             won = true;
@@ -180,7 +185,7 @@ const Game = ({ word, gameResult, opponent }) => {
                         currentGuess = [];
                         guessCounter++;
                         letterCounter = 0;
-                        if (guessCounter == MAX_GUESS && !won) {
+                        if (guessCounter === MAX_GUESS && !won) {
                             lost = true;
                             gameResult(-1);
                             updateScore(-1);
@@ -196,8 +201,7 @@ const Game = ({ word, gameResult, opponent }) => {
             }
         }
 
-        const handleGuess = (el, index, sum) => {
-            sum += el;
+        const handleGuess = (el, index) => {
             if (el === 0) {
                 let existElsewhere = solutionArrary.some((element) => {
                     return currentGuess[index] === element
@@ -258,11 +262,9 @@ const Game = ({ word, gameResult, opponent }) => {
 
         const updateScore = (s) => {
             const score_offset = 5;
-            const winTitleText = 'Congrats!';
             const loseTitleText = `Oops, the word is ${word}`;
             const winScoreText = `You solved the wordle and gained ${s} points!`;
-            const loseScoreText = 'Better luck next time!';
-
+            
             const resJSON = {
                 username: username,
                 score: s

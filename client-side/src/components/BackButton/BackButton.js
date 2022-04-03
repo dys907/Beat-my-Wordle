@@ -1,10 +1,9 @@
 import React from 'react';
 import styles from './BackButton.module.css';
 import PropTypes from 'prop-types';
+import { altText } from './strings';
 
 const BackButton = (Props) => {
-    const altText = 'Back Button';
-    const backBtnImage = 'back-button.png';
     const backBtnWhite = 'backbtnW.png';
     return (
         <button 

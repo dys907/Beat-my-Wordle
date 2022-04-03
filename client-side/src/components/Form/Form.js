@@ -6,6 +6,11 @@ import {
     loginErrorText,
     signupErrorText,
     generalErrorText,
+    adminStatsTxt,
+    getStatsTxt,
+    postStatsTxt,
+    deleteStatsTxt,
+    putStatsTxt,
 } from './strings';
 import styles from '../Button/Button.module.css';
 import formStyles from './Form.module.css';
@@ -48,7 +53,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
         
         const response = await fetchMethod(method, URL);
         try {
-            
             const data = await response.json();
             setAdminStats(data);
             setPageFlow('adminStats');
@@ -145,23 +149,23 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             </div>
         :pageFlow === 'adminStats' ?
          <div className={formStyles.adminWrapper}>
-            <h3>Admin stats</h3>
-            <h3>Get stats</h3>
+            <h3>{adminStatsTxt}</h3>
+            <h3>{getStatsTxt}</h3>
             {adminStats && 
                 Object.keys(adminStats["GET"]).map((key, i) => (
                 <p key={key}>Endpoint= {key}: {adminStats["GET"][key]} hits</p>
             )) }
-            <h3>Post stats</h3>
+            <h3>{postStatsTxt}</h3>
             {adminStats && 
                 Object.keys(adminStats["POST"]).map((key, i) => (
                 <p key={key}>Endpoint= {key}: {adminStats["POST"][key]} hits</p>
             )) }
-            <h3>Delete stats</h3>
+            <h3>{deleteStatsTxt}</h3>
             {adminStats && 
                 Object.keys(adminStats["DELETE"]).map((key, i) => (
                 <p key={key}>Endpoint= {key}: {adminStats["DELETE"][key]} hits</p>
             )) }
-            <h3>Put stats</h3>
+            <h3>{putStatsTxt}</h3>
             {adminStats && 
                 Object.keys(adminStats["PUT"]).map((key, i) => (
                 <p key={key}>Endpoint= {key}: {adminStats["PUT"][key]} hits</p>

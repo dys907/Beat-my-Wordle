@@ -1,0 +1,15 @@
+export const upload = 'Edit your word';
+export const helpModalTitleText = 'Upload a word or change your current one';
+export const helpModalDescText = '* If you already uploaded a word, uploading a new one will overwrite it';
+export const deleteWarning = 'If you delete your word you will not be able to play until you upload a new word!'
+export const deleteYourWordButtonText = 'Delete your word';
+export const submitButtonText = 'Submit';
+export const homeButtonText = 'Home';
+export const playButtonText = 'Play';
+export const profileText = 'Profile';
+export const incorrectLengthText = "Word is not of length 5, try a 5 letter word";
+export const uploadErrorText = "Something went wrong, upload failed";
+export const wordValidationErrorText = "Something went wrong with word validation";
+export const successfulDeleteText = "Your word has been deleted";
+export const errorWordDeleteText = "You did not have a word uploaded";
+export const connectErrorText = "Error connecting to the server";

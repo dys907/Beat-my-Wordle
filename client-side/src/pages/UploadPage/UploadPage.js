@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './UploadPage.module.css';
 
 const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler }) => {
-    const username = sessionStorage.getItem('username')
+    const username = localStorage.getItem('username')
     const upload = 'Edit your word';
     const helpModalTitleText = 'Upload a word or change your current one';
     const helpModalDescText = '* If you already uploaded a word, uploading a new one will overwrite it';
@@ -60,6 +60,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
         return new Promise((res, rej) => {
             const resourceGet = "1/words/check/?word=" + word;
             xhttp.open('GET', endPointRoot + resourceGet, true);
+            xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
             xhttp.onload = () => {
                 if (xhttp.status === 200) {
                     res(xhttp.response)
@@ -75,6 +76,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
         return new Promise((res, rej) => {
             const resourceGet = "1/words/?username=" + username;
             xhttp.open('GET', endPointRoot + resourceGet, true);
+            xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
             xhttp.onload = () => {
                 if (xhttp.status === 200) {
                     res(xhttp.response)
@@ -96,6 +98,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
             const resourcePost = "1/words/" + method;
             xhttp.open('PUT', endPointRoot + resourcePost, true);
             xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
             xhttp.onload = () => {
                 if (xhttp.status === 200) {
                     res(xhttp.response)
@@ -113,6 +116,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
         const connectErrorText = "Error connecting to the server";
         const resourceDelete = "1/words/?username=" + username;
         xhttp.open('DELETE', endPointRoot + resourceDelete, true)
+        xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
         xhttp.onload = () => {
             if (xhttp.status === 200) {
                 setUploadStatus(successfulDeleteText);

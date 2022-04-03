@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styles from './ProfilePage.module.css';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, uploadHandler }) => {
-    const username = sessionStorage.getItem('username')
+    const username = localStorage.getItem('username')
     const profile = 'Profile';
     const rating = 'Score';
     const word = 'Word';

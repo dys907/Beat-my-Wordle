@@ -11,7 +11,7 @@ const Game = ({ word, gameResult, opponent }) => {
     const title = 'Beat my Wordle';
     
     useEffect(() => {
-        const username = sessionStorage.getItem('username'); // todo: fix this later
+        const username = localStorage.getItem('username'); // todo: fix this later
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";
@@ -229,6 +229,7 @@ const Game = ({ word, gameResult, opponent }) => {
             const resourceGet = "1/words/check/?word=" + currentGuessWord;
             return new Promise((res, rej) => {
                 xhttp.open("GET", endPointRoot + resourceGet, true);
+                xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
                     if (xhttp.status === 200) {
                         res(xhttp.response)

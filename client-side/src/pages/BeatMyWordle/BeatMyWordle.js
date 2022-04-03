@@ -21,13 +21,13 @@ const BeatMyWordle = () => {
   const [modalText, setModalText] = useState("");
 
   const xhttp = new XMLHttpRequest();
-  const userID = sessionStorage.getItem("username"); // testing
+  const userID = localStorage.getItem("username"); // testing
   const endPointRoot = "https://wordle.itsvicly.com/";
   const [isLoggedIn, setIsLoggedIn] = useState();
 
   //Will probably need some kind of token check for login status
   useEffect(() => {
-    if (sessionStorage.getItem("username")) {
+    if (localStorage.getItem("username")) {
       setIsLoggedIn(true);
     }
   }, []);
@@ -40,7 +40,6 @@ const BeatMyWordle = () => {
     setPageFlow("Login");
   };
 
-  //TEMPORARY FOR TESTING
   const playGameHandler = () => {
     setGameResult(0);
 
@@ -90,6 +89,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceScore = "1/scores/all";
       xhttp.open("GET", endPointRoot + resourceScore, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -105,6 +105,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceScore = "1/scores/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceScore, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -120,6 +121,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceWord = "1/words/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceWord, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -135,6 +137,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceCheck = "1/users/gamestatus/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceCheck, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -150,6 +153,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceLook = "1/games/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceLook, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -174,6 +178,7 @@ const BeatMyWordle = () => {
       const resourceCreate = "1/games";
       xhttp.open("POST", endPointRoot + resourceCreate, true);
       xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       const jsonObj = {
         player: userID,
         opponent: opponent,
@@ -192,14 +197,44 @@ const BeatMyWordle = () => {
 
   const postLoginHandler = (user) => {
     setIsLoggedIn(true);
-    sessionStorage.setItem("username", user);
+    localStorage.setItem("username", user);
     homeHandler();
   };
 
-  const logoutHandler = () => {
-    setIsLoggedIn(false);
-    sessionStorage.removeItem("username");
-  };
+    const logoutHandler = async() => {
+        const logoutRoute = '1/users/logout';
+        const URL = endPointRoot + logoutRoute;
+        const username = localStorage.getItem('username');
+        const submitObject = {
+            username: username
+        }
+
+        try {
+            const response = await fetch(`${URL}/`, {
+                method: 'POST',
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                    'Authorization': 'bearer '+ localStorage.getItem("jwt"), 
+                }),
+                body: JSON.stringify(submitObject),
+            });
+    
+            if (response.status === 200) {
+                console.log('Log out successful');
+                setIsLoggedIn(false);
+                localStorage.removeItem("username");
+                localStorage.removeItem('jwt');
+            } else {
+                console.log('Error while trying to log out');
+                response.text((txt) => {
+                    console.log(txt);
+                });
+            }
+        } catch(e) {
+            console.log('Error logging out: ' + e);
+        }
+        
+    };
 
   useEffect(() => {
     if (gameResult !== 0) {
@@ -209,6 +244,7 @@ const BeatMyWordle = () => {
         opponent: gameOpponent,
       });
       xhttp.open("PATCH", endPointRoot + resourcePatch, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send(params);
     }

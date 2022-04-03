@@ -31,7 +31,7 @@ const signup = (req, res) => {
             });
         } catch (err) {
             console.log(err);
-            res.status(sc.INTERNAL_SERVER_ERROR);
+            res.status(sc.INTERNAL_SERVER_ERROR).send("500: Internal server error");
         }
         connection.release();
     });

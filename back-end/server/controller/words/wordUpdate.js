@@ -14,7 +14,7 @@ const wordUpdate = (req, res) => {
         res.status(sc.BAD_REQUEST).send("400: Word must be 5 letters");
     } else {
         con.getConnection((err, connection) => { //need to test this one
-            let sql = "UPDATE words SET word = ? WHERE username = ?"
+            let sql = "UPDATE words SET word = ? WHERE username = ?";
             connection.query(sql, [word, username], function (err, result) {
                 if (err) {
                     console.log(err);
@@ -22,7 +22,6 @@ const wordUpdate = (req, res) => {
                 } else {
                     res.status(sc.OK).send("200: Word has been updated");
                 }
-
             })
         })
     }

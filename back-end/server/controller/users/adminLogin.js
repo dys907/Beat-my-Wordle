@@ -13,12 +13,14 @@ const adminLogin = (req, res) => {
         let sql = 'SELECT * FROM admins WHERE username = ? AND password = ?';
         con.getConnection((err, connection) => {
             connection.query(sql, [username, password], function(err, result) {
-                if (err) throw err;
+                if (err) {
+                    res.status(sc.INTERNAL_SERVER_ERROR).send("500: Internal server error");
+                }
                 if (result.length > 0) {
                     console.log(statReport);
                     res.status(sc.OK).json(statReport);
                 } else {
-                    res.status(sc.FORBIDDEN).send('Incorrect password or user does not exist');
+                    res.status(sc.FORBIDDEN).send("403: Incorrect password or user does not exist");
                 }
             });
             connection.release();

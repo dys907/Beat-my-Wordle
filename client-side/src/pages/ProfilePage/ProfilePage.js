@@ -6,7 +6,6 @@ import styles from './ProfilePage.module.css';
 
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
     const username = sessionStorage.getItem('username')
-    console.log(username)
     const profile = 'Profile';
     const rating = 'Rating';
     const word = 'Word';
@@ -31,7 +30,6 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
     const formStatus = document.querySelector("#status");
     // todo: change/delete instead of upload once a word already uploaded
     const uploadWord = () => {
-        console.log("HELLo")
         const incorrectLengthText = "Word is not of length 5, try a 5 letter word";
         const uploadErrorText = "Something went wrong, upload failed";
         const wordValidationErrorText = "Something went wrong with word validation";
@@ -41,49 +39,81 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
             return;
         }
 
-        const resourceGet = "1/words/check/?word=" + word;
-        const resourcePost = "1/words/upload";
-        xhttp.open('GET', endPointRoot + resourceGet, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                const response = this.responseText.toString();
-                console.log(response)
-                const resJSON = JSON.parse(response);
-                if (this.status === 200) {
-                    if (resJSON.isWord === true) {
-                        const jsonObj = {
-                            username: username,
-                            word: word
-                        }
-                        const params = JSON.stringify(jsonObj);
-                        xhttp.open('PUT', endPointRoot + resourcePost, true);
-                        xhttp.setRequestHeader("Content-type", "application/json");
-                        xhttp.send(params);
-                        xhttp.onreadystatechange = function () {
-                            if (this.readyState === 4) {
-                                if (this.status === 200) {
-                                    const uploadSuccessText = "Word - " + word + " was uploaded";
-                                    formStatus.innerHTML = uploadSuccessText;
-                                    setOwnWord(word)
-                                } else if (this.status === 400) {
-                                    formStatus.innerHTML = { uploadErrorText };
-                                }
-                            }
-                        }
-                    } else {
-                        const invalidWordText = word + " is not a valid word, try a different word";
-                        formStatus.innerHTML = invalidWordText;
-                    }
+
+        checkIfWord(word).then((res) => {
+            let isWord = JSON.parse(res).isWord;
+            if (isWord) {
+                checkIfHasWord().then((res2) => {
+                    let currentWord = JSON.parse(res2).word;
+                    const update = "update"
+                    const upload = "upload"
+                    let method = (currentWord === "") ? upload : update;
+                    wordToDB(method, word).then(() => {
+                        const uploadSuccessText = "Word - " + word + " was uploaded";
+                        formStatus.innerHTML = uploadSuccessText;
+                        setOwnWord(word);
+                    }).catch(() => {
+                        formStatus.innerHTML = uploadErrorText;
+                    })
+                })
+            } else {
+                const invalidWordText = word + " is not a valid word, try a different word";
+                formStatus.innerHTML = invalidWordText;
+            }
+        }).catch((err) => {
+            formStatus.innerHTML = wordValidationErrorText;
+        })
+    }
+
+    const checkIfWord = (word) => {
+        return new Promise((res, rej) => {
+            const resourceGet = "1/words/check/?word=" + word;
+            xhttp.open('GET', endPointRoot + resourceGet, true);
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
                 } else {
-                    formStatus.innerHTML = wordValidationErrorText;
+                    rej(xhttp.statusText)
                 }
             }
-        }
+            xhttp.send();
+        })
     }
 
     const checkIfHasWord = () => {
-        
+        return new Promise((res, rej) => {
+            const resourceGet = "1/words/?username=" + username;
+            xhttp.open('GET', endPointRoot + resourceGet, true);
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
+                } else {
+                    rej(xhttp.statusText)
+                }
+            }
+            xhttp.send();
+        })
+    }
+
+    const wordToDB = (method, word) => {
+        return new Promise((res, rej) => {
+            const jsonObj = {
+                username: username,
+                word: word
+            }
+            const params = JSON.stringify(jsonObj);
+            const resourcePost = "1/words/" + method;
+            xhttp.open('PUT', endPointRoot + resourcePost, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.onload = () => {
+                if (xhttp.status === 200) {
+                    res(xhttp.response)
+                } else {
+                    rej(xhttp.statusText)
+                }
+            }
+            xhttp.send(params);
+        })
     }
 
     const deleteWord = () => {

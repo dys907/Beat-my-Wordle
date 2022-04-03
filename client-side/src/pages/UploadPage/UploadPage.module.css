@@ -1,0 +1,96 @@
+.title {
+    text-align:center;
+    color:white;
+}
+.profile_card {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    color: white;
+    border-radius: 10px;
+    text-align:center;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border:double 5px #3A3A3C;
+
+}
+
+.profile_card h1{
+    color: white;
+    font-size: small
+}
+.profile_card span {
+    color:white;
+    font-size:x-large;
+    font-style:bold;
+}
+
+.inner_profile {
+    margin-bottom:20px;
+}
+
+.userName {
+    margin-bottom:20px;
+}
+.userName span {
+    font-size:42px;
+    font-style:bold;
+}
+
+.cardBox {
+    border: thin solid black;
+    margin:auto;
+    background-color:#3A3A3C;
+    border-radius:5px;
+    width:150px;
+    padding:10px;
+    vertical-align: middle;
+}
+
+.upload_section {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom:60px;
+    color: white;
+    text-align: center;
+    width:400px;
+    height: 300px;
+}
+
+.hide_display {
+    display:none;
+}
+
+.help_desc {
+    font-style:italic;
+}
+
+.buttonMenu {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.buttonMenu Button {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.upload input , .upload button {
+    background-color: #121213;
+    border: 2px solid #3A3A3C;
+    box-sizing: border-box;
+    color: white;
+    font-size:20px;
+    transition: all .3s;
+}
+
+.upload input:hover .upload button:hover {
+    border-color: white;
+    color: white;
+    fill: white;
+}

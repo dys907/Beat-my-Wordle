@@ -14,6 +14,10 @@
     margin-bottom:20px;
 }
 
+.backButton {
+    margin: 10px;
+}
+
 @media only screen and (max-width: 500px) {
     .buttonMenu {
         margin-top: 50%;

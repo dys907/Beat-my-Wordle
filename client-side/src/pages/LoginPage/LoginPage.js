@@ -23,8 +23,11 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
     
     return (
         loginOrSignup === 'Login' ?
+        <>
+            <div className={styles.backButton}>
+                <BackButton  clickHandler={homeHandler} />
+            </div>
             <div className={styles.form_div}>
-                <BackButton clickHandler={homeHandler} />
                 <Form 
                     titleTxt={loginBtnTxt} 
                     formType={'login'} 
@@ -32,9 +35,13 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                     postLoginHandler={postLoginHandler} 
                 />                
             </div>
+        </>
         : loginOrSignup === 'Signup' ?
+        <>    
+            <div className={styles.backButton}>
+                <BackButton  clickHandler={homeHandler} />
+            </div>
             <div className={styles.form_div}>
-                <BackButton clickHandler={homeHandler} />
                 <Form 
                     titleTxt={signupBtnTxt} 
                     formType={'signup'} 
@@ -42,6 +49,7 @@ const LoginPage = ({ postLoginHandler, homeHandler }) => {
                     postLoginHandler={postLoginHandler} 
                 />
             </div>
+        </>
         : 
             <div className={styles.buttonMenu}>
                 <Button btnText={loginBtnTxt} clickHandler={loginHandler} />

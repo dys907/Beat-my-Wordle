@@ -84,8 +84,7 @@
 }
 
 .backWrapper > button {
-    margin-left: 37%;
-    margin-right: auto;
+    margin: 10px;
 }
 
 @media only screen and (max-width: 412px) {

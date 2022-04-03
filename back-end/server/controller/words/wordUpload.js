@@ -18,7 +18,7 @@ const wordUpload = (req, res) => {
     let sql = "INSERT INTO words(username, word) VALUES (?,?)";
     con.getConnection((err, connection) => {
       //need to test this one
-      connection.query(sql, [username, word], function (err, result) {
+      connection.query(sql, [username, word],  (err, result) => {
         if (err) {
           console.log(err);
           res

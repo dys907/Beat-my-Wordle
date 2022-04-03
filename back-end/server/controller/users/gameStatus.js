@@ -12,7 +12,7 @@ const gameStatus = (req, res) => {
     const username = parsedLink.query['username'];
     let sql = 'SELECT gl.opponent, w.word FROM gameLobby gl JOIN words w ON gl.opponent = w.username WHERE gl.player=? AND inProgress=TRUE;';
     con.getConnection((err, connection) => {
-        con.query(sql, [username], function (err, result) {
+        con.query(sql, [username], (err, result) => {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send('Could not contact server');
             }

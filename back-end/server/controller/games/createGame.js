@@ -8,7 +8,7 @@ const createGame = (req, res) => {
     const { player, opponent } = req.body;
     let sql = "INSERT INTO gameLobby(player, opponent, inProgress) VALUES (?,?,TRUE)";
     con.getConnection((err, connection) => {
-        connection.query(sql, [player, opponent], function (err, result) {
+        connection.query(sql, [player, opponent],  (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error with creating game lobby");

@@ -11,7 +11,7 @@ const API_VERSION = require('./configs/API_VERSION');
 //------------------------------------
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.header( "Access-Control-Allow-Origin", "*");
     res.header( "Access-Control-Allow-Headers", "*");
     res.header( "Access-Control-Allow-Methods", "*");

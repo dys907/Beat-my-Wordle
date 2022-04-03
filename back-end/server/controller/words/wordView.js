@@ -12,7 +12,7 @@ const wordView = (req, res) => {
 
     let sql = 'SELECT words.word FROM words WHERE words.username = ?;';
     con.getConnection((err, connection) => {
-        connection.query(sql, [username], function (err, result) {
+        connection.query(sql, [username],  (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error with contacting the server.");

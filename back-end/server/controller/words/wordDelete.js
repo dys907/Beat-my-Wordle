@@ -11,7 +11,7 @@ const wordDelete = (req, res) => {
     const username = parsedLink.query["username"];
     let sql = "DELETE FROM words WHERE username=?";
     con.getConnection((err, connection) => {
-        connection.query(sql, [username], function (err, result) {
+        connection.query(sql, [username], (err, result) => {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error could not reach database");
             }

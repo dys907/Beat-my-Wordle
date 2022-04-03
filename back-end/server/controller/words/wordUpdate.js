@@ -15,7 +15,7 @@ const wordUpdate = (req, res) => {
     } else {
         con.getConnection((err, connection) => { //need to test this one
             let sql = "UPDATE words SET word = ? WHERE username = ?"
-            connection.query(sql, [word, username], function (err, result) {
+            connection.query(sql, [word, username], (err, result) => {
                 if (err) {
                     console.log(err);
                     res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error with updating your word");

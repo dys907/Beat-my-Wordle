@@ -8,7 +8,7 @@ const wordDeleteAll = (req, res) => {
     statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION + "words/all"] + 1;
     let sql = "DELETE FROM words";
     con.getConnection((err, connection) => {
-        connection.query(sql, function (err, result) {
+        connection.query(sql,  (err, result) => {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send("500: Error could not reach database");
             }

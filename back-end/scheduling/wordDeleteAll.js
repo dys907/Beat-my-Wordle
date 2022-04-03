@@ -7,7 +7,7 @@ const wordDeleteAll = () => {
     statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION + "words/all"] + 1;
     let sql = "DELETE FROM words";
     con.getConnection((err, connection) => {
-        connection.query(sql, function (err, result) {
+        connection.query(sql, (err, result) => {
             if (err) {
                 console.error(err + " : " + new Date());
             }

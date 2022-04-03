@@ -58,12 +58,16 @@
     margin-bottom:60px;
     color: white;
     text-align: center;
-    width: 350px;
+    width:400px;
     height: 300px;
 }
 
 .hide_display {
     display:none;
+}
+
+.help_desc {
+    font-style:italic;
 }
 
 .buttonMenu {
@@ -74,4 +78,19 @@
 .buttonMenu Button {
     margin-top:10px;
     margin-bottom:10px;
+}
+
+.upload input , .upload button {
+    background-color: #121213;
+    border: 2px solid #3A3A3C;
+    box-sizing: border-box;
+    color: white;
+    font-size:20px;
+    transition: all .3s;
+}
+
+.upload input:hover .upload button:hover {
+    border-color: white;
+    color: white;
+    fill: white;
 }

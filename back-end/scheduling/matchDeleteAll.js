@@ -6,7 +6,7 @@ const matchDeleteAll = () => {
     statReport.DELETE[API_VERSION + "games/all"] = statReport.DELETE[API_VERSION + "games/all"] + 1;
     let sql = "DELETE FROM gameLobby";
     con.getConnection((err, connection) => {
-        connection.query(sql, function (err, result) {
+        connection.query(sql, (err, result) => {
             if (err) {
                 console.error(err + " : " + new Date());
             }

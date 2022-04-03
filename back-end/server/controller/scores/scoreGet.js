@@ -10,7 +10,7 @@ const scoreGet = (req, res) => {
     const username = url.parse(req.url, true).query["username"];
     let sql = "SELECT score FROM scores WHERE username = ?";
     con.getConnection((err, connection) => {
-        connection.query(sql, [username], function(err, result) {
+        connection.query(sql, [username], (err, result) => {
             if (err) {
                 res.status(sc.INTERNAL_SERVER_ERROR).send("Internal server error");
             } else if (result.length === 1) {

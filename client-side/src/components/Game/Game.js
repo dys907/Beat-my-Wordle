@@ -11,7 +11,7 @@ const Game = ({ word, gameResult, opponent }) => {
     const title = 'Beat my Wordle';
     
     useEffect(() => {
-        const username = sessionStorage.getItem('username'); // todo: fix this later
+        const username = localStorage.getItem('username'); // todo: fix this later
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";

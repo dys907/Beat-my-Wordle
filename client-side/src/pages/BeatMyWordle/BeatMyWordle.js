@@ -21,13 +21,13 @@ const BeatMyWordle = () => {
   const [modalText, setModalText] = useState("");
 
   const xhttp = new XMLHttpRequest();
-  const userID = sessionStorage.getItem("username"); // testing
+  const userID = localStorage.getItem("username"); // testing
   const endPointRoot = "https://wordle.itsvicly.com/";
   const [isLoggedIn, setIsLoggedIn] = useState();
 
   //Will probably need some kind of token check for login status
   useEffect(() => {
-    if (sessionStorage.getItem("username")) {
+    if (localStorage.getItem("username")) {
       setIsLoggedIn(true);
     }
   }, []);
@@ -192,14 +192,44 @@ const BeatMyWordle = () => {
 
   const postLoginHandler = (user) => {
     setIsLoggedIn(true);
-    sessionStorage.setItem("username", user);
+    localStorage.setItem("username", user);
     homeHandler();
   };
 
-  const logoutHandler = () => {
-    setIsLoggedIn(false);
-    sessionStorage.removeItem("username");
-  };
+    const logoutHandler = async() => {
+        const logoutRoute = '1/users/logout';
+        const URL = endPointRoot + logoutRoute;
+        const username = localStorage.getItem('username');
+        const submitObject = {
+            username: username
+        }
+
+        try {
+            const response = await fetch(`${URL}/`, {
+                method: 'POST',
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                    'Authorization': 'bearer '+ localStorage.getItem("jwt"), 
+                }),
+                body: JSON.stringify(submitObject),
+            });
+    
+            if (response.status === 200) {
+                console.log('Log out successful');
+                setIsLoggedIn(false);
+                localStorage.removeItem("username");
+                localStorage.removeItem('jwt');
+            } else {
+                console.log('Error while trying to log out');
+                response.text((txt) => {
+                    console.log(txt);
+                });
+            }
+        } catch(e) {
+            console.log('Error logging out: ' + e);
+        }
+        
+    };
 
   useEffect(() => {
     if (gameResult !== 0) {

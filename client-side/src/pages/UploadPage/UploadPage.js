@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './UploadPage.module.css';
 
 const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler }) => {
-    const username = sessionStorage.getItem('username')
+    const username = localStorage.getItem('username')
     const upload = 'Edit your word';
     const helpModalTitleText = 'Upload a word or change your current one';
     const helpModalDescText = '* If you already uploaded a word, uploading a new one will overwrite it';

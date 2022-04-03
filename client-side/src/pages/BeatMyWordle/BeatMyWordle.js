@@ -56,19 +56,18 @@ const BeatMyWordle = () => {
         } else {
             checkGameStatus().then((res) => {
                 let response = JSON.parse(res);
-                console.log(response);
                 if (response.length == 0) {
                   lookForGame().then((res2) => {
                     createLobby(res2).then(() => {
                       setPageFlow("Game");
-                    });
-                  });
+                    }).catch((error1) => console.log(error1));
+                  }).catch((err1) => console.log(err1));
                 } else {
                   setGameOpponent(response[0].opponent);
                   setWord(response[0].word);
                   setPageFlow("Game");
                 }
-              });
+              }).catch((error) => console.log(error));
         }
     }).catch((err) => console.log(err))
 
@@ -84,15 +83,15 @@ const BeatMyWordle = () => {
         let s2 = response2.word;
         setOwnWord(s2);
         setPageFlow("Profile");
-      });
-    });
+      }).catch((error) => console.log(error));
+    }).catch((err) => console.log(err));
   };
 
   const leaderboardHandler = () => {
     getLeaderboard().then((res) => {
       setLeaderboard(res);
       setPageFlow("Leaderboard");
-    });
+    }).catch((err) => console.log(err));
   };
 
   const uploadHandler = () => {
@@ -183,7 +182,6 @@ const BeatMyWordle = () => {
   };
 
   const createLobby = (res) => {
-    console.log(res);
     const response = JSON.parse(res);
     const opponent = response.username;
     setGameOpponent(opponent);
@@ -236,15 +234,6 @@ const BeatMyWordle = () => {
             setIsLoggedIn(false);
             localStorage.removeItem("username");
             localStorage.removeItem('jwt');
-    
-            if (response.status === 200) {
-                console.log('Log out successful');
-            } else {
-                console.log('Error while trying to log out');
-                response.text((txt) => {
-                    console.log(txt);
-                });
-            }
         } catch(e) {
             setIsLoggedIn(false);
             localStorage.removeItem("username");

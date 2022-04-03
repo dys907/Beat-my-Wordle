@@ -33,7 +33,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('handle submit called');
         sendFormData();
     }
 
@@ -57,7 +56,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             setAdminStats(data);
             setPageFlow('adminStats');
         } catch {
-            console.log('error');
             setErrorMsgAndChangePageFlow(loginErrorText);
         }
     }
@@ -69,11 +67,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             const response = await fetchMethod(method, URL);
             if (response.status !== 200) {
                 setErrorMsgAndChangePageFlow(loginErrorText);
-                response.text().then(text => {
-                    console.log(text);
-                });
             } else {
-                console.log(`Login successful!`);
                 response.text().then(text => {
                     let jwt_token = JSON.parse(text).access_token;
                     localStorage.setItem("jwt", jwt_token);
@@ -82,7 +76,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             }
         } catch (e) {
             setErrorMsgAndChangePageFlow(generalErrorText);
-            console.log('login error' + e);
         }
     }
 
@@ -93,13 +86,8 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             const response = await fetchMethod(method, URL);
             if (response.status !== 200) {
                 setErrorMsgAndChangePageFlow(generalErrorText);
-                response.text().then(text => {
-                    console.log(text);
-                });
-                console.log(response);
             } else {
                 response.text().then(text => {
-                    console.log(text);
                     let jwt_token = JSON.parse(text).access_token;
                     localStorage.setItem("jwt", jwt_token);
                 })
@@ -107,7 +95,6 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
             }
         } catch (e) {
             setErrorMsgAndChangePageFlow(signupErrorText);
-            console.log('signup error ' + e);
         }
     }
 

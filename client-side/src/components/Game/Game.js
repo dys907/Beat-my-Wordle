@@ -38,15 +38,13 @@ const Game = ({ word, opponent }) => {
         let lost = false;
         
         let solution = word.toUpperCase();
-        console.log(solution);
+        
         
         let solutionArrary = [];
         
         for (let i = 0; i < NUMBER_OF_LETTERS; i++) {
             solutionArrary.push(solution.substring(i, i + 1));
         }
-
-        console.log(solutionArrary)
         
         let guessCounter = 0;
         let letterCounter = 0;

@@ -59,6 +59,10 @@
 
 
 @media only screen and (max-width: 600px) {
+    .status {
+        margin-top:30px;
+        margin-bottom:30px;
+    }
     .flex-container {
       flex-direction: column;
     }

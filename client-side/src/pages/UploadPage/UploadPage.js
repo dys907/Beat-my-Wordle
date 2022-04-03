@@ -148,9 +148,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
 
                 {/* <button onClick={() => deleteWord()}>{deleteYourWordButtonText}</button> */}
                 <h4 className={styles.help_desc}>{deleteWarning}</h4>
-                <div className={styles.delete}>
 
-                </div>
                 <Button btnText={deleteYourWordButtonText} clickHandler={() => { deleteWord() }} />
                 {/* <Button btnText="Submit" clickHandler= {() => uploadWord()}></Button> */}
 

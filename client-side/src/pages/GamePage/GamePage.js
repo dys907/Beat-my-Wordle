@@ -3,14 +3,13 @@ import Game from "../../components/Game/Game";
 import BackButton from "../../components/BackButton/BackButton";
 import styles from './GamePage.module.css';
 
-const GamePage = ({homeHandler, word, gameResult, opponent}) => {
+const GamePage = ({homeHandler, word, opponent}) => {
     return (
         <>  
             <div className={styles.buttonWrapper}>
                 <BackButton clickHandler={homeHandler} />
             </div>
-            
-            <Game word={word} gameResult={gameResult} opponent={opponent}/>
+            <Game word={word} opponent={opponent}/>
         </>
     )
 }

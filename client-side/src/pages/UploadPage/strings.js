@@ -1,6 +1,6 @@
 export const upload = 'Edit your word';
 export const helpModalTitleText = 'Upload a word or change your current one';
-export const helpModalDescText = '* If you already uploaded a word, uploading a new one will overwrite it';
+export const helpModalDescText = '* If you already uploaded a word, uploading a new one will overwrite it. ';
 export const deleteWarning = 'If you delete your word you will not be able to play until you upload a new word!'
 export const deleteYourWordButtonText = 'Delete your word';
 export const submitButtonText = 'Submit';

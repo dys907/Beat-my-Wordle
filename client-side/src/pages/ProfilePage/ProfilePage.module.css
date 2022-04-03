@@ -3,7 +3,7 @@
     color:white;
 }
 .profile_card {
-    margin-top: 20px;
+
     margin-left: auto;
     margin-right: auto;
     width: 300px;
@@ -99,7 +99,7 @@
     margin: 10px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 412px) {
     .backWrapper > button {
         margin-left: 8px;
     }

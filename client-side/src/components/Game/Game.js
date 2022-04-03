@@ -9,7 +9,7 @@ import {
  } from './strings';
 import CustomModal from '../CustomModal/CustomModal'
 
-const Game = ({ word, gameResult, opponent }) => {
+const Game = ({ word, opponent }) => {
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
     const [modalText, setModalText] = useState("")
@@ -19,7 +19,6 @@ const Game = ({ word, gameResult, opponent }) => {
 
         const xhttp = new XMLHttpRequest();
         const endPointRoot = "https://wordle.itsvicly.com/";
-        gameResult(0)
         const CODE_A = 65;
         const CODE_a = 97;
         const CODE_z = 122;
@@ -179,16 +178,22 @@ const Game = ({ word, gameResult, opponent }) => {
                         })
                         if (sum === NUMBER_OF_LETTERS) {
                             won = true;
-                            gameResult(MAX_GUESS - guessCounter + 1);
-                            updateScore(MAX_GUESS - guessCounter + 1)
+                            updateGameStatus().then((res) => {
+                                updateScore(MAX_GUESS - guessCounter + 1)
+                            }).catch((err) => {
+                                console.log(err);
+                            })
                         }
                         currentGuess = [];
                         guessCounter++;
                         letterCounter = 0;
                         if (guessCounter === MAX_GUESS && !won) {
                             lost = true;
-                            gameResult(-1);
-                            updateScore(-1);
+                            updateGameStatus().then((res) => {
+                                updateScore(-1);
+                            }).catch((err) => {
+                                console.log(err);
+                            })
                         }
                         
                     } else {
@@ -305,6 +310,29 @@ const Game = ({ word, gameResult, opponent }) => {
                 xhttp.send(resStr);
             })
         }
+
+        const updateGameStatus = () => {
+            const resourcePatch = "1/games";
+            const params = JSON.stringify({
+              player: username,
+              opponent: opponent,
+            });
+            return new Promise((res, rej) => {
+                xhttp.open("PATCH", endPointRoot + resourcePatch, true);
+                xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.onload = () => {
+                    if (xhttp.status === 200) {
+                        res(xhttp.response)
+                    } else {
+                        rej(xhttp.statusText)
+                    }
+                }
+                xhttp.send(params);
+            })
+
+        }
+
     }, [])
     return (
         <>

@@ -134,15 +134,13 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
             <h1 className={styles.title}>{upload}</h1>
             <div className={styles.upload_section}>
                 <h2>{helpModalTitleText}</h2>
-                <h4 className={styles.help_desc}>{helpModalDescText}</h4>
+                <h4 className={styles.help_desc}>{helpModalDescText + deleteWarning}</h4>
                 <div className={styles.upload}>
                     <input id="word" className={styles.word} type="text"></input>
                     <button onClick={() => uploadWord()}>{submitButtonText}</button>
                 </div>
 
                 <br></br>
-
-                <h4 className={styles.help_desc}>{deleteWarning}</h4>
                 <div className={styles.delete}></div>
                 <Button btnText={deleteYourWordButtonText} clickHandler={() => { deleteWord() }} />
                 <h3 id="status" className={styles.status}>{uploadStatus}</h3>

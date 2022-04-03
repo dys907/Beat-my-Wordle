@@ -12,7 +12,6 @@ const BeatMyWordle = () => {
   const [pageFlow, setPageFlow] = useState("Homepage");
   const [word, setWord] = useState();
   const [gameOpponent, setGameOpponent] = useState();
-  const [gameResult, setGameResult] = useState(0);
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState("");
   const [ownWord, setOwnWord] = useState("");
@@ -41,7 +40,6 @@ const BeatMyWordle = () => {
   };
 
   const playGameHandler = () => {
-    setGameResult(0);
 
     checkGameStatus().then((res) => {
       let response = JSON.parse(res);
@@ -240,20 +238,6 @@ const BeatMyWordle = () => {
         
     };
 
-  useEffect(() => {
-    if (gameResult !== 0) {
-      const resourcePatch = "1/games";
-      const params = JSON.stringify({
-        player: userID,
-        opponent: gameOpponent,
-      });
-      xhttp.open("PATCH", endPointRoot + resourcePatch, true);
-      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
-      xhttp.setRequestHeader("Content-type", "application/json");
-      xhttp.send(params);
-    }
-  }, [gameResult]);
-
   return (
     <>
       {pageFlow === "Homepage" ? (
@@ -275,7 +259,6 @@ const BeatMyWordle = () => {
         <GamePage
           homeHandler={homeHandler}
           word={word}
-          gameResult={setGameResult}
           opponent={gameOpponent}
         />
       ) : pageFlow === "Profile" ? (

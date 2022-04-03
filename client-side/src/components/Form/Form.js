@@ -10,7 +10,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     const [pageFlow, setPageFlow] = useState('login');
     const [adminStats, setAdminStats] = useState(null);
     const host = `https://wordle.itsvicly.com`;
-    // const host = `http://localhost:8080`;
+    //const host = `http://localhost:8080`;
     const method = 'POST';
 
     const userNameLabel = 'Username: ';

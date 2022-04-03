@@ -7,6 +7,9 @@ import styles from './ProfilePage.module.css';
 const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }) => {
     const username = sessionStorage.getItem('username')
     console.log(username)
+    const profile = 'Profile';
+    const rating = 'Rating';
+    const word = 'Word';
     const changeWordButtonText = 'Change Word';
     const noWordText = 'NONE!';
     const helpModalTitleText = 'Upload a word or change your current one';
@@ -37,7 +40,7 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
             formStatus.innerHTML = incorrectLengthText;
             return;
         }
-        
+
         const resourceGet = "1/words/check/?word=" + word;
         const resourcePost = "1/words/upload";
         xhttp.open('GET', endPointRoot + resourceGet, true);
@@ -64,7 +67,7 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
                                     formStatus.innerHTML = uploadSuccessText;
                                     setOwnWord(word)
                                 } else if (this.status === 400) {
-                                    formStatus.innerHTML = {uploadErrorText};
+                                    formStatus.innerHTML = { uploadErrorText };
                                 }
                             }
                         }
@@ -84,10 +87,10 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
         const errorWordDeleteText = "You did not have a word uploaded";
         const connectErrorText = "Error connecting to the server";
         const resourceDelete = "1/words/?username=" + username;
-        
+
         xhttp.open('DELETE', endPointRoot + resourceDelete, true)
         xhttp.send()
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
                     formStatus.innerHTML = successfulDeleteText;
@@ -103,19 +106,20 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
 
     return (
         <div>
-            <div className={visible ? styles.hide_display: styles.profile_card}>
+            <h1 className={styles.title}>{profile}</h1>
+            <div className={visible ? styles.hide_display : styles.profile_card}>
                 <div className={styles.inner_profile}>
                     <div className={styles.userName}>
                         <span>{username}</span>
                     </div>
-                    <h1>Rating</h1>
+                    <h1>{rating}</h1>
                     <div className={styles.cardBox}>
                         <span>{score}</span>
                     </div>
 
-                    <h1>Word</h1>
+                    <h1>{word}</h1>
                     <div className={styles.cardBox}>
-                        <span>{ownWord ? ownWord : noWordText}</span>
+                        <span>{ownWord ? ownWord.toUpperCase() : noWordText}</span>
                     </div>
                 </div>
                 <Button btnText={changeWordButtonText} clickHandler={() => { toggleUpload() }} />
@@ -137,8 +141,11 @@ const ProfilePage = ({ homeHandler, playBtnHandler, score, ownWord, setOwnWord }
                 <Button btnText={viewInfoButtonText} clickHandler={() => { toggleUpload() }} />
             </div>
 
-            <Button btnText={homeButtonText} clickHandler={homeHandler} />
-            <Button btnText={playButtonText} clickHandler={playBtnHandler} />
+            <div className={styles.buttonMenu}>
+                <Button btnText={homeButtonText} clickHandler={homeHandler} />
+                <Button btnText={playButtonText} clickHandler={playBtnHandler} />
+            </div>
+
         </div>
     );
 }

@@ -2,7 +2,6 @@
 const con = require('../configs/dbconfigs');
 const API_VERSION = require('../configs/API_VERSION');
 const statReport = require('../configs/statReport');
-const sc = require('../configs/httpResponseCodes');
 
 const wordDeleteAll = () => {
     statReport.DELETE[API_VERSION + "words/all"] = statReport.DELETE[API_VERSION + "words/all"] + 1;

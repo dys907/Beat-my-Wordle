@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BackButton from '../../components/BackButton/BackButton';
 import Button from '../../components/Button/Button';
 import PropTypes from 'prop-types';
 
@@ -28,6 +29,9 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
 
     return (
         <>
+            <div className={styles.backWrapper}>
+                <BackButton clickHandler={homeHandler} />
+            </div>
             <h1 className={styles.title}>Leaderboard</h1>
             <table id="leaderboard">
                 <thead>
@@ -41,7 +45,6 @@ const Leaderboardpage = ({ homeHandler, playBtnHandler, jsonList }) => {
                 </tbody>
             </table>
             <div className={styles.buttonMenu}>
-                <Button btnText={homeBtnTxt} clickHandler={homeHandler} />
                 <Button btnText={playBtnTxt} clickHandler={playBtnHandler} />
             </div>
         </>

@@ -94,3 +94,14 @@
     color: white;
     fill: white;
 }
+
+.backWrapper > button {
+    margin-left: 37%;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 412px) {
+    .backWrapper > button {
+        margin-left: 8px;
+    }
+}

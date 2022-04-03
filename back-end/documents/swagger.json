@@ -25,10 +25,6 @@
       "description": "For being matched with another player's word"
     },
     {
-      "name": "systems",
-      "description": "For system to organize data"
-    },
-    {
       "name": "matchmaking",
       "description": "For connecting games between 2 players"
     }
@@ -304,26 +300,6 @@
         }
       }
     },
-    "/words/all": {
-      "delete": {
-        "tags": [
-          "words",
-          "systems"
-        ],
-        "summary": "Delete all the words stored for the day",
-        "description": "Deletes all words stored in the day",
-        "operationId": "wordDeleteAll",
-        "produces": ["html/text"],
-        "responses": {
-          "200": {
-            "description": "200: All Word deleted successfully"
-          },
-          "500": {
-            "description": "500: Error could not reach database" 
-          }
-        }
-      }
-    },
     "/scores/{username}": {
       "get": {
         "tags": [
@@ -499,47 +475,7 @@
           }
         }
       }
-    },
-    "/games/all": {
-      "delete": {
-        "tags": [
-          "systems",
-          "games"
-        ],
-        "summary": "Clears all game lobbies from game storage",
-        "description": "Deletes all the created lobby history in the game lobby` table, used on daily reset",
-        "operationId":"MatchDeleteAll",
-        "produces":["html/text"],
-        "parameters": [
-          {
-            "name": "player",
-            "in": "query",
-            "description": "Player of the game",
-            "required": true,
-            "type":"string"
-          },
-          {
-            "name": "opponent",
-            "in": "query",
-            "description": "Opponent of the game",
-            "required": true,
-            "type":"string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200: Lobby is available"
-          },
-          "400": {
-            "description": "400: Lobby already exists, cannot create"
-          },
-          "500": {
-            "description": "500: Error contacting server"
-          }
-        }
-      }
     }
-
   },
   "definitions": {
     "Users": {

@@ -4,24 +4,25 @@ const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 const isInteger = require("../../../helper/helpers");
 
+const query = (sql, args) => {
+    return new Promise((resolve, reject) => {
+        connection.query(sql, args, (err, result) => {
+            if (err) { reject(new Error()); }
+            else { resolve(result); }
+        });
+    })
+};
 // For updating a user's score
 const scoreChange = (req, res) => {
-    statReport.POST[APIE_VERSION + "scores"] += 1;
+    statReport.POST[API_VERSION + "scores"] += 1;
     const body = req.body;
     const username = body.username;
     const scoreAddition = body.score;
-    
+
     if (isInteger(scoreAddition)) {
         con.getConnection((err, connection) => {
             //Promise structure
-            connection.promise = (sql, args) => {
-                return new Promise((resolve, reject) => {
-                    con.query(sql, args, (err, result) => {
-                        if (err) { reject(new Error()); }
-                        else { resolve(result); }
-                    });
-                });
-            };
+            connection.promise = query;
             let sql = "SELECT score FROM scores WHERE username=?";
             connection.promise(sql, [username]).then((result) => {
                 let sql;

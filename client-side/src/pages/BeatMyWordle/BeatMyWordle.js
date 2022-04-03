@@ -40,7 +40,6 @@ const BeatMyWordle = () => {
     setPageFlow("Login");
   };
 
-  //TEMPORARY FOR TESTING
   const playGameHandler = () => {
     setGameResult(0);
 
@@ -90,6 +89,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceScore = "1/scores/all";
       xhttp.open("GET", endPointRoot + resourceScore, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -105,6 +105,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceScore = "1/scores/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceScore, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -120,6 +121,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceWord = "1/words/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceWord, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -135,6 +137,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceCheck = "1/users/gamestatus/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceCheck, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -150,6 +153,7 @@ const BeatMyWordle = () => {
     return new Promise((res, rej) => {
       const resourceLook = "1/games/?username=" + userID;
       xhttp.open("GET", endPointRoot + resourceLook, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
         if (xhttp.status === 200) {
           res(xhttp.response);
@@ -174,6 +178,7 @@ const BeatMyWordle = () => {
       const resourceCreate = "1/games";
       xhttp.open("POST", endPointRoot + resourceCreate, true);
       xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       const jsonObj = {
         player: userID,
         opponent: opponent,
@@ -209,6 +214,7 @@ const BeatMyWordle = () => {
         opponent: gameOpponent,
       });
       xhttp.open("PATCH", endPointRoot + resourcePatch, true);
+      xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send(params);
     }

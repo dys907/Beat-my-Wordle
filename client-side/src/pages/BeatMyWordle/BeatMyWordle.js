@@ -6,6 +6,12 @@ import ProfilePage from "../ProfilePage/ProfilePage";
 import LeaderboardPage from "../LeaderboardPage/LeaderboardPage";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import UploadPage from "../UploadPage/UploadPage";
+import {
+    noWordTitle,
+    noWordText,
+    noGameTitle,
+    noGameText,
+} from './strings';
 
 const BeatMyWordle = () => {
   //Homepage, Login, Game,
@@ -40,22 +46,32 @@ const BeatMyWordle = () => {
   };
 
   const playGameHandler = () => {
+    checkWord().then((res0) => {
+        let response0 = JSON.parse(res0);
+        let s0 = response0.word;
+        if (s0 === "") {
+            setModalTitle(noWordTitle);
+            setModalText(noWordText);
+            setModalOpen(true);
+        } else {
+            checkGameStatus().then((res) => {
+                let response = JSON.parse(res);
+                console.log(response);
+                if (response.length == 0) {
+                  lookForGame().then((res2) => {
+                    createLobby(res2).then(() => {
+                      setPageFlow("Game");
+                    });
+                  });
+                } else {
+                  setGameOpponent(response[0].opponent);
+                  setWord(response[0].word);
+                  setPageFlow("Game");
+                }
+              });
+        }
+    }).catch((err) => console.log(err))
 
-    checkGameStatus().then((res) => {
-      let response = JSON.parse(res);
-      console.log(response);
-      if (response.length == 0) {
-        lookForGame().then((res2) => {
-          createLobby(res2).then(() => {
-            setPageFlow("Game");
-          });
-        });
-      } else {
-        setGameOpponent(response[0].opponent);
-        setWord(response[0].word);
-        setPageFlow("Game");
-      }
-    });
   };
 
   const profileHandler = () => {
@@ -157,8 +173,8 @@ const BeatMyWordle = () => {
           res(xhttp.response);
         } else if (xhttp.status === 403) {
           rej(xhttp.statusText);
-          setModalText("Wait for other users to upload a word!");
-          setModalTitle("No game available!");
+          setModalText(noGameText);
+          setModalTitle(noGameTitle);
           setModalOpen(true);
         }
       };

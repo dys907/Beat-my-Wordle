@@ -42,7 +42,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
     }
 
     const handleAdminLogin =  async () => {
-        const endpoint = `/1/users/admin/login`;
+        const endpoint = `/1/users/adminLogin`;
         const URL = host + endpoint;
         
         const response = await fetchMethod(method, URL);
@@ -144,7 +144,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 {pageFlow === 'loginError' ? <p>{errorMsg}</p> : <></>}
             </div>
         :pageFlow === 'adminStats' ?
-         <>
+         <div className={formStyles.adminWrapper}>
             <h3>Admin stats</h3>
             <h3>Get stats</h3>
             {adminStats && 
@@ -166,7 +166,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
                 Object.keys(adminStats["PUT"]).map((key, i) => (
                 <p key={key}>Endpoint= {key}: {adminStats["PUT"][key]} hits</p>
             )) }
-        </>
+        </div>
         :<></>
     );
 };

@@ -23,6 +23,14 @@ h3, h2 {
     color: white;
 }
 
+p {
+    color: white;
+}
+
+.adminWrapper {
+    text-align: center;
+}
+
 .submitBtn {
     margin-top: 15px !important;
 }

@@ -2,11 +2,11 @@ import React from "react";
 import Game from "../../components/Game/Game";
 import BackButton from "../../components/BackButton/BackButton";
 
-const GamePage = ({homeHandler, word, gameResult, opponent}) => {
+const GamePage = ({homeHandler, word, opponent}) => {
     return (
         <>
             <BackButton clickHandler={homeHandler} />
-            <Game word={word} gameResult={gameResult} opponent={opponent}/>
+            <Game word={word} opponent={opponent}/>
         </>
     )
 }

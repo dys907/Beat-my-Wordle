@@ -1,5 +1,9 @@
 # Beat-my-Wordle
-COMP 4357 Assignment
+COMP 4357 Assignment Set G Group C
+-Vicly Cao
+-Ben Chin
+-Kevin Kang
+-Dylan Sung
 
 ## Client App:
 https://beat-my-wordle.herokuapp.com/

@@ -46,6 +46,9 @@ body {
     height: 50px;
     background-color: white;
     border-radius: 5px;
+    box-shadow: rgba(255,255,255,.6) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: black;
 }
 
 @media only screen and (max-width: 680px) and (min-width: 450px) {

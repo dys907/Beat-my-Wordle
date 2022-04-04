@@ -11,6 +11,13 @@ import {
     postStatsTxt,
     deleteStatsTxt,
     putStatsTxt,
+    methodTxt,
+    endpointTxt,
+    requestsTxt,
+    GET,
+    POST,
+    PUT,
+    DELETE
 } from './strings';
 import styles from '../Button/Button.module.css';
 import formStyles from './Form.module.css';
@@ -137,26 +144,56 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
         :pageFlow === 'adminStats' ?
          <div className={formStyles.adminWrapper}>
             <h3>{adminStatsTxt}</h3>
-            <h3>{getStatsTxt}</h3>
-            {adminStats && 
-                Object.keys(adminStats["GET"]).map((key, i) => (
-                <p key={key}>Endpoint= {key}: {adminStats["GET"][key]} hits</p>
-            )) }
-            <h3>{postStatsTxt}</h3>
-            {adminStats && 
-                Object.keys(adminStats["POST"]).map((key, i) => (
-                <p key={key}>Endpoint= {key}: {adminStats["POST"][key]} hits</p>
-            )) }
-            <h3>{deleteStatsTxt}</h3>
-            {adminStats && 
-                Object.keys(adminStats["DELETE"]).map((key, i) => (
-                <p key={key}>Endpoint= {key}: {adminStats["DELETE"][key]} hits</p>
-            )) }
-            <h3>{putStatsTxt}</h3>
-            {adminStats && 
-                Object.keys(adminStats["PUT"]).map((key, i) => (
-                <p key={key}>Endpoint= {key}: {adminStats["PUT"][key]} hits</p>
-            )) }
+            <table className={formStyles.adminTable}>
+                <thead>
+                    <tr>
+                        <th>{methodTxt}</th>
+                        <th>{endpointTxt}</th>
+                        <th>{requestsTxt}</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                
+                {adminStats && 
+                    Object.keys(adminStats["GET"]).map((key, i) => (
+                        <tr>
+                            <td>{GET}</td>
+                            <td>{key}</td>
+                            <td>{adminStats["GET"][key]}</td>
+                        </tr>
+                    )) 
+                }
+                {adminStats && 
+                    Object.keys(adminStats["POST"]).map((key, i) => (
+                        <tr>
+                            <td>{POST}</td>
+                            <td>{key}</td>
+                            <td>{adminStats["POST"][key]}</td>
+                        </tr>
+                    )) 
+                }
+
+                {adminStats && 
+                    Object.keys(adminStats["DELETE"]).map((key, i) => (
+                        <tr>
+                            <td>{DELETE}</td>
+                            <td>{key}</td>
+                            <td>{adminStats["DELETE"][key]}</td>
+                        </tr>
+                    )) 
+                }
+
+                {adminStats && 
+                    Object.keys(adminStats["PUT"]).map((key, i) => (
+                        <tr>
+                            <td>{PUT}</td>
+                            <td>{key}</td>
+                            <td>{adminStats["PUT"][key]} </td>
+                        </tr>
+                )) }
+                </tbody>
+            </table>            
         </div>
         :<></>
     );

@@ -31,6 +31,12 @@ p {
     text-align: center;
 }
 
+.adminTable {
+    color:white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .submitBtn {
     margin-top: 15px !important;
 }

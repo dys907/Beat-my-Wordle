@@ -436,45 +436,6 @@
           }
         }
       }
-    },
-    "/games/exist": {
-      "get": {
-        "tags": [
-          "matchmaking",
-          "games"
-        ],
-        "summary": "Check if a game already exists or has been played",
-        "description": "Checks gameLobby table to see if match has been already made",
-        "operationId":"GameExist",
-        "produces":["html/text"],
-        "parameters": [
-          {
-            "name": "player",
-            "in": "query",
-            "description": "Player of the game",
-            "required": true,
-            "type":"string"
-          },
-          {
-            "name": "opponent",
-            "in": "query",
-            "description": "Opponent of the game",
-            "required": true,
-            "type":"string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200: Lobby is available"
-          },
-          "400": {
-            "description": "400: Lobby already exists, cannot create"
-          },
-          "500": {
-            "description": "500: Error contacting server"
-          }
-        }
-      }
     }
   },
   "definitions": {

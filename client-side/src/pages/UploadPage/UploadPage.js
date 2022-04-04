@@ -19,6 +19,7 @@ import {
 } from './strings';
 import PropTypes from 'prop-types';
 import styles from './UploadPage.module.css';
+import { SC } from '../../configs/httpResponseCodes';
 
 const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler }) => {
     const username = localStorage.getItem('username');
@@ -64,7 +65,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
             xhttp.open('GET', endPointRoot + resourceGet, true);
             xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"));
             xhttp.onload = () => {
-                if (xhttp.status === 200) {
+                if (xhttp.status === SC.OK) {
                     res(xhttp.response);
                 } else {
                     rej(xhttp.statusText);
@@ -80,7 +81,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
             xhttp.open('GET', endPointRoot + resourceGet, true);
             xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"));
             xhttp.onload = () => {
-                if (xhttp.status === 200) {
+                if (xhttp.status === SC.OK) {
                     res(xhttp.response);
                 } else {
                     rej(xhttp.statusText);
@@ -102,7 +103,7 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"));
             xhttp.onload = () => {
-                if (xhttp.status === 200) {
+                if (xhttp.status === SC.OK) {
                     res(xhttp.response);
                 } else {
                     rej(xhttp.statusText);
@@ -117,10 +118,10 @@ const UploadPage = ({ homeHandler, playBtnHandler, setOwnWord, profileHandler })
         xhttp.open('DELETE', endPointRoot + resourceDelete, true);
         xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"));
         xhttp.onload = () => {
-            if (xhttp.status === 200) {
+            if (xhttp.status === SC.OK) {
                 setUploadStatus(successfulDeleteText);
                 setOwnWord("");
-            } else if (xhttp.status === 400) {
+            } else if (xhttp.status === SC.BAD_REQUEST) {
                 setUploadStatus(errorWordDeleteText);
             } else {
                 setUploadStatus(connectErrorText);

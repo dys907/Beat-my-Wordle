@@ -8,3 +8,12 @@ export const getStatsTxt = 'Get Stats';
 export const postStatsTxt = 'Post Stats';
 export const deleteStatsTxt = 'Delete Stats';
 export const putStatsTxt = 'Put Stats';
+
+export const methodTxt = 'Method';
+export const endpointTxt = 'Endpoint';
+export const requestsTxt = 'Requests';
+
+export const GET = 'GET';
+export const POST = 'POST';
+export const DELETE = 'DELETE';
+export const PUT = 'PUT';

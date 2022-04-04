@@ -12,7 +12,8 @@ import {
     enter,
     del
  } from './strings';
-import CustomModal from '../CustomModal/CustomModal'
+import CustomModal from '../CustomModal/CustomModal';
+import { SC } from '../../configs/httpResponseCodes';
 
 const Game = ({ word, opponent }) => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -240,7 +241,7 @@ const Game = ({ word, opponent }) => {
                 xhttp.open("GET", endPointRoot + resourceGet, true);
                 xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
-                    if (xhttp.status === 200) {
+                    if (xhttp.status === SC.OK) {
                         res(xhttp.response)
                     } else {
                         rej(xhttp.statusText)
@@ -302,7 +303,7 @@ const Game = ({ word, opponent }) => {
                 xhttp.setRequestHeader("Content-type","application/json");
                 xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.onload = () => {
-                    if (xhttp.status === 200) {
+                    if (xhttp.status === SC.OK) {
                         res(xhttp.response)
                     } else {
                         rej(xhttp.statusText)
@@ -323,7 +324,7 @@ const Game = ({ word, opponent }) => {
                 xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
                 xhttp.setRequestHeader("Content-type", "application/json");
                 xhttp.onload = () => {
-                    if (xhttp.status === 200) {
+                    if (xhttp.status === SC.OK) {
                         res(xhttp.response)
                     } else {
                         rej(xhttp.statusText)

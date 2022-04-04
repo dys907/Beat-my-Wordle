@@ -12,6 +12,7 @@ import {
     noGameTitle,
     noGameText,
 } from './strings';
+import { SC } from '../../configs/httpResponseCodes';
 
 const BeatMyWordle = () => {
   //Homepage, Login, Game,
@@ -104,7 +105,7 @@ const BeatMyWordle = () => {
       xhttp.open("GET", endPointRoot + resourceScore, true);
       xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
         } else {
           rej(xhttp.statusText);
@@ -120,7 +121,7 @@ const BeatMyWordle = () => {
       xhttp.open("GET", endPointRoot + resourceScore, true);
       xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
         } else {
           rej(xhttp.statusText);
@@ -136,7 +137,7 @@ const BeatMyWordle = () => {
       xhttp.open("GET", endPointRoot + resourceWord, true);
       xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
         } else {
           rej(xhttp.statusText);
@@ -152,7 +153,7 @@ const BeatMyWordle = () => {
       xhttp.open("GET", endPointRoot + resourceCheck, true);
       xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
         } else {
           rej(xhttp.statusText);
@@ -168,9 +169,9 @@ const BeatMyWordle = () => {
       xhttp.open("GET", endPointRoot + resourceLook, true);
       xhttp.setRequestHeader("authorization", "bearer " + localStorage.getItem("jwt"))
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
-        } else if (xhttp.status === 403) {
+        } else if (xhttp.status === SC.FORBIDDEN) {
           rej(xhttp.statusText);
           setModalText(noGameText);
           setModalTitle(noGameTitle);
@@ -197,7 +198,7 @@ const BeatMyWordle = () => {
       };
       const params = JSON.stringify(jsonObj);
       xhttp.onload = () => {
-        if (xhttp.status === 200) {
+        if (xhttp.status === SC.OK) {
           res(xhttp.response);
         } else {
           rej(xhttp.statusText);

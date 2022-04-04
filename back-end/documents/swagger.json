@@ -63,6 +63,32 @@
         }
       }
     },
+    "/users/logout": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "General login to the application",
+        "description": "",
+        "operationId": "logout",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "UserLogout object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogout"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK"
+          }
+        }
+      }
+    },
     "/users/signup": {
       "post": {
         "tags": [
@@ -300,6 +326,30 @@
         }
       }
     },
+    "/scores": {
+      "post": {
+        "tags": [
+          "scores"
+        ],
+        "summary": "Change a user's score",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Score object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Scores"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 OK"
+          }
+        }
+      }
+    },
     "/scores/{username}": {
       "get": {
         "tags": [
@@ -453,6 +503,17 @@
         "name": "Users"
       }
     },
+    "UserLogout": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Users"
+      }
+    },
     "Words" : {
       "type": "object",
       "properties": {
@@ -475,6 +536,20 @@
         },
         "opponent": {
           "type":"string"
+        }
+      },
+      "xml": {
+        "name": "Match"
+      }
+    },
+    "Scores" : {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type":"string"
+        },
+        "score": {
+          "type":"number"
         }
       },
       "xml": {

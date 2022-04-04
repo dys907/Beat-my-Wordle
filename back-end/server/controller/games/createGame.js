@@ -4,7 +4,7 @@ const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 
 const createGame = (req, res) => {
-    statReport.POST[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
+    statReport.POST[API_VERSION + "games"] = statReport.POST[API_VERSION + "games"] + 1;
     const { player, opponent } = req.body;
     let sql = "INSERT INTO gameLobby(player, opponent, inProgress) VALUES (?,?,TRUE)";
     con.getConnection((err, connection) => {

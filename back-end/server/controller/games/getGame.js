@@ -6,7 +6,7 @@ const sc = require('../../../configs/httpResponseCodes');
 
 //checking for available matches then sending 1 match back in JSON form NEW /?username
 const getGame = (req,res) => {
-    statReport.GET[API_VERSION + "games/id"] = statReport.GET[API_VERSION + "games/id"] + 1;
+    statReport.GET[API_VERSION + "games"] = statReport.GET[API_VERSION + "games"] + 1;
     const parsedLink = url.parse(req.url, true);
     const username = parsedLink.query["username"];
 

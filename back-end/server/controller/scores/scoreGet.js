@@ -6,7 +6,7 @@ const url = require("url");
 
 //For getting a user's score
 const scoreGet = (req, res) => {
-    statReport.GET[API_VERSION + "scores/?username"] += 1;
+    statReport.GET[API_VERSION + "scores"] += 1;
     const username = url.parse(req.url, true).query["username"];
     let sql = "SELECT score FROM scores WHERE username = ?";
     con.getConnection((err, connection) => {

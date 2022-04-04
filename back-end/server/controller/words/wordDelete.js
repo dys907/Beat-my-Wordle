@@ -6,7 +6,7 @@ const statReport = require('../../../configs/statReport');
 const sc = require('../../../configs/httpResponseCodes');
 
 const wordDelete = (req, res) => {
-    statReport.DELETE[API_VERSION + "words/id"] = statReport.DELETE[API_VERSION + "words/id"] + 1;
+    statReport.DELETE[API_VERSION + "words"] = statReport.DELETE[API_VERSION + "words"] + 1;
     const parsedLink = url.parse(req.url, true);
     const username = parsedLink.query["username"];
     let sql = "DELETE FROM words WHERE username=?";

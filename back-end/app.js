@@ -12,9 +12,9 @@ const API_VERSION = require('./configs/API_VERSION');
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use((req, res, next) => {
-    res.header( "Access-Control-Allow-Origin", "*");
+    res.header( "Access-Control-Allow-Origin", "https://beat-my-wordle.herokuapp.com");
     res.header( "Access-Control-Allow-Headers", "*");
-    res.header( "Access-Control-Allow-Methods", "*");
+    res.header( "Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE");
     res.header( 'Access-Control-Expose-Headers', "*");
     next();
 });

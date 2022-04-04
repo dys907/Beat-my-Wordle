@@ -21,6 +21,7 @@ import {
 } from './strings';
 import styles from '../Button/Button.module.css';
 import formStyles from './Form.module.css';
+import { SC } from '../../configs/httpResponseCodes';
 
 const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {    
     const [user, setName] = useState('');
@@ -72,7 +73,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
         const URL = host + endpoint;        
         try {
             const response = await fetchMethod(method, URL);
-            if (response.status !== 200) {
+            if (response.status !== SC.OK) {
                 setErrorMsgAndChangePageFlow(loginErrorText);
             } else {
                 response.text().then(text => {
@@ -91,7 +92,7 @@ const Form = ({ titleTxt, formType, submitTxt, postLoginHandler }) => {
         const URL = host + endpoint;
         try {
             const response = await fetchMethod(method, URL);
-            if (response.status !== 200) {
+            if (response.status !== SC.OK) {
                 setErrorMsgAndChangePageFlow(generalErrorText);
             } else {
                 response.text().then(text => {

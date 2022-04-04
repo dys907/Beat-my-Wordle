@@ -6,6 +6,11 @@ import {
     modalTryAgainText,
     loseScoreText,
     winTitleText,
+    LETTERS_KEYBOARD_1,
+    LETTERS_KEYBOARD_2,
+    LETTERS_KEYBOARD_3,
+    enter,
+    del
  } from './strings';
 import CustomModal from '../CustomModal/CustomModal'
 
@@ -13,6 +18,7 @@ const Game = ({ word, opponent }) => {
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
     const [modalText, setModalText] = useState("")
+    
 
     useEffect(() => {
         const username = localStorage.getItem('username');
@@ -24,9 +30,6 @@ const Game = ({ word, opponent }) => {
         const CODE_z = 122;
         const NUMBER_OF_LETTERS = 5;
         const MAX_GUESS = 6;
-        const LETTERS_KEYBOARD_1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
-        const LETTERS_KEYBOARD_2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
-        const LETTERS_KEYBOARD_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
         const ENTER_KEY = 13;
         const DELETE_KEY = 8;
         const yellow = "#b59d34"
@@ -83,7 +86,7 @@ const Game = ({ word, opponent }) => {
                 this.letter = "*";
                 this.text.html("*");
             }
-            this.text = $("<div><span>*</span></div>").addClass("letterClass");//.css({"color": "white", "display":"inline-block", "width": "10vw", "height": "5vh", "border": "2px dashed white"});
+            this.text = $("<div><span>*</span></div>").addClass("letterClass");
             this.setColor = (color) => {
                 $(this.text).css("backgroundColor", color);
             }
@@ -95,7 +98,7 @@ const Game = ({ word, opponent }) => {
             this.letter = letter;
             this.row = row;
             this.alreadyGreen = false;
-            this.btn = $("<button class='letter'></button>").addClass("letterBtnClass")//css({"width": "5vw", "height": "5vh", "backgroundColor": "white", "border-radius": "5px"})
+            this.btn = $("<button class='letter'></button>").addClass("letterBtnClass")
             .append(letter).click(() => {
                 pressLetter(letter);
             });
@@ -138,7 +141,7 @@ const Game = ({ word, opponent }) => {
         
         $("#letterDiv").append($("<br>"));
 
-        let enter_btn = $("<button></button>").append("ENTER").addClass("enter_delete").click(() => {
+        let enter_btn = $("<button></button>").append(enter).addClass("enter_delete").click(() => {
             pressEnter();
         })
         $("#letterDiv").append(enter_btn);
@@ -149,7 +152,7 @@ const Game = ({ word, opponent }) => {
         })
         
         
-        let del_btn = $("<button></button>").append("DEL").addClass("enter_delete").click(() => {
+        let del_btn = $("<button></button>").append(del).addClass("enter_delete").click(() => {
             pressDelete();
         })
         $("#letterDiv").append(del_btn);

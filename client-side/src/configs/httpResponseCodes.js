@@ -6,7 +6,7 @@ const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 const BAD_GATEWAY = 502;
 
-module.exports = {
+export const SC = {
     OK,
     BAD_REQUEST,
     UNAUTHORIZED,

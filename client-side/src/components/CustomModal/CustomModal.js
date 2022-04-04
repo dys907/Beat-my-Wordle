@@ -14,7 +14,7 @@ const style = {
   borderRadius: '10px',
   boxShadow: 24,
   p: 4,
-  color: "#0077b6",
+  color: "#3A3A3C",
   fontSize: '50px'
 };
 
